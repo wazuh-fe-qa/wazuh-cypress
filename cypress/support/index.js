@@ -27,7 +27,8 @@ import {
     timestampToDate
 } from '../integration/utils/driver';
 const cookieMock = require('../../cookie.json');
-const loginMethod = 'xpack'
+//TODO: we must improve these hardcoded variables
+const loginMethod = Cypress.env('type_x')
 import './commands';
 require("cypress-xpath");
 
