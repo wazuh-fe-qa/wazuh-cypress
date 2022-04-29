@@ -1,0 +1,19 @@
+{
+  "testFiles": "**/*.{feature,features}",
+  "defaultCommandTimeout": 20000,
+  "viewportWidth": 1360,
+  "viewportHeight": 790,
+  "reporter": "mochawesome",
+  "watchForFileChanges": false,
+  "reporterOptions": {
+    "charts": true,
+    "overwrite": false,
+    "html": true,
+    "json": true,
+    "reportDir": "cypress/report/mochawesome-report",
+    "mochaFile": "cypress/report/output.html"
+  },
+  "videosFolder": "cypress/report/video",
+  "screenshotsFolder": "cypress/report/screenshots",
+  "experimentalSessionSupport": true
+}

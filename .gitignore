@@ -1,0 +1,18 @@
+#IDE files
+.idea/
+
+#node libraries
+node_modules/
+
+#env configurations
+cypress.env.json
+
+#reports
+report/
+
+#cookie
+cookie.json
+
+#package-lick.json
+package-lock.json
+
