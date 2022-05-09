@@ -1,10 +1,10 @@
 Feature: Pin filter
-   
-    As Wazuh user 
-    I want to pin a filter 
-    in order to aplly it across the modules
-  
-   Scenario Outline: The user add and pin new filer - across the modules - from dashboard to event page
+
+  As Wazuh user
+  I want to pin a filter
+  in order to aplly it across the modules
+  @filter
+  Scenario Outline: The user add and pin new filer - across the modules - from dashboard to event page
     Given The kibana admin user is logged in using xpack and the wazuh logo is displayed
     When The user goes to <Module Name>
     And The user adds a new filter
@@ -16,16 +16,15 @@ Feature: Pin filter
     And The user moves to events page
     Then The user checks if the filter is displayed
     Examples:
-      | Module Name           |
-      | Security Events       |
-      | Integrity Monitoring  |
-      | System Auditing       |
-      | Vulnerabilities       |
-      | Mitre & Attack        |
-      | GDPR                  |
-      | HIPAA                 |
-      | NIST                  |
-      | TSC                   |
-      | Policy Monitoring     |
-      | PCIDSS                |
-      
+      | Module Name          |
+      | Security Events      |
+      | Integrity Monitoring |
+      | System Auditing      |
+      | Vulnerabilities      |
+      | Mitre & Attack       |
+      | GDPR                 |
+      | HIPAA                |
+      | NIST                 |
+      | TSC                  |
+      | Policy Monitoring    |
+      | PCIDSS               |
