@@ -1,8 +1,9 @@
 Feature: Pin filter
 
-  As Wazuh user
+  As a Wazuh user
   I want to pin a filter
   in order to aplly it across the modules
+  
   @filter
   Scenario Outline: The user add and pin new filer - across the modules
     Given The kibana admin user is logged in using xpack and the wazuh logo is displayed
@@ -27,3 +28,4 @@ Feature: Pin filter
       | TSC                  |
       | Policy Monitoring    |
       | PCIDSS               |
+      
