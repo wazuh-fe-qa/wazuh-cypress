@@ -1,8 +1,9 @@
 Feature: Validate that the added filter label is displayed
 
-  As Wazuh user
+  As a Wazuh user
   I want to set a new filter
   in order to manage them
+  
   @filter
   Scenario Outline: The user add a new filer
     Given The kibana admin user is logged in using xpack and the wazuh logo is displayed
