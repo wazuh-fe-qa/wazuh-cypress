@@ -1,6 +1,6 @@
 Feature: Validate that the pinned filter label is displayed
 
-  As Wazuh user
+  As a Wazuh user
   I want to set a new filter from the agent page
   in order to manage them
   @filter
