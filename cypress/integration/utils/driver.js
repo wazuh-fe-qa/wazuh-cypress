@@ -6,13 +6,13 @@ export const clickElement = (selector) => {
 
 export const forceClickElement = (cssSelector) => {
   cy.wait(1000);
-  getElement(cssSelector).click({force:true})
+  getElement(cssSelector).click({ force: true })
   return this;
 };
 
 export const forceClickElementByXpath = (xpathSelector) => {
   cy.wait(1000);
-  getElementByXpath(xpathSelector).click({force:true})
+  getElementByXpath(xpathSelector).click({ force: true })
   return this;
 };
 
@@ -76,10 +76,10 @@ export const setCookies = (cookieFromFile) => {
         cookieFromFile.forEach((element) => {
           cy.setCookie(element.name, element.value);
         });
-      }else{
+      } else {
         cy.readFile('cookie.json').then((cookieFile) => {
-          cy.log('cookie',cookieFile);
-            cookieFile.forEach(element => { 
+          cy.log('cookie', cookieFile);
+          cookieFile.forEach(element => {
             cy.setCookie(element.name, element.value);
           })
         })
@@ -92,47 +92,47 @@ export const setCookies = (cookieFromFile) => {
 export const updateCookies = () => {
   const filename = 'cookie.json';
   cy.getCookies().then((currentCook) => {
-     if(currentCook.length != 0){
-    const parameterToFilter = ['sid', 'wz-token'];
-    for (let l = 0; l < parameterToFilter.length; l++) {
-      const [cookie] = currentCook.filter(e => e.name == parameterToFilter[l]);
-      cy.readFile(filename).then((obj) => {
-        const newCookie = obj.map(e => {
-        if (e.name == parameterToFilter[l]) e.value = cookie.value
-        return e;
+    if (currentCook.length != 0) {
+      const parameterToFilter = ['sid', 'wz-token'];
+      for (let l = 0; l < parameterToFilter.length; l++) {
+        const [cookie] = currentCook.filter(e => e.name == parameterToFilter[l]);
+        cy.readFile(filename).then((obj) => {
+          const newCookie = obj.map(e => {
+            if (e.name == parameterToFilter[l]) e.value = cookie.value
+            return e;
+          })
+          cy.writeFile(filename, JSON.stringify(newCookie))
         })
-        cy.writeFile(filename,  JSON.stringify(newCookie))
-      })
+      }
     }
-   }
   });
 }
 
 export const preserveCookie = () => {
   let str = [];
- return cy.getCookies().then((cook) => {
-      if(cook.length != 0){
+  return cy.getCookies().then((cook) => {
+    if (cook.length != 0) {
       for (let l = 0; l < cook.length; l++) {
-          if (cook.length > 0 && l == 0) {
-              str[l] = cook[l].name;
-              Cypress.Cookies.preserveOnce(str[l]);
-          }
-          else if (cook.length > 1 && l > 1) {
-              str[l] = cook[l].name;
-              Cypress.Cookies.preserveOnce(str[l]);
-          }
+        if (cook.length > 0 && l == 0) {
+          str[l] = cook[l].name;
+          Cypress.Cookies.preserveOnce(str[l]);
+        }
+        else if (cook.length > 1 && l > 1) {
+          str[l] = cook[l].name;
+          Cypress.Cookies.preserveOnce(str[l]);
+        }
       }
     }
   })
 }
 
-export const updateExpiryValueCookies =  () => {
+export const updateExpiryValueCookies = () => {
   let timestamp = new Date().getTime();
   let today = new Date();
   const filename = 'cookie.json';
   try {
     cy.readFile(filename).then((obj) => {
-      const newCookie = obj.map(e => { 
+      const newCookie = obj.map(e => {
         let oldDate = new Date(e.expiry);
         if (oldDate < today) e.expiry = timestamp;
         return e;
@@ -158,6 +158,28 @@ export const xpathElementIsVisible = (xpathSelector) => {
 };
 
 export const timestampToDate = (e) => {
-  let newDates = e.getDate()+"/"+(e.getMonth()+1)+"/"+e.getFullYear()+" "+e.getHours()+":"+e.getMinutes()+":"+e.getSeconds();
+  let newDates = e.getDate() + "/" + (e.getMonth() + 1) + "/" + e.getFullYear() + " " + e.getHours() + ":" + e.getMinutes() + ":" + e.getSeconds();
   return newDates;
 };
+
+Cypress.Commands.add('checkInformationElement', (webLocator, optionsNames, optionLength) => {
+  cy.get(webLocator, { timeout: 2000 }).should("be.visible")
+  cy.get(webLocator)
+    .should(($) => {
+      const texts = $.map((i, el) => Cypress.$(el).text())
+      const paragraphs = texts.get()
+      expect(paragraphs, 'has ' + optionLength + ' paragraphs').to.have.length(optionLength)
+      expect(optionsNames, 'has expected [' + optionsNames + '] text in each paragraph [' + paragraphs + ']').to.contains(paragraphs)
+    })
+})
+
+Cypress.Commands.add('xpathCheckInformationElement', (webLocator, optionsNames, optionLength) => {
+  cy.xpath(webLocator, { timeout: 2000 }).should("be.visible")
+  cy.xpath(webLocator)
+    .should(($) => {
+      const texts = $.map((i, el) => Cypress.$(el).text())
+      const paragraphs = texts.get()
+      expect(paragraphs, 'has ' + optionLength + ' paragraphs').to.have.length(optionLength)
+      expect(optionsNames, 'has expected [' + optionsNames + '] text in each paragraph [' + paragraphs + ']').to.contains(paragraphs)
+    })
+})
