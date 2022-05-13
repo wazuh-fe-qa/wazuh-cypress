@@ -8,5 +8,8 @@ Before executing the command `npm start` remember to have the client's server up
 ## Configuration
 set your server ip on `"baseUrl":` parameter inside `cypress.json` file
 
-## Executing tests
+## Execute tests in debug
 run `cypress open`
+
+## Execute test using tags
+npx cypress-tags run -e TAGS='@about'
