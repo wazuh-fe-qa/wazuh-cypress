@@ -16,17 +16,38 @@ on:
         description: ''
         default: '4.3'
         required: true
+      Wazuh-Version: 
+        description: ''
+        default: '4.3'
+        required: true
+      Elastic Version: 
+        description: ''
+        default: '7.16.3'
+        required: true
         
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "greet"
-  greet:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+  setup-wazuh-kibana-app:
+    name: Run setup environment wazuh kibana app
+    #runs-on: self-hosted
+    runs-on: ubuntu-18.04
+    #container: cypress/browsers:node12.18.0-chrome83-ff77
     steps:
-    # Runs a single command using the runners shell
-    - name: Send greeting
-      run: echo "Hello ${{ github.event.inputs.name }}"
+     - name: Step 01 - Set up environment variables
+       run: |
+        #echo Base Branch: ${{ github.base_ref }}
+        #echo Head Branch: ${{ github.head_ref }}
+        #echo Run Test TRUE
+        #echo "RUN_TEST=true" >> $GITHUB_ENV
+        
+        #echo "WAZUH_HEAD_BRANCH=${{ github.head_ref }}" >> $GITHUB_ENV
+        #echo "${{ github.event.pull_request.body }}" > pull_request.body.txt
+        
+        echo "WAZUH_MANAGER_IMAGE=$(Wazuh-Manager-Image)
+        echo "WAZUH_AGENT_IMAGE=$(Wazuh-Agent-Image)
+        echo "WAZUH_VERSION=$(Wazuh-Version)
+        echo "ELASTIC_VERSION=$(Elastic Version)
+        
+        #echo "PATH_TEMPLATE_BASIC_CLUSTER_AGENT=$GITHUB_WORKSPACE/wazuh-app-environments/templates_elastic_prod/es_basic-wz_cluster-agent/" >> $GITHUB_ENV
+        
