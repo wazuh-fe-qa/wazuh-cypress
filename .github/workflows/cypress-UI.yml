@@ -59,10 +59,10 @@ jobs:
         mkdir packages
         cd ${{ env.PATH_TEMPLATE_BASIC_CLUSTER_AGENT }}
         cat ./.env
-        sed -i -e 's|WAZUH_MANAGER_IMAGE=.*|WAZUH_MANAGER_IMAGE=${{ env.WAZUH_MANAGER_IMAGE }}|g' ./.env
-        sed -i -e 's|WAZUH_AGENT_IMAGE=.*|WAZUH_AGENT_IMAGE=${{ env.WAZUH_AGENT_IMAGE }}|g' ./.env
-        sed -i -e 's|WAZUH_VERSION=.*|WAZUH_VERSION=${{ env.WAZUH_VERSION }}|g' ./.env
-        sed -i -e 's|ELASTIC_VERSION=.*|ELASTIC_VERSION=${{ env.ELASTIC_VERSION }}|g' ./.env
+        sed -i -e 's|WAZUH_MANAGER_IMAGE=.*|WAZUH_MANAGER_IMAGE=${{ github.event.inputs.wazuh-manager-image }}|g' ./.env
+        sed -i -e 's|WAZUH_AGENT_IMAGE=.*|WAZUH_AGENT_IMAGE=${{ github.event.inputs.wazuh-agent-image }}|g' ./.env
+        sed -i -e 's|WAZUH_VERSION=.*|WAZUH_VERSION=${{ github.event.inputs.wazuh-version }}|g' ./.env
+        sed -i -e 's|ELASTIC_VERSION=.*|ELASTIC_VERSION=${{ github.event.inputs.elastic-version }}|g' ./.env
         cat .env
      - name: Step 04 - Starting containers
        if: ${{ env.RUN_TEST == 'true'}}
