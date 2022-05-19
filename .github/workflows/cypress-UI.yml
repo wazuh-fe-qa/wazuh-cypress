@@ -58,10 +58,11 @@ jobs:
         cd $GITHUB_WORKSPACE/wazuh-app-environments/
         mkdir packages
         cd ${{ env.PATH_TEMPLATE_BASIC_CLUSTER_AGENT }}
-        sed "s/WAZUH_MANAGER_IMAGE=.*/WAZUH_MANAGER_IMAGE=${{ env.WAZUH_MANAGER_IMAGE }}/g" ./.env
-        sed "s/WAZUH_AGENT_IMAGE=.*/WAZUH_AGENT_IMAGE=${{ env.WAZUH_AGENT_IMAGE }}/g" ./.env
-        sed "s/WAZUH_VERSION=.*/WAZUH_VERSION=${{ env.WAZUH_VERSION }}/g" ./.env
-        sed "s/ELASTIC_VERSION=.*/ELASTIC_VERSION=${{ env.ELASTIC_VERSION }}/g" ./.env
+        cat ./.env
+        sed -i -e 's/WAZUH_MANAGER_IMAGE=.*/WAZUH_MANAGER_IMAGE=${{ env.WAZUH_MANAGER_IMAGE }}/g' ./.env
+        sed -i -e 's/WAZUH_AGENT_IMAGE=.*/WAZUH_AGENT_IMAGE=${{ env.WAZUH_AGENT_IMAGE }}/g' ./.env
+        sed -i -e 's/WAZUH_VERSION=.*/WAZUH_VERSION=${{ env.WAZUH_VERSION }}/g' ./.env
+        sed -i -e 's/ELASTIC_VERSION=.*/ELASTIC_VERSION=${{ env.ELASTIC_VERSION }}/g' ./.env
         cat .env
      - name: Step 04 - Starting containers
        if: ${{ env.RUN_TEST == 'true'}}
@@ -113,7 +114,7 @@ jobs:
        run: |
         cd $GITHUB_WORKSPACE/wazuh-cypress
         npm install
-       # npm run cy:install
+        #npm run cy:install
      - name: Step 11 - Run Cypress tests
        if: ${{ env.RUN_TEST == 'true' }}
        run: |
