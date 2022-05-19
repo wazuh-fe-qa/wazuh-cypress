@@ -8,19 +8,19 @@ on:
   workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
-      Wazuh-Manager-Image: 
+      wazuh-manager-image: 
         description: 'Version'
         default: '4.3'
         required: true
-      Wazuh-Agent-Image: 
+      wazuh-agent-image: 
         description: ''
         default: '4.3'
         required: true
-      Wazuh-Version: 
+      wazuh-version: 
         description: ''
         default: '4.3'
         required: true
-      Elastic Version: 
+      elastic-version: 
         description: ''
         default: '7.16.3'
         required: true
@@ -44,10 +44,10 @@ jobs:
         #echo "WAZUH_HEAD_BRANCH=${{ github.head_ref }}" >> $GITHUB_ENV
         #echo "${{ github.event.pull_request.body }}" > pull_request.body.txt
         
-        echo "WAZUH_MANAGER_IMAGE=$Wazuh-Manager-Image
-        echo "WAZUH_AGENT_IMAGE=$Wazuh-Agent-Image
-        echo "WAZUH_VERSION=$Wazuh-Version
-        echo "ELASTIC_VERSION=$Elastic Version
+        echo "WAZUH_MANAGER_IMAGE=${{ wazuh-manager-image }}
+        echo "WAZUH_AGENT_IMAGE=${{ wazuh-agent-image }}
+        echo "WAZUH_VERSION=${{ wazuh-version }}
+        echo "ELASTIC_VERSION=${{ elastic-version }}
         
         #echo "PATH_TEMPLATE_BASIC_CLUSTER_AGENT=$GITHUB_WORKSPACE/wazuh-app-environments/templates_elastic_prod/es_basic-wz_cluster-agent/" >> $GITHUB_ENV
         
