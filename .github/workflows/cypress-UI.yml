@@ -72,6 +72,7 @@ jobs:
         repository: wazuh/wazuh-packages
         ref: 'master'
         path: wazuh-packages
+       run: echo "Repository downloaded successfull"
      - name: Step 06 - Building package
        if: ${{ env.RUN_TEST == 'true' }}
        run: |
