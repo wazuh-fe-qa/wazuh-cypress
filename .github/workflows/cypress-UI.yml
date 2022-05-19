@@ -40,10 +40,6 @@ jobs:
         echo Head Branch: ${{ github.head_ref }}
         echo "RUN_TEST=true" >> $GITHUB_ENV
         echo "WAZUH_HEAD_BRANCH=${{ github.head_ref }}" >> $GITHUB_ENV
-        echo "WAZUH_MANAGER_IMAGE=${{ github.event.inputs.wazuh-manager-image }} >> $GITHUB_ENV
-        echo "WAZUH_AGENT_IMAGE=${{ github.event.inputs.wazuh-agent-image }} >> $GITHUB_ENV
-        echo "WAZUH_VERSION=${{ github.event.inputs.wazuh-version }} >> $GITHUB_ENV
-        echo "ELASTIC_VERSION=${{ github.event.inputs.elastic-version }} >> $GITHUB_ENV
         echo "PATH_TEMPLATE_BASIC_CLUSTER_AGENT=$GITHUB_WORKSPACE/wazuh-app-environments/templates_elastic_prod/es_basic-wz_cluster-agent/" >> $GITHUB_ENV
      - name: Step 02 - Download Project wazuh-app-environments 
        uses: actions/checkout@v2
@@ -88,6 +84,8 @@ jobs:
        if: ${{ env.RUN_TEST == 'true' }}
        run: |
         cd $GITHUB_WORKSPACE/wazuh-app-environments/packages/
+        pwd
+        ls -la
         PACKAGE_NAME=`ls *.zip`
         cd ${{ env.PATH_TEMPLATE_BASIC_CLUSTER_AGENT }}
         docker exec es_basic-wz_cluster-agent_kibana_1 bin/kibana-plugin install file:///packages/$PACKAGE_NAME
