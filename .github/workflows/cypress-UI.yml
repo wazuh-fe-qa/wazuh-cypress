@@ -107,16 +107,14 @@ jobs:
        if: ${{ env.RUN_TEST == 'true' }}
        uses: actions/checkout@v2
        with:
-        repository: wazuh-fe-qa/wazuh-cypress
         ref: 'master'
         path: wazuh-cypress
-        token: ${{ secrets.FE_SECRET_TOKEN }}
      - name: Step 10 - Install Cypress Project Dependencies
        if: ${{ env.RUN_TEST == 'true' }}
        run: |
         cd $GITHUB_WORKSPACE/wazuh-cypress
         npm install
-        #npm run cy:install
+      # npm run cy:install
      - name: Step 11 - Run Cypress tests
        if: ${{ env.RUN_TEST == 'true' }}
        run: |
