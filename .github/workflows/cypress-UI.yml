@@ -95,7 +95,7 @@ jobs:
         docker exec es_basic-wz_cluster-agent_kibana_1 bin/kibana-plugin install file:///packages/$PACKAGE_NAME
         sudo docker-compose restart kibana
         echo CONTINUES AFTER 20 SECONDS ...
-        sleep 20s
+        sleep 30s
      - name: Step 08 - Configuring ip container into wazuh.yml
        if: ${{ env.RUN_TEST == 'true' }}
        run: |
