@@ -76,6 +76,8 @@ jobs:
        if: ${{ env.RUN_TEST == 'true' }}
        run: |
         cd $GITHUB_WORKSPACE/wazuh-packages/wazuhapp/kibana
+        pwd
+        ls -la
         echo fixing command...
         sed -i -e 's/'\|' cut -d \"\/\" \-f2//g' ./generate_wazuh_app.sh 
         echo run command...
@@ -84,8 +86,6 @@ jobs:
        if: ${{ env.RUN_TEST == 'true' }}
        run: |
         cd $GITHUB_WORKSPACE/wazuh-app-environments/packages/
-        pwd
-        ls -la
         PACKAGE_NAME=`ls *.zip`
         cd ${{ env.PATH_TEMPLATE_BASIC_CLUSTER_AGENT }}
         docker exec es_basic-wz_cluster-agent_kibana_1 bin/kibana-plugin install file:///packages/$PACKAGE_NAME
