@@ -24,6 +24,10 @@ on:
         description: 'Elastic Version'
         default: '7.16.3'
         required: true
+      wazuh-app-branch-version: 
+        description: 'Wazuh Kiabana App Branch/Tag'
+        default: ''
+        required: true  
         
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -81,7 +85,7 @@ jobs:
         echo fixing command...
         sed -i -e 's/'\|' cut -d \"\/\" \-f2//g' ./generate_wazuh_app.sh 
         echo run command...
-        ./generate_wazuh_app.sh -b master -s $GITHUB_WORKSPACE/wazuh-app-environments/packages -r 1
+        ./generate_wazuh_app.sh -b ${{ github.event.inputs.wazuh-app-branch-version }} -s $GITHUB_WORKSPACE/wazuh-app-environments/packages -r 1
      - name: Step 07 - Installing package
        if: ${{ env.RUN_TEST == 'true' }}
        run: |
