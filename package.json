@@ -31,5 +31,8 @@
   "cypress-cucumber-preprocessor": {
     "nonGlobalStepDefinitions": false,
     "step_definitions": "cypress/integration/step-definitions/**/"
+  },
+  "engines": {
+    "node": "10.23.1"
   }
 }
