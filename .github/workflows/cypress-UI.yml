@@ -96,6 +96,7 @@ jobs:
         sudo docker-compose restart kibana
         echo CONTINUES AFTER 60 SECONDS ...
         sleep 60s
+        docker ps
      - name: Step 08 - Configuring ip container into wazuh.yml
        if: ${{ env.RUN_TEST == 'true' }}
        run: |
