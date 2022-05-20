@@ -44,7 +44,7 @@ jobs:
         echo Head Branch: ${{ github.head_ref }}
         echo "RUN_TEST=true" >> $GITHUB_ENV
         echo "WAZUH_HEAD_BRANCH=${{ github.head_ref }}" >> $GITHUB_ENV
-        echo "PATH_TEMPLATE_BASIC_CLUSTER_AGENT=$GITHUB_WORKSPACE/wazuh-app-environments/templates_elastic_prod/es_basic-wz_cluster-agent/" >> $GITHUB_ENV
+        echo "PATH_TEMPLATE_XPACK_CLUSTER_AGENT=$GITHUB_WORKSPACE/wazuh-app-environments/templates_elastic_prod/es_xpack-wz_cluster-agent/" >> $GITHUB_ENV
      - name: Step 02 - Download Project wazuh-app-environments 
        uses: actions/checkout@v2
        with:
@@ -57,7 +57,7 @@ jobs:
        run: |
         cd $GITHUB_WORKSPACE/wazuh-app-environments/
         mkdir packages
-        cd ${{ env.PATH_TEMPLATE_BASIC_CLUSTER_AGENT }}
+        cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
         cat ./.env
         sed -i -e 's|WAZUH_MANAGER_IMAGE=.*|WAZUH_MANAGER_IMAGE=${{ github.event.inputs.wazuh-manager-image }}|g' ./.env
         sed -i -e 's|WAZUH_AGENT_IMAGE=.*|WAZUH_AGENT_IMAGE=${{ github.event.inputs.wazuh-agent-image }}|g' ./.env
@@ -67,8 +67,8 @@ jobs:
      - name: Step 04 - Starting containers
        if: ${{ env.RUN_TEST == 'true'}}
        run: |
-        cd ${{ env.PATH_TEMPLATE_BASIC_CLUSTER_AGENT }}
-        sudo docker-compose up -d
+        cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
+        sudo sh setup.sh 
      - name: Step 05 - Download Project wazuh-packages 
        if: ${{ env.RUN_TEST == 'true' }}
        uses: actions/checkout@v2
@@ -91,18 +91,18 @@ jobs:
        run: |
         cd $GITHUB_WORKSPACE/wazuh-app-environments/packages/
         PACKAGE_NAME=`ls *.zip`
-        cd ${{ env.PATH_TEMPLATE_BASIC_CLUSTER_AGENT }}
-        docker exec es_basic-wz_cluster-agent_kibana_1 bin/kibana-plugin install file:///packages/$PACKAGE_NAME
+        cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
+        docker exec es_xpack-wz_cluster-agent_kibana_1 bin/kibana-plugin install file:///packages/$PACKAGE_NAME
         sudo docker-compose restart kibana
         echo CONTINUES AFTER 20 SECONDS ...
         sleep 30s
      - name: Step 08 - Configuring ip container into wazuh.yml
        if: ${{ env.RUN_TEST == 'true' }}
        run: |
-        IP_CONTAINER_MANAGER=$(docker exec es_basic-wz_cluster-agent_wazuh-manager-master_1 hostname -i)
-        docker exec es_basic-wz_cluster-agent_kibana_1 cat ./data/wazuh/config/wazuh.yml
-        docker exec es_basic-wz_cluster-agent_kibana_1 sed -i -e "s/url: https:\/\/localhost/url: https:\/\/$IP_CONTAINER_MANAGER/g" ./data/wazuh/config/wazuh.yml
-        docker exec es_basic-wz_cluster-agent_kibana_1 cat ./data/wazuh/config/wazuh.yml
+        IP_CONTAINER_MANAGER=$(docker exec es_xpack-wz_cluster-agent_wazuh-manager-master_1 hostname -i)
+        docker exec es_xpack-wz_cluster-agent_kibana_1 cat ./data/wazuh/config/wazuh.yml
+        docker exec es_xpack-wz_cluster-agent_kibana_1 sed -i -e "s/url: https:\/\/localhost/url: https:\/\/$IP_CONTAINER_MANAGER/g" ./data/wazuh/config/wazuh.yml
+        docker exec es_xpack-wz_cluster-agent_kibana_1 cat ./data/wazuh/config/wazuh.yml
      - name: Step 09 - Download Project wazuh-qa 
        if: ${{ env.RUN_TEST == 'true' }}
        uses: actions/checkout@v2
