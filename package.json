@@ -11,13 +11,14 @@
     "cypress:run": "cypress run --browser chrome",
     "merge": "mochawesome-merge cypress/report/mochawesome-report/*.json > cypress/report/output.json",
     "generate_mochawesome_report": "marge cypress/report/output.json --reportDir ./cypress/report --inline",
+    "cypress:report": "mochawesome-merge cypress/report/mochawesome-report/*.json > cypress/report/output.json && marge cypress/report/output.json --reportDir ./cypress/report --inline",
     "delete:reports": "rm -r cypress/report/* || true"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "cosmiconfig": "^4.0.0",
-    "mocha": "^9.2.2",
+    "mocha": "^9.2.2", 
     "prettier": "^2.3.0"
   },
   "devDependencies": {
