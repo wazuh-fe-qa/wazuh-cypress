@@ -162,7 +162,7 @@ export const timestampToDate = (e) => {
   return newDates;
 };
 
-Cypress.Commands.add('checkInformationElement', (webLocator, optionsNames, optionLength) => {
+export const checkInformationElement =  (webLocator, optionsNames, optionLength) => {
   cy.get(webLocator, { timeout: 2000 }).should("be.visible")
   cy.get(webLocator)
     .should(($) => {
@@ -171,9 +171,9 @@ Cypress.Commands.add('checkInformationElement', (webLocator, optionsNames, optio
       expect(paragraphs, 'has ' + optionLength + ' paragraphs').to.have.length(optionLength)
       expect(optionsNames, 'has expected [' + optionsNames + '] text in each paragraph [' + paragraphs + ']').to.contains(paragraphs)
     })
-})
+}
 
-Cypress.Commands.add('xpathCheckInformationElement', (webLocator, optionsNames, optionLength) => {
+export const xpathCheckInformationElement=  (webLocator, optionsNames, optionLength) => {
   cy.xpath(webLocator, { timeout: 2000 }).should("be.visible")
   cy.xpath(webLocator)
     .should(($) => {
@@ -182,4 +182,4 @@ Cypress.Commands.add('xpathCheckInformationElement', (webLocator, optionsNames, 
       expect(paragraphs, 'has ' + optionLength + ' paragraphs').to.have.length(optionLength)
       expect(optionsNames, 'has expected [' + optionsNames + '] text in each paragraph [' + paragraphs + ']').to.contains(paragraphs)
     })
-})
+}
