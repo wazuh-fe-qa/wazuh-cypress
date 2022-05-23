@@ -101,9 +101,9 @@ jobs:
        if: ${{ env.RUN_TEST == 'true' }}
        run: |
         cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
-        docker-compose exec kibana cat /usr/share/kibana/data/wazuh/config/wazuh.yml
-        docker-compose exec kibana sed -i -e "s/url: https:\/\/localhost/url: https:\/\/wazuh-manager-master/g" /usr/share/kibana/data/wazuh/config/wazuh.yml
-        docker-compose exec kibana cat /usr/share/kibana/data/wazuh/config/wazuh.yml
+        docker exec es_xpack-wz_cluster-agent_kibana_1 cat /usr/share/kibana/data/wazuh/config/wazuh.yml
+        docker exec es_xpack-wz_cluster-agent_kibana_1 sed -i -e "s/url: https:\/\/localhost/url: https:\/\/wazuh-manager-master/g" /usr/share/kibana/data/wazuh/config/wazuh.yml
+        docker exec es_xpack-wz_cluster-agent_kibana_1 cat /usr/share/kibana/data/wazuh/config/wazuh.yml
      - name: Step 09 - Download Project wazuh-qa 
        if: ${{ env.RUN_TEST == 'true' }}
        uses: actions/checkout@v2
