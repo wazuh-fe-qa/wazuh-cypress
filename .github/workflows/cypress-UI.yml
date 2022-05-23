@@ -101,6 +101,7 @@ jobs:
        if: ${{ env.RUN_TEST == 'true' }}
        run: |
         cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
+        docker exec es_xpack-wz_cluster-agent_kibana_1 ls -la /usr/share/kibana/data/wazuh/config/
         docker exec es_xpack-wz_cluster-agent_kibana_1 cat /usr/share/kibana/data/wazuh/config/wazuh.yml
         docker exec es_xpack-wz_cluster-agent_kibana_1 sed -i -e "s/url: https:\/\/localhost/url: https:\/\/wazuh-manager-master/g" /usr/share/kibana/data/wazuh/config/wazuh.yml
         docker exec es_xpack-wz_cluster-agent_kibana_1 cat /usr/share/kibana/data/wazuh/config/wazuh.yml
