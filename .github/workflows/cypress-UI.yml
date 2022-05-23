@@ -101,6 +101,7 @@ jobs:
        if: ${{ env.RUN_TEST == 'true' }}
        run: |
         cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
+        pwd
         docker-compose exec kibana cat /usr/share/kibana/data/wazuh/config/wazuh.yml
         docker-compose exec kibana sed -i -e "s/url: https:\/\/localhost/url: https:\/\/wazuh-manager-master/g" /usr/share/kibana/data/wazuh/config/wazuh.yml
         docker-compose exec kibana cat /usr/share/kibana/data/wazuh/config/wazuh.yml
