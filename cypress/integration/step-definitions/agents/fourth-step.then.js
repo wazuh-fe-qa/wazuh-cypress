@@ -1,7 +1,8 @@
-import { And } from 'cypress-cucumber-preprocessor/steps';
+import { Then } from 'cypress-cucumber-preprocessor/steps';
 import { elementIsVisible, checkInformationElement } from '../../utils/driver';
 import { installAndEnrollAgentSubTitle, installAndEnrollAgentDefaultLabel } from '../../pageobjects/agents/deploy-new-agent.page';
-And('A fourth step {string} with the {string} by default is displayed', (title, message) => {
+
+Then('A fourth step {string} with the {string} by default is displayed', (title, message) => {
     elementIsVisible(installAndEnrollAgentSubTitle);
     elementIsVisible(installAndEnrollAgentDefaultLabel);
     checkInformationElement(installAndEnrollAgentSubTitle, title, 1);
