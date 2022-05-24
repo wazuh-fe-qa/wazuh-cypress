@@ -115,8 +115,12 @@ jobs:
        run: |
          cd $GITHUB_WORKSPACE/wazuh-cypress
          npm run cypress:run-headless         
-       continue-on-error: true
-     - name: Archive packages
+       continue-on-error: true 
+     - name: Step 12 - Run Cypress reports
+       run: |
+         cd $GITHUB_WORKSPACE/wazuh-cypress
+         npm run cypress:report        
+     - name: Step 13 - Archive packages
        uses: actions/upload-artifact@v2
        with:
         name: wazuh-packages
