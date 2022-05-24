@@ -120,10 +120,10 @@ jobs:
        run: |
          cd $GITHUB_WORKSPACE/wazuh-cypress
          npm run cypress:report        
-     - name: Step 13 - Archive packages
+     - name: Step 13 - Archive reports
        uses: actions/upload-artifact@v2
        with:
-        name: wazuh-packages
+        name: cypress-reports
         path: ${{ github.workspace }}/wazuh-cypress/cypress/report/*
      #- name: Step 12 - Upload Screenshots And Videos To Slack
       # if: failure()
