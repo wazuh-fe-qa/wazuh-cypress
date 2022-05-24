@@ -113,8 +113,8 @@ jobs:
      - name: Upload artifact
        uses: actions/upload-artifact@v2
        with:
-        name: wazuh-manager-image
-        path: /tmp/wazuh-manager-image.tar
+        name: wazuh-agent-image
+        path: /tmp/wazuh-agent-image.tar
 
   job_4:
     name: 'Build Image Wazuh QA'
@@ -141,21 +141,44 @@ jobs:
         name: ubuntu-cypress-image
         path: /tmp/ubuntu-cypress-image.tar
 
-  # job_5:
-  #   name: 'Run Wazuh QA'
-  #   runs-on: ubuntu-18.04
-  #   steps:
-  #    - name: Step 01 - Download Project wazuh-qa 
-  #      uses: actions/checkout@v2
-  #      with:
-  #       ref: 'main'
-  #       path: wazuh-cypress
-  #    - name: Step 02 - Install Cypress Project Dependencies
-  #      run: |
-  #       cd $GITHUB_WORKSPACE/wazuh-cypress
-  #       npm install
-  #     # npm run cy:install
-
+  job_5:
+    name: 'Run Wazuh QA'
+    runs-on: ubuntu-18.04
+    needs:
+     - job_1
+     - job_3
+     - job_4
+    steps:
+     - name: Step 01 - Download Project wazuh-app-environments 
+       uses: actions/checkout@v2
+       with:
+        repository: matiasmoreno876/wazuh-app-environments
+        ref: 'master'
+        path: wazuh-app-environments
+        token: ${{ secrets.FE_SECRET_TOKEN }}
+     - name: Set up Docker Buildx
+       uses: docker/setup-buildx-action@v1
+     - name: Download wazuh-kibana-app
+       uses: actions/download-artifact@v2
+       with:
+        name: wazuh-kibana-app
+        path: /tmp
+     - name: Download wazuh-agent-image
+       uses: actions/download-artifact@v2
+       with:
+        name: wazuh-agent-image
+        path: /tmp
+     - name: Download ubuntu-cypress-image
+       uses: actions/download-artifact@v2
+       with:
+        name: ubuntu-cypress-image
+        path: /tmp        
+     - name: Load Docker image
+       run: |
+          docker load --input /tmp/wazuh-kibana-app.tar
+          docker load --input /tmp/wazuh-agent-image.tar
+          docker load --input /tmp/ubuntu-cypress-image.tar
+          docker image ls -a
 
   # job_x:
   #   name: Run setup environment wazuh kibana app
