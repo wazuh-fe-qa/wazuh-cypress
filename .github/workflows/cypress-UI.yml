@@ -42,7 +42,6 @@ jobs:
        run: |
         echo Base Branch: ${{ github.base_ref }}
         echo Head Branch: ${{ github.head_ref }}
-        echo "RUN_TEST=true" >> $GITHUB_ENV
         echo "WAZUH_HEAD_BRANCH=${{ github.head_ref }}" >> $GITHUB_ENV
         echo "PATH_TEMPLATE_XPACK_CLUSTER_AGENT=$GITHUB_WORKSPACE/wazuh-app-environments/templates_elastic_prod/es_xpack-wz_cluster-agent/" >> $GITHUB_ENV
      - name: Step 02 - Download Project wazuh-app-environments 
@@ -53,7 +52,6 @@ jobs:
         path: wazuh-app-environments
         token: ${{ secrets.FE_SECRET_TOKEN }}
      - name: Step 03 - Configuring templates docker environment
-       if: ${{ env.RUN_TEST == 'true'}}
        run: |
         cd $GITHUB_WORKSPACE/wazuh-app-environments/
         mkdir packages
@@ -65,19 +63,16 @@ jobs:
         sed -i -e 's|ELASTIC_VERSION=.*|ELASTIC_VERSION=${{ github.event.inputs.elastic-version }}|g' ./.env
         cat .env
      - name: Step 04 - Starting containers
-       if: ${{ env.RUN_TEST == 'true'}}
        run: |
         cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
         sudo sh setup.sh 
      - name: Step 05 - Download Project wazuh-packages 
-       if: ${{ env.RUN_TEST == 'true' }}
        uses: actions/checkout@v2
        with:
         repository: wazuh/wazuh-packages
         ref: 'master'
         path: wazuh-packages
      - name: Step 06 - Building package
-       if: ${{ env.RUN_TEST == 'true' }}
        run: |
         cd $GITHUB_WORKSPACE/wazuh-packages/wazuhapp/kibana
         pwd
@@ -87,7 +82,6 @@ jobs:
         echo run command...
         ./generate_wazuh_app.sh -b ${{ github.event.inputs.wazuh-app-branch-version }} -s $GITHUB_WORKSPACE/wazuh-app-environments/packages -r 1
      - name: Step 07 - Installing package
-       if: ${{ env.RUN_TEST == 'true' }}
        run: |
         cd $GITHUB_WORKSPACE/wazuh-app-environments/packages/
         PACKAGE_NAME=`ls *.zip`
@@ -98,7 +92,6 @@ jobs:
         sleep 60s
         docker ps
      - name: Step 08 - Configuring ip container into wazuh.yml
-       if: ${{ env.RUN_TEST == 'true' }}
        run: |
         cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
         docker exec es_xpack-wz_cluster-agent_kibana_1 pwd
@@ -106,19 +99,16 @@ jobs:
         docker exec es_xpack-wz_cluster-agent_kibana_1 sed -i -e "s/url: https:\/\/localhost/url: https:\/\/wazuh-manager-master/g" /usr/share/kibana/data/wazuh/config/wazuh.yml
         docker exec es_xpack-wz_cluster-agent_kibana_1 cat data/wazuh/config/wazuh.yml
      - name: Step 09 - Download Project wazuh-qa 
-       if: ${{ env.RUN_TEST == 'true' }}
        uses: actions/checkout@v2
        with:
         ref: 'main'
         path: wazuh-cypress
      - name: Step 10 - Install Cypress Project Dependencies
-       if: ${{ env.RUN_TEST == 'true' }}
        run: |
         cd $GITHUB_WORKSPACE/wazuh-cypress
         npm install
       # npm run cy:install
      - name: Step 11 - Run Cypress tests
-       if: ${{ env.RUN_TEST == 'true' }}
        run: |
          cd $GITHUB_WORKSPACE/wazuh-cypress
          npm run cypress:run-headless         
