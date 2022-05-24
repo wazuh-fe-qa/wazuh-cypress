@@ -116,6 +116,11 @@ jobs:
          cd $GITHUB_WORKSPACE/wazuh-cypress
          npm run cypress:run-headless         
        continue-on-error: true
+     - name: Archive packages
+       uses: actions/upload-artifact@v2
+       with:
+        name: wazuh-packages
+        path: ${{ github.workspace }}/wazuh-cypress/cypress/report/*
      #- name: Step 12 - Upload Screenshots And Videos To Slack
       # if: failure()
        #uses: trymbill/cypress-slack-video-upload-action@v1.3.0
