@@ -61,7 +61,7 @@ jobs:
      - name: Step 03 - Upload package
        uses: actions/upload-artifact@v3
        with:
-          name: package
+          name: wazuh-kibana-app
           path: ${{ github.workspace }}/packages/*
   
   job_2:
@@ -116,20 +116,30 @@ jobs:
         name: wazuh-manager-image
         path: /tmp/wazuh-manager-image.tar
 
-  # job_4:
-  #   name: 'Build Image Wazuh QA'
-  #   runs-on: ubuntu-18.04
-  #   steps:
-  #    - name: Step 01 - Download Project wazuh-qa 
-  #      uses: actions/checkout@v2
-  #      with:
-  #       ref: 'main'
-  #       path: wazuh-cypress
-  #    - name: Step 02 - Install Cypress Project Dependencies
-  #      run: |
-  #       cd $GITHUB_WORKSPACE/wazuh-cypress
-  #       npm install
-  #     # npm run cy:install
+  job_4:
+    name: 'Build Image Wazuh QA'
+    runs-on: ubuntu-18.04
+    steps:
+     - name: Step 01 - Download Project wazuh-app-environments 
+       uses: actions/checkout@v2
+       with:
+        repository: matiasmoreno876/wazuh-app-environments
+        ref: 'master'
+        path: wazuh-app-environments
+        token: ${{ secrets.FE_SECRET_TOKEN }}
+     - name: Set up Docker Buildx
+       uses: docker/setup-buildx-action@v1
+     - name: Build and push
+       uses: docker/build-push-action@v2
+       with:
+        context: ${{ github.workspace }}/wazuh-app-environments/images/ubuntu-cypress
+        tags: ubuntu-cypress:1.0.0
+        outputs: type=docker,dest=/tmp/ubuntu-cypress-image.tar
+     - name: Upload artifact
+       uses: actions/upload-artifact@v2
+       with:
+        name: ubuntu-cypress-image
+        path: /tmp/ubuntu-cypress-image.tar
 
   # job_5:
   #   name: 'Run Wazuh QA'
