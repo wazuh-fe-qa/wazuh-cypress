@@ -81,7 +81,6 @@ jobs:
        uses: docker/build-push-action@v2
        with:
         context: ${{ github.workspace }}/wazuh-app-environments/images/${{ github.event.inputs.wazuh-manager-image }}
-        file: ./Dockerfile
         build-args: WAZUH_VERSION=${{ github.event.inputs.wazuh-version }},FILEBEAT_VERSION=${{ github.event.inputs.elastic-version }},FILEBEAT_WAZUH_TEMPLATE_URL=${{ github.event.inputs.filebeat-wazuh-template-url }},FILEBEAT_WAZUH_MODULE_URL=${{ github.event.inputs.filebeat-wazuh-module-url }}
         tags: ${{ github.event.inputs.wazuh-manager-image }}:${{ github.event.inputs.wazuh-version }}-${{ github.event.inputs.elastic-version }}
         outputs: type=docker,dest=/tmp/wazuh-manager-image.tar
@@ -108,7 +107,6 @@ jobs:
        uses: docker/build-push-action@v2
        with:
         context: ${{ github.workspace }}/wazuh-app-environments/images/${{ github.event.inputs.wazuh-agent-image }}
-        file: ./Dockerfile
         build-args: WAZUH_VERSION=${{ github.event.inputs.wazuh-version }}
         tags: ${{ github.event.inputs.wazuh-agent-image }}:${{ github.event.inputs.wazuh-version}}
         outputs: type=docker,dest=/tmp/wazuh-manager-image.tar
