@@ -40,29 +40,29 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # job_1:
-  #   name: 'Build Wazuh app package'
-  #   runs-on: ubuntu-18.04
-  #   steps:
-  #    - name: Step 01 - Download Project wazuh-packages 
-  #      uses: actions/checkout@v2
-  #      with:
-  #       repository: wazuh/wazuh-packages
-  #       ref: 'master'
-  #       path: wazuh-packages
-  #    - name: Step 02 - Building package
-  #      run: |
-  #       mkdir -p $GITHUB_WORKSPACE/packages
-  #       cd $GITHUB_WORKSPACE/wazuh-packages/wazuhapp/kibana
-  #       echo fixing command...
-  #       sed -i -e 's/'\|' cut -d \"\/\" \-f2//g' ./generate_wazuh_app.sh 
-  #       echo run command...
-  #       ./generate_wazuh_app.sh -b ${{ github.event.inputs.wazuh-app-branch-version }} -s $GITHUB_WORKSPACE/packages -r 1
-  #    - name: Step 03 - Upload package
-  #      uses: actions/upload-artifact@v3
-  #      with:
-  #         name: wazuh-kibana-app
-  #         path: ${{ github.workspace }}/packages/*
+  job_1:
+    name: 'Build Wazuh app package'
+    runs-on: ubuntu-18.04
+    steps:
+     - name: Step 01 - Download Project wazuh-packages 
+       uses: actions/checkout@v2
+       with:
+        repository: wazuh/wazuh-packages
+        ref: 'master'
+        path: wazuh-packages
+     - name: Step 02 - Building package
+       run: |
+        mkdir -p $GITHUB_WORKSPACE/packages
+        cd $GITHUB_WORKSPACE/wazuh-packages/wazuhapp/kibana
+        echo fixing command...
+        sed -i -e 's/'\|' cut -d \"\/\" \-f2//g' ./generate_wazuh_app.sh 
+        echo run command...
+        ./generate_wazuh_app.sh -b ${{ github.event.inputs.wazuh-app-branch-version }} -s $GITHUB_WORKSPACE/packages -r 1
+     - name: Step 03 - Upload package
+       uses: actions/upload-artifact@v3
+       with:
+          name: wazuh-kibana-app
+          path: ${{ github.workspace }}/packages/*
   
   job_2:
     name: 'Build Image Wazuh Manager'
@@ -145,7 +145,7 @@ jobs:
     name: 'Run Wazuh QA'
     runs-on: ubuntu-18.04
     needs:
-    #  - job_1
+     - job_1
      - job_3
      - job_4
     steps:
@@ -159,33 +159,35 @@ jobs:
         ref: 'master'
         path: wazuh-app-environments
         token: ${{ secrets.FE_SECRET_TOKEN }}
-     - name: Step 03 - Set up Docker Buildx
+     - name: Step 03 - Create folder for packages
+       run: |
+          cd $GITHUB_WORKSPACE/wazuh-app-environments/
+          mkdir packages
+     - name: Step 04 - Set up Docker Buildx
        uses: docker/setup-buildx-action@v1
-    #  - name: Step 04 - Download wazuh-kibana-app
-    #    uses: actions/download-artifact@v2
-    #    with:
-    #     name: wazuh-kibana-app
-    #     path: /tmp
-     - name: Step 05 - Download wazuh-agent-image
+     - name: Step 05 - Download wazuh-kibana-app
+       uses: actions/download-artifact@v2
+       with:
+        name: wazuh-kibana-app
+        path: ${{ github.workspace }}/wazuh-app-environments/packages
+     - name: Step 06 - Download wazuh-agent-image
        uses: actions/download-artifact@v2
        with:
         name: wazuh-agent-image
         path: /tmp
-     - name: Step 06 - Download ubuntu-cypress-image
+     - name: Step 07 - Download ubuntu-cypress-image
        uses: actions/download-artifact@v2
        with:
         name: ubuntu-cypress-image
         path: /tmp        
-     - name: Step 07 - Load Docker images
+     - name: Step 08 - Load Docker images
        run: |
           ls -ls /tmp/
           docker load --input /tmp/wazuh-agent-image.tar
           docker load --input /tmp/ubuntu-cypress-image.tar
           docker image ls -a
-     - name: Step 08 - Configuring templates docker environment
+     - name: Step 09 - Configuring templates docker environment
        run: |
-        cd $GITHUB_WORKSPACE/wazuh-app-environments/
-        mkdir packages
         cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
         cat ./.env
         sed -i -e 's|WAZUH_MANAGER_IMAGE=.*|WAZUH_MANAGER_IMAGE=${{ github.event.inputs.wazuh-manager-image }}|g' ./.env
@@ -197,64 +199,20 @@ jobs:
        run: |
         cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
         sudo sh setup.sh 
-
-
-
-
-
-  # job_x:
-  #   name: Run setup environment wazuh kibana app
-  #   #runs-on: self-hosted
-  #   runs-on: ubuntu-18.04
-  #   #container: cypress/browsers:node12.18.0-chrome83-ff77
-  #   steps:
-  #    - name: Step 04 - Starting containers
-  #      run: |
-  #       cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
-  #       sudo sh setup.sh 
-  #    - name: Step 07 - Installing package
-  #      run: |
-  #       cd $GITHUB_WORKSPACE/wazuh-app-environments/packages/
-  #       PACKAGE_NAME=`ls *.zip`
-  #       cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
-  #       docker-compose exec kibana bin/kibana-plugin install file:///packages/$PACKAGE_NAME
-  #       docker-compose exec kibana pwd
-  #       docker-compose exec kibana ls -la /usr/share/kibana/
-  #       docker-compose exec kibana ls -la /usr/share/kibana/data/
-  #       docker-compose restart kibana
-  #       echo CONTINUES AFTER 60 SECONDS ...
-  #       sleep 60s
-  #       docker-compose ps
-  #       docker-compose exec kibana pwd
-  #       docker-compose exec kibana cat data/wazuh/config/wazuh.yml
-  #       docker-compose exec kibana sed -i -e "s/url: https:\/\/localhost/url: https:\/\/wazuh-manager-master/g" /usr/share/kibana/data/wazuh/config/wazuh.yml
-  #       docker-compose exec kibana cat data/wazuh/config/wazuh.yml
-  #   # - name: Step 08 - Configuring ip container into wazuh.yml
-  #   #   run: |
-  #   #    cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
-  #   #    docker exec es_xpack-wz_cluster-agent_kibana_1 pwd
-  #   #    docker exec es_xpack-wz_cluster-agent_kibana_1 cat data/wazuh/config/wazuh.yml
-  #   #    docker exec es_xpack-wz_cluster-agent_kibana_1 sed -i -e "s/url: https:\/\/localhost/url: https:\/\/wazuh-manager-master/g" /usr/share/kibana/data/wazuh/config/wazuh.yml
-  #   #    docker exec es_xpack-wz_cluster-agent_kibana_1 cat data/wazuh/config/wazuh.yml
-  #    - name: Step 11 - Run Cypress tests
-  #      run: |
-  #        cd $GITHUB_WORKSPACE/wazuh-cypress
-  #        npm run cypress:run-headless         
-  #      continue-on-error: true 
-  #    - name: Step 12 - Run Cypress reports
-  #      run: |
-  #        cd $GITHUB_WORKSPACE/wazuh-cypress
-  #        npm run cypress:report        
-  #    - name: Step 13 - Archive reports
-  #      uses: actions/upload-artifact@v2
-  #      with:
-  #       name: cypress-reports
-  #       path: ${{ github.workspace }}/wazuh-cypress/cypress/report/*
-  #    #- name: Step 12 - Upload Screenshots And Videos To Slack
-  #     # if: failure()
-  #      #uses: trymbill/cypress-slack-video-upload-action@v1.3.0
-  #      #with:
-  #       #workdir: wazuh-qa/tests/frontend/test_kibana_app/cypress
-  #       #token: ${{ secrets.ACTIONS_SLACK_TOKEN }}
-  #       #channels: 'daily-app-team'
-  #       #message-text: ${{ format('Workflow "{0}" job test triggered by {1} is FAILED for {2} - {3}', github.workflow, github.event_name, github.base_ref, github.head_ref) }}
+     - name: Step 10 - Installing package
+       run: |
+        cd $GITHUB_WORKSPACE/wazuh-app-environments/packages/
+        PACKAGE_NAME=`ls *.zip`
+        cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
+        docker-compose exec kibana bin/kibana-plugin install file:///packages/$PACKAGE_NAME
+        docker-compose exec kibana pwd
+        docker-compose exec kibana ls -la /usr/share/kibana/
+        docker-compose exec kibana ls -la /usr/share/kibana/data/
+        docker-compose restart kibana
+        echo CONTINUES AFTER 60 SECONDS ...
+        sleep 60s
+        docker-compose ps
+        docker-compose exec kibana pwd
+        docker-compose exec kibana cat data/wazuh/config/wazuh.yml
+        docker-compose exec kibana sed -i -e "s/url: https:\/\/localhost/url: https:\/\/wazuh-manager-master/g" /usr/share/kibana/data/wazuh/config/wazuh.yml
+        docker-compose exec kibana cat data/wazuh/config/wazuh.yml
