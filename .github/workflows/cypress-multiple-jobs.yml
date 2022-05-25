@@ -198,22 +198,24 @@ jobs:
      - name: Step 09 - Starting containers
        run: |
         cd ${{ env.PATH_TEMPLATE }}
-        sudo docker-compose up -d
+        docker-compose up -d
      - name: Step 10 - Installing package
        run: |
         cd $GITHUB_WORKSPACE/wazuh-app-environments/packages/
         PACKAGE_NAME=`ls *.zip`
         cd ${{ env.PATH_TEMPLATE }}
         docker exec $(docker-compose ps -q kibana) bin/kibana-plugin install file:///packages/$PACKAGE_NAME
-        sudo docker-compose restart kibana
+        docker-compose restart kibana
         echo CONTINUES AFTER 60 SECONDS ...
         sleep 60s
+     - name: Step 11 - Modify Wazuh.yml
+       run: |
         docker exec $(docker-compose ps -q kibana) sed -i -e "s/url: https:\/\/localhost/url: https:\/\/wazuh-manager-master/g" /usr/share/kibana/data/wazuh/config/wazuh.yml
         docker exec $(docker-compose ps -q kibana) cat /usr/share/kibana/data/wazuh/config/wazuh.yml
-     - name: Step 11 - Run Cypress tests
+     - name: Step 12 - Run Cypress tests
        run: |
          docker exec $(docker-compose ps -q cypress) bash -c " . /home/automation/nvm/nvm.sh && nvm use && npm run cypress:run-headless"        
        continue-on-error: true 
-     - name: Step 12 - Run Cypress reports
+     - name: Step 13 - Run Cypress reports
        run: |
          docker exec $(docker-compose ps -q cypress) bash -c " . /home/automation/nvm/nvm.sh && nvm use && npm run cypress:report"  
