@@ -145,7 +145,7 @@ jobs:
     name: 'Run Wazuh QA'
     runs-on: ubuntu-18.04
     needs:
-     - job_1
+    #  - job_1
      - job_3
      - job_4
     steps:
