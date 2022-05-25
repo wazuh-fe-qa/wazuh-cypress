@@ -40,29 +40,29 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  job_1:
-    name: 'Build Wazuh app package'
-    runs-on: ubuntu-18.04
-    steps:
-     - name: Step 01 - Download Project wazuh-packages 
-       uses: actions/checkout@v2
-       with:
-        repository: wazuh/wazuh-packages
-        ref: 'master'
-        path: wazuh-packages
-     - name: Step 02 - Building package
-       run: |
-        mkdir -p $GITHUB_WORKSPACE/packages
-        cd $GITHUB_WORKSPACE/wazuh-packages/wazuhapp/kibana
-        echo fixing command...
-        sed -i -e 's/'\|' cut -d \"\/\" \-f2//g' ./generate_wazuh_app.sh 
-        echo run command...
-        ./generate_wazuh_app.sh -b ${{ github.event.inputs.wazuh-app-branch-version }} -s $GITHUB_WORKSPACE/packages -r 1
-     - name: Step 03 - Upload package
-       uses: actions/upload-artifact@v3
-       with:
-          name: wazuh-kibana-app
-          path: ${{ github.workspace }}/packages/*
+  # job_1:
+  #   name: 'Build Wazuh app package'
+  #   runs-on: ubuntu-18.04
+  #   steps:
+  #    - name: Step 01 - Download Project wazuh-packages 
+  #      uses: actions/checkout@v2
+  #      with:
+  #       repository: wazuh/wazuh-packages
+  #       ref: 'master'
+  #       path: wazuh-packages
+  #    - name: Step 02 - Building package
+  #      run: |
+  #       mkdir -p $GITHUB_WORKSPACE/packages
+  #       cd $GITHUB_WORKSPACE/wazuh-packages/wazuhapp/kibana
+  #       echo fixing command...
+  #       sed -i -e 's/'\|' cut -d \"\/\" \-f2//g' ./generate_wazuh_app.sh 
+  #       echo run command...
+  #       ./generate_wazuh_app.sh -b ${{ github.event.inputs.wazuh-app-branch-version }} -s $GITHUB_WORKSPACE/packages -r 1
+  #    - name: Step 03 - Upload package
+  #      uses: actions/upload-artifact@v3
+  #      with:
+  #         name: wazuh-kibana-app
+  #         path: ${{ github.workspace }}/packages/*
   
   job_2:
     name: 'Build Image Wazuh Manager'
@@ -158,11 +158,11 @@ jobs:
         token: ${{ secrets.FE_SECRET_TOKEN }}
      - name: Set up Docker Buildx
        uses: docker/setup-buildx-action@v1
-     - name: Download wazuh-kibana-app
-       uses: actions/download-artifact@v2
-       with:
-        name: wazuh-kibana-app
-        path: /tmp
+    #  - name: Download wazuh-kibana-app
+    #    uses: actions/download-artifact@v2
+    #    with:
+    #     name: wazuh-kibana-app
+    #     path: /tmp
      - name: Download wazuh-agent-image
        uses: actions/download-artifact@v2
        with:
@@ -175,6 +175,7 @@ jobs:
         path: /tmp        
      - name: Load Docker image
        run: |
+          ls -ls /tmp/
           docker load --input /tmp/wazuh-kibana-app.tar
           docker load --input /tmp/wazuh-agent-image.tar
           docker load --input /tmp/ubuntu-cypress-image.tar
