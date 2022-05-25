@@ -151,7 +151,7 @@ jobs:
     steps:
      - name: Step 01 - Set up environment variables
        run: |
-        echo "PATH_TEMPLATE_XPACK_CLUSTER_AGENT=$GITHUB_WORKSPACE/wazuh-app-environments/templates_elastic_prod/es_xpack-wz_cluster-agent/" >> $GITHUB_ENV
+        echo "PATH_TEMPLATE=$GITHUB_WORKSPACE/wazuh-app-environments/templates_elastic_prod/es_basic-wz_cluster-agent/" >> $GITHUB_ENV
      - name: Step 02 - Download Project wazuh-app-environments 
        uses: actions/checkout@v2
        with:
@@ -188,7 +188,7 @@ jobs:
           docker image ls -a
      - name: Step 09 - Configuring templates docker environment
        run: |
-        cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
+        cd ${{ env.PATH_TEMPLATE }}
         cat ./.env
         sed -i -e 's|WAZUH_MANAGER_IMAGE=.*|WAZUH_MANAGER_IMAGE=${{ github.event.inputs.wazuh-manager-image }}|g' ./.env
         sed -i -e 's|WAZUH_AGENT_IMAGE=.*|WAZUH_AGENT_IMAGE=${{ github.event.inputs.wazuh-agent-image }}|g' ./.env
@@ -197,14 +197,13 @@ jobs:
         cat .env
      - name: Step 09 - Starting containers
        run: |
-        cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
-        sudo sh setup.sh 
+        cd ${{ env.PATH_TEMPLATE }}
+        sudo docker-compose up -d
      - name: Step 10 - Installing package
        run: |
         cd $GITHUB_WORKSPACE/wazuh-app-environments/packages/
         PACKAGE_NAME=`ls *.zip`
-        cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
-
+        cd ${{ env.PATH_TEMPLATE }}
         docker exec $(docker-compose ps -q kibana) kibana bin/kibana-plugin install file:///packages/$PACKAGE_NAME
         docker exec $(docker-compose ps -q kibana) pwd
         docker exec $(docker-compose ps -q kibana) kibana ls -la /usr/share/kibana/
