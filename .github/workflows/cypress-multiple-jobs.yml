@@ -109,7 +109,7 @@ jobs:
         context: ${{ github.workspace }}/wazuh-app-environments/images/${{ github.event.inputs.wazuh-agent-image }}
         build-args: WAZUH_VERSION=${{ github.event.inputs.wazuh-version }}
         tags: ${{ github.event.inputs.wazuh-agent-image }}:${{ github.event.inputs.wazuh-version}}
-        outputs: type=docker,dest=/tmp/wazuh-manager-image.tar
+        outputs: type=docker,dest=/tmp/wazuh-agent-image.tar
      - name: Upload artifact
        uses: actions/upload-artifact@v2
        with:
