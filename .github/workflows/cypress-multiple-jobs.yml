@@ -205,14 +205,15 @@ jobs:
         PACKAGE_NAME=`ls *.zip`
         cd ${{ env.PATH_TEMPLATE }}
         docker exec $(docker-compose ps -q kibana) bin/kibana-plugin install file:///packages/$PACKAGE_NAME
-        docker exec $(docker-compose ps -q kibana) pwd
-        docker exec $(docker-compose ps -q kibana) ls -la /usr/share/kibana/
-        docker exec $(docker-compose ps -q kibana) ls -la /usr/share/kibana/data/
         sudo docker-compose restart kibana
         echo CONTINUES AFTER 60 SECONDS ...
         sleep 60s
-        docker exec $(docker-compose ps -q kibana) ps
-        docker exec $(docker-compose ps -q kibana) kibana pwd
-        docker exec $(docker-compose ps -q kibana) cat data/wazuh/config/wazuh.yml
         docker exec $(docker-compose ps -q kibana) sed -i -e "s/url: https:\/\/localhost/url: https:\/\/wazuh-manager-master/g" /usr/share/kibana/data/wazuh/config/wazuh.yml
-        docker exec $(docker-compose ps -q kibana) cat data/wazuh/config/wazuh.yml
+        docker exec $(docker-compose ps -q kibana) cat /usr/share/kibana/data/wazuh/config/wazuh.yml
+     - name: Step 11 - Run Cypress tests
+       run: |
+         docker exec $(docker-compose ps -q cypress) bash -c " . /home/automation/nvm/nvm.sh && nvm use && npm run cypress:run-headless"        
+       continue-on-error: true 
+     - name: Step 12 - Run Cypress reports
+       run: |
+         docker exec $(docker-compose ps -q cypress) bash -c " . /home/automation/nvm/nvm.sh && nvm use && npm run cypress:report"  
