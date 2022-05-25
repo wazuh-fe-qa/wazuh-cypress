@@ -34,7 +34,7 @@ on:
         required: true                
       wazuh-app-branch-version: 
         description: 'Wazuh Kiabana App Branch/Tag'
-        default: ''
+        default: 'v4.3.1-7.16.3'
         required: true  
         
 
