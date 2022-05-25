@@ -204,15 +204,16 @@ jobs:
         cd $GITHUB_WORKSPACE/wazuh-app-environments/packages/
         PACKAGE_NAME=`ls *.zip`
         cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
-        docker-compose exec kibana bin/kibana-plugin install file:///packages/$PACKAGE_NAME
-        docker-compose exec kibana pwd
-        docker-compose exec kibana ls -la /usr/share/kibana/
-        docker-compose exec kibana ls -la /usr/share/kibana/data/
-        docker-compose restart kibana
+
+        docker exec $(docker-compose ps -q kibana) kibana bin/kibana-plugin install file:///packages/$PACKAGE_NAME
+        docker exec $(docker-compose ps -q kibana) pwd
+        docker exec $(docker-compose ps -q kibana) kibana ls -la /usr/share/kibana/
+        docker exec $(docker-compose ps -q kibana) exec kibana ls -la /usr/share/kibana/data/
+        sudo docker-compose restart kibana
         echo CONTINUES AFTER 60 SECONDS ...
         sleep 60s
-        docker-compose ps
-        docker-compose exec kibana pwd
-        docker-compose exec kibana cat data/wazuh/config/wazuh.yml
-        docker-compose exec kibana sed -i -e "s/url: https:\/\/localhost/url: https:\/\/wazuh-manager-master/g" /usr/share/kibana/data/wazuh/config/wazuh.yml
-        docker-compose exec kibana cat data/wazuh/config/wazuh.yml
+        docker exec $(docker-compose ps -q kibana) ps
+        docker exec $(docker-compose ps -q kibana) exec kibana pwd
+        docker exec $(docker-compose ps -q kibana) exec kibana cat data/wazuh/config/wazuh.yml
+        docker exec $(docker-compose ps -q kibana) exec kibana sed -i -e "s/url: https:\/\/localhost/url: https:\/\/wazuh-manager-master/g" /usr/share/kibana/data/wazuh/config/wazuh.yml
+        docker exec $(docker-compose ps -q kibana) exec kibana cat data/wazuh/config/wazuh.yml
