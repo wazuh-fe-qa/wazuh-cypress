@@ -75,16 +75,16 @@ jobs:
         ref: 'master'
         path: wazuh-app-environments
         token: ${{ secrets.FE_SECRET_TOKEN }}
-     - name: Set up Docker Buildx
+     - name: Step 02 - Set up Docker Buildx
        uses: docker/setup-buildx-action@v1
-     - name: Build and push
+     - name: Step 03 - Build
        uses: docker/build-push-action@v2
        with:
         context: ${{ github.workspace }}/wazuh-app-environments/images/${{ github.event.inputs.wazuh-manager-image }}
         build-args: WAZUH_VERSION=${{ github.event.inputs.wazuh-version }},FILEBEAT_VERSION=${{ github.event.inputs.elastic-version }},FILEBEAT_WAZUH_TEMPLATE_URL=${{ github.event.inputs.filebeat-wazuh-template-url }},FILEBEAT_WAZUH_MODULE_URL=${{ github.event.inputs.filebeat-wazuh-module-url }}
         tags: ${{ github.event.inputs.wazuh-manager-image }}:${{ github.event.inputs.wazuh-version }}-${{ github.event.inputs.elastic-version }}
         outputs: type=docker,dest=/tmp/wazuh-manager-image.tar
-     - name: Upload artifact
+     - name: Step 04 - Upload artifact
        uses: actions/upload-artifact@v2
        with:
         name: wazuh-manager-image
@@ -101,16 +101,16 @@ jobs:
         ref: 'master'
         path: wazuh-app-environments
         token: ${{ secrets.FE_SECRET_TOKEN }}
-     - name: Set up Docker Buildx
+     - name: Step 02 - Set up Docker Buildx
        uses: docker/setup-buildx-action@v1
-     - name: Build and push
+     - name: Step 03 - Build and push
        uses: docker/build-push-action@v2
        with:
         context: ${{ github.workspace }}/wazuh-app-environments/images/${{ github.event.inputs.wazuh-agent-image }}
         build-args: WAZUH_VERSION=${{ github.event.inputs.wazuh-version }}
         tags: ${{ github.event.inputs.wazuh-agent-image }}:${{ github.event.inputs.wazuh-version}}
         outputs: type=docker,dest=/tmp/wazuh-agent-image.tar
-     - name: Upload artifact
+     - name: Step 04 - Upload artifact
        uses: actions/upload-artifact@v2
        with:
         name: wazuh-agent-image
@@ -127,15 +127,15 @@ jobs:
         ref: 'master'
         path: wazuh-app-environments
         token: ${{ secrets.FE_SECRET_TOKEN }}
-     - name: Set up Docker Buildx
+     - name: Step 02 - Set up Docker Buildx
        uses: docker/setup-buildx-action@v1
-     - name: Build and push
+     - name: Step 03 - Build and push
        uses: docker/build-push-action@v2
        with:
         context: ${{ github.workspace }}/wazuh-app-environments/images/ubuntu-cypress
         tags: ubuntu-cypress:1.0.0
         outputs: type=docker,dest=/tmp/ubuntu-cypress-image.tar
-     - name: Upload artifact
+     - name: Step 03 - Upload artifact
        uses: actions/upload-artifact@v2
        with:
         name: ubuntu-cypress-image
@@ -149,36 +149,58 @@ jobs:
      - job_3
      - job_4
     steps:
-     - name: Step 01 - Download Project wazuh-app-environments 
+     - name: Step 01 - Set up environment variables
+       run: |
+        echo "PATH_TEMPLATE_XPACK_CLUSTER_AGENT=$GITHUB_WORKSPACE/wazuh-app-environments/templates_elastic_prod/es_xpack-wz_cluster-agent/" >> $GITHUB_ENV
+     - name: Step 02 - Download Project wazuh-app-environments 
        uses: actions/checkout@v2
        with:
         repository: matiasmoreno876/wazuh-app-environments
         ref: 'master'
         path: wazuh-app-environments
         token: ${{ secrets.FE_SECRET_TOKEN }}
-     - name: Set up Docker Buildx
+     - name: Step 03 - Set up Docker Buildx
        uses: docker/setup-buildx-action@v1
-    #  - name: Download wazuh-kibana-app
+    #  - name: Step 04 - Download wazuh-kibana-app
     #    uses: actions/download-artifact@v2
     #    with:
     #     name: wazuh-kibana-app
     #     path: /tmp
-     - name: Download wazuh-agent-image
+     - name: Step 05 - Download wazuh-agent-image
        uses: actions/download-artifact@v2
        with:
         name: wazuh-agent-image
         path: /tmp
-     - name: Download ubuntu-cypress-image
+     - name: Step 06 - Download ubuntu-cypress-image
        uses: actions/download-artifact@v2
        with:
         name: ubuntu-cypress-image
         path: /tmp        
-     - name: Load Docker image
+     - name: Step 07 - Load Docker images
        run: |
           ls -ls /tmp/
           docker load --input /tmp/wazuh-agent-image.tar
           docker load --input /tmp/ubuntu-cypress-image.tar
           docker image ls -a
+     - name: Step 08 - Configuring templates docker environment
+       run: |
+        cd $GITHUB_WORKSPACE/wazuh-app-environments/
+        mkdir packages
+        cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
+        cat ./.env
+        sed -i -e 's|WAZUH_MANAGER_IMAGE=.*|WAZUH_MANAGER_IMAGE=${{ github.event.inputs.wazuh-manager-image }}|g' ./.env
+        sed -i -e 's|WAZUH_AGENT_IMAGE=.*|WAZUH_AGENT_IMAGE=${{ github.event.inputs.wazuh-agent-image }}|g' ./.env
+        sed -i -e 's|WAZUH_VERSION=.*|WAZUH_VERSION=${{ github.event.inputs.wazuh-version }}|g' ./.env
+        sed -i -e 's|ELASTIC_VERSION=.*|ELASTIC_VERSION=${{ github.event.inputs.elastic-version }}|g' ./.env
+        cat .env
+     - name: Step 09 - Starting containers
+       run: |
+        cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
+        sudo sh setup.sh 
+
+
+
+
 
   # job_x:
   #   name: Run setup environment wazuh kibana app
@@ -186,9 +208,6 @@ jobs:
   #   runs-on: ubuntu-18.04
   #   #container: cypress/browsers:node12.18.0-chrome83-ff77
   #   steps:
-  #    - name: Step 01 - Set up environment variables
-  #      run: |
-  #       echo "PATH_TEMPLATE_XPACK_CLUSTER_AGENT=$GITHUB_WORKSPACE/wazuh-app-environments/templates_elastic_prod/es_xpack-wz_cluster-agent/" >> $GITHUB_ENV
   #    - name: Step 04 - Starting containers
   #      run: |
   #       cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
