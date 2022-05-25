@@ -176,7 +176,6 @@ jobs:
      - name: Load Docker image
        run: |
           ls -ls /tmp/
-          docker load --input /tmp/wazuh-kibana-app.tar
           docker load --input /tmp/wazuh-agent-image.tar
           docker load --input /tmp/ubuntu-cypress-image.tar
           docker image ls -a
