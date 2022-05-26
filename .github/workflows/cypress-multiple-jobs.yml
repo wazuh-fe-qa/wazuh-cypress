@@ -42,7 +42,7 @@ on:
 jobs:
   job_1:
     name: 'Build Wazuh app package'
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
      - name: Step 01 - Download Project wazuh-packages 
        uses: actions/checkout@v2
