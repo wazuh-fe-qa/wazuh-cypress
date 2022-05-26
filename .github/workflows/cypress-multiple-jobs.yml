@@ -212,6 +212,7 @@ jobs:
        continue-on-error: true 
      - name: Step 11 - Modify Wazuh.yml
        run: |
+        cd ${{ env.PATH_TEMPLATE }}
         docker exec $(docker-compose ps -q kibana) bash -c "sed -i -e 's|url: https:\/\/localhost|url: https:\/\/wazuh-manager-master|g' /usr/share/kibana/data/wazuh/config/wazuh.yml"
         docker exec $(docker-compose ps -q kibana) bash -c "cat /usr/share/kibana/data/wazuh/config/wazuh.yml"
      - name: Step 12 - Run Cypress tests
