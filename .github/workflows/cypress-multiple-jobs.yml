@@ -217,8 +217,10 @@ jobs:
         docker exec $(docker-compose ps -q kibana) bash -c "cat /usr/share/kibana/data/wazuh/config/wazuh.yml"
      - name: Step 12 - Run Cypress tests
        run: |
+         cd ${{ env.PATH_TEMPLATE }}
          docker exec $(docker-compose ps -q cypress) bash -c " . /home/automation/nvm/nvm.sh && nvm use && npm run cypress:run-headless"        
        continue-on-error: true 
      - name: Step 13 - Run Cypress reports
        run: |
+         cd ${{ env.PATH_TEMPLATE }}
          docker exec $(docker-compose ps -q cypress) bash -c " . /home/automation/nvm/nvm.sh && nvm use && npm run cypress:report"  
