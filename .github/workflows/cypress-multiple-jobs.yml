@@ -209,6 +209,7 @@ jobs:
         docker-compose restart kibana
         echo CONTINUES AFTER 60 SECONDS ...
         sleep 60s
+       continue-on-error: true 
      - name: Step 11 - Modify Wazuh.yml
        run: |
         docker exec $(docker-compose ps -q kibana) sed -i -e "s/url: https:\/\/localhost/url: https:\/\/wazuh-manager-master/g" /usr/share/kibana/data/wazuh/config/wazuh.yml
