@@ -200,6 +200,8 @@ jobs:
         cd ${{ env.PATH_TEMPLATE }}
         sed -i -e 's|docker-compose exec elasticsearch|docker exec $(docker-compose ps -q elasticsearch)|g' ./setup.sh
         sudo sh ./setup.sh 
+        echo CONTINUES AFTER 60 SECONDS ...
+        sleep 60s
      - name: Step 10 - Installing package
        run: |
         cd $GITHUB_WORKSPACE/wazuh-app-environments/packages/
