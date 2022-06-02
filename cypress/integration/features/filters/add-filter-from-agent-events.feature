@@ -1,7 +1,7 @@
 Feature: Validate that the pinned filter label is displayed
 
   As a Wazuh user
-  I want to set a new filter from the agent page
+  i want to set a new filter from the agent page
   in order to manage them
   Background:
     Given The admin user is logged in using xpack
