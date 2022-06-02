@@ -13,3 +13,14 @@ Given('The kibana admin user is logged in using {} and the wazuh logo is display
     elementIsVisible(wazuhMenuButton);
     
 })
+
+Given('The admin user is logged in using {}',  (loginMethod) => {
+    const url = Cypress.env(loginMethod);
+    
+    cy.log(`Parameter url from loginMethod is: ${url}`);
+    
+    navigate(Cypress.env(loginMethod));
+    
+    elementIsVisible(wazuhMenuButton);
+    
+})
