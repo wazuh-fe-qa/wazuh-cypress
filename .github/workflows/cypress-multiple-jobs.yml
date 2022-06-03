@@ -36,13 +36,6 @@ on:
         description: 'Wazuh Kiabana App Branch/Tag'
         default: 'v4.3.1-7.16.3'
         required: true  
-      install-package:
-        type: boolean
-        description: 'install previously created package?'
-        required: true
-      url-package:
-        description: 'package download url'
-        required: false
         
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -58,7 +51,6 @@ jobs:
         ref: 'master'
         path: wazuh-packages
      - name: Step 02 - Building package
-       if: ${{ github.event.inputs.install-package == 'false' }}
        run: |
         mkdir -p $GITHUB_WORKSPACE/packages
         cd $GITHUB_WORKSPACE/wazuh-packages/wazuhapp/kibana
