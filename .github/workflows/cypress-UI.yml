@@ -28,7 +28,13 @@ on:
         description: 'Wazuh Kiabana App Branch/Tag'
         default: ''
         required: true  
-        
+      install-package:
+        type: boolean
+        description: 'install previously created package?'
+        required: true
+      url-package:
+        description: 'package download url'
+        required: false        
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -68,12 +74,14 @@ jobs:
         sed -i -e 's|docker-compose exec elasticsearch|docker exec $(docker-compose ps -q elasticsearch)|g' ./setup.sh
         sudo sh setup.sh 
      - name: Step 05 - Download Project wazuh-packages 
+       if: ${{ github.event.inputs.install-package == 'false' }}
        uses: actions/checkout@v2
        with:
         repository: wazuh/wazuh-packages
         ref: 'master'
         path: wazuh-packages
      - name: Step 06 - Building package
+       if: ${{ github.event.inputs.install-package == 'false' }}
        run: |
         cd $GITHUB_WORKSPACE/wazuh-packages/wazuhapp/kibana
         pwd
@@ -83,11 +91,24 @@ jobs:
         echo run command...
         ./generate_wazuh_app.sh -b ${{ github.event.inputs.wazuh-app-branch-version }} -s $GITHUB_WORKSPACE/wazuh-app-environments/packages -r 1
      - name: Step 07 - Installing package
+       if: ${{ github.event.inputs.install-package == 'false' }}
        run: |
         cd $GITHUB_WORKSPACE/wazuh-app-environments/packages/
         PACKAGE_NAME=`ls *.zip`
         cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
         docker exec $(docker-compose ps -q kibana) bin/kibana-plugin install file:///packages/$PACKAGE_NAME
+        docker exec $(docker-compose ps -q kibana) pwd
+        docker exec $(docker-compose ps -q kibana) ls -la /usr/share/kibana/
+        docker exec $(docker-compose ps -q kibana) ls -la /usr/share/kibana/data/
+        docker-compose restart kibana
+        echo CONTINUES AFTER 60 SECONDS ...
+        sleep 60s
+        docker-compose ps
+     - name: Step 07 - Installing package from url
+       if: ${{ github.event.inputs.install-package == 'true' }}
+       run: |
+        cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
+        docker exec $(docker-compose ps -q kibana) bin/kibana-plugin install ${{ github.event.inputs.url-package }}
         docker exec $(docker-compose ps -q kibana) pwd
         docker exec $(docker-compose ps -q kibana) ls -la /usr/share/kibana/
         docker exec $(docker-compose ps -q kibana) ls -la /usr/share/kibana/data/
