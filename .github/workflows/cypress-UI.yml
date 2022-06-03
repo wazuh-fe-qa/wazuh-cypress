@@ -27,7 +27,7 @@ on:
       wazuh-app-branch-version: 
         description: 'Wazuh Kiabana App Branch/Tag'
         default: ''
-        required: true  
+        required: false  
       install-package:
         type: boolean
         description: 'install previously created package?'
