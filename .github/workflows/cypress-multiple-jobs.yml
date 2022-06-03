@@ -36,6 +36,22 @@ on:
         description: 'Wazuh Kiabana App Branch/Tag'
         default: 'v4.3.1-7.16.3'
         required: true  
+      name:
+        required: true
+        type: choice
+        description: Who to greet
+        options: 
+        - monalisa
+        - cschleiden
+      message:
+        description: ''
+        required: true
+      use-emoji:
+        type: boolean
+        description: Include  emojis
+        required: true
+      environment:
+        type: environment    
         
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
