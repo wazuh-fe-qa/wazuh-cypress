@@ -1,6 +1,6 @@
 {
   "testFiles": ["**/*.{feature,features}"],
-  "defaultCommandTimeout": 20000,
+  "defaultCommandTimeout": 40000,
   "viewportWidth": 1360,
   "viewportHeight": 790,
   "reporter": "mochawesome",
