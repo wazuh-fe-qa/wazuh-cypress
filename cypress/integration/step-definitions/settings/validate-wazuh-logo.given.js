@@ -6,8 +6,6 @@ import { wazuhMenuButton } from '../../pageobjects/wazuh-menu/wazuh-menu.page';
 Given('The kibana admin user is logged in using {} and the wazuh logo is displayed',  (loginMethod) => {
     const url = Cypress.env(loginMethod);
     
-    cy.log(`Parameter url from loginMethod is: ${url}`);
-    
     navigate(Cypress.env(loginMethod));
     
     elementIsVisible(wazuhMenuButton);
@@ -16,8 +14,6 @@ Given('The kibana admin user is logged in using {} and the wazuh logo is display
 
 Given('The admin user is logged in using {}',  (loginMethod) => {
     const url = Cypress.env(loginMethod);
-    
-    cy.log(`Parameter url from loginMethod is: ${url}`);
     
     navigate(Cypress.env(loginMethod));
     
