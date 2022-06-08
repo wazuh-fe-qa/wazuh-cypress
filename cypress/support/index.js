@@ -77,4 +77,5 @@ beforeEach(() => {
 
 afterEach(() => {
     updateCookies();
+    clearSession();
 })
