@@ -3,10 +3,11 @@ Feature: Pin filter
   As a Wazuh user
   I want to pin a filter
   in order to aplly it across the modules
-  
+  Background:
+    Given The admin user is logged in using xpack
+
   @filter
-  Scenario Outline: The user add and pin new filer - across the modules
-    Given The kibana admin user is logged in using xpack and the wazuh logo is displayed
+  Scenario Outline: The user add and pin new filer - across the modules <Module Name>
     When The user goes to <Module Name>
     And The user adds a new filter
     And The user checks filter label is added
