@@ -19,7 +19,6 @@ Feature: Validate that the added filter label is displayed
       | Security Events      |
       | Integrity Monitoring |
       | System Auditing      |
-      | Vulnerabilities      |
       | Mitre & Attack       |
       | GDPR                 |
       | HIPAA                |

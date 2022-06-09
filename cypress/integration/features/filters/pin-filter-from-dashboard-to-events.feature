@@ -5,7 +5,7 @@ Feature: Pin filter
   in order to aplly it across the modules
   Background:
     Given The admin user is logged in using xpack
-    
+
   @filter
   Scenario Outline: The user add and pin new filer - across the modules - from dashboard to event page <Module Name>
     When The user goes to <Module Name>
@@ -22,7 +22,6 @@ Feature: Pin filter
       | Security Events      |
       | Integrity Monitoring |
       | System Auditing      |
-      | Vulnerabilities      |
       | Mitre & Attack       |
       | GDPR                 |
       | HIPAA                |

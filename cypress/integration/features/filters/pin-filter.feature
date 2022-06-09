@@ -21,7 +21,6 @@ Feature: Pin filter
       | Security Events      |
       | Integrity Monitoring |
       | System Auditing      |
-      | Vulnerabilities      |
       | Mitre & Attack       |
       | GDPR                 |
       | HIPAA                |

@@ -5,7 +5,7 @@ Feature: Validate that the added filter label is displayed
   in order to manage them
   Background:
     Given The admin user is logged in using xpack
-    
+
   @filter
   Scenario Outline: The user add a new filer <Module Name>
     When The user goes to <Module Name>
@@ -19,7 +19,6 @@ Feature: Validate that the added filter label is displayed
       | Security Events      |
       | Integrity Monitoring |
       | System Auditing      |
-      | Vulnerabilities      |
       | Mitre & Attack       |
       | GDPR                 |
       | HIPAA                |

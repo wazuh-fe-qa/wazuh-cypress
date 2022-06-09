@@ -18,7 +18,6 @@ Feature: Validate that the added filter label is remove after click remove filte
       | Security Events      |
       | Integrity Monitoring |
       | System Auditing      |
-      | Vulnerabilities      |
       | Mitre & Attack       |
       | GDPR                 |
       | HIPAA                |
