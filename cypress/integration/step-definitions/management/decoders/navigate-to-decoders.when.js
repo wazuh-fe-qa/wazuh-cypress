@@ -13,5 +13,4 @@ When('The user navigates to decoders', () => {
   clickElement(managementButton);
   elementIsVisible(decodersLink);
   clickElement(decodersLink);
-  //validateURLIncludes('/manager/?tab=decoders');
 });
