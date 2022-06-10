@@ -3,10 +3,10 @@ Feature: Validate that the added filter label is displayed
   As a Wazuh user
   I want to set a new filter
   in order to manage them
-  
+  Background:
+    Given The admin user is logged in using xpack
   @filter
-  Scenario Outline: The user add a new filer from the events page
-    Given The kibana admin user is logged in using xpack and the wazuh logo is displayed
+  Scenario Outline: The user add a new filer from the events page <Module Name>
     When The user goes to <Module Name>
     And The user moves to events page
     And The user adds a new filter
@@ -19,7 +19,6 @@ Feature: Validate that the added filter label is displayed
       | Security Events      |
       | Integrity Monitoring |
       | System Auditing      |
-      | Vulnerabilities      |
       | Mitre & Attack       |
       | GDPR                 |
       | HIPAA                |

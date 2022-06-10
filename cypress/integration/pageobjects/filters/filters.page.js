@@ -1,7 +1,7 @@
 export const addFilterButton = '[data-test-subj="addFilter"]';
 export const filterSuggestionList = '[data-test-subj="filterFieldSuggestionList"]';
-export const filterOperatorList = '[data-test-subj="filterOperatorList"]';
-export const filterParams = '[class="euiFieldNumber euiFieldNumber--fullWidth"]';
+export const filterOperatorList = '.euiForm .euiFlexGroup--responsive [data-test-subj="filterOperatorList"] [data-test-subj="comboBoxInput"]';
+export const filterParams = '[data-test-subj="filterParams"]';
 export const saveFilterButton = '[data-test-subj="saveFilter"]';
 export const stablishedFilter = '[data-test-subj="filter filter-enabled filter-key-rule.level filter-value-7 filter-unpinned"';
 export const pinFilterAction = '[data-test-subj="pinFilter"]';

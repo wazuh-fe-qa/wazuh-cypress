@@ -49,6 +49,10 @@ export const getElement = (selector) => {
   return cy.get(selector);
 };
 
+export const getAvailableElement = (selector) => {
+  return cy.get(selector).should('not.be.disabled');
+};
+
 export const interceptAs = (methodUsed, urlUsed, alias) => {
   cy.intercept({
     method: methodUsed,
