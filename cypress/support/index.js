@@ -28,7 +28,7 @@ import {
 } from '../integration/utils/driver';
 const cookieMock = require('../../cookie.json');
 //TODO: we must improve these hardcoded variables
-const loginMethod = Cypress.env('type_x')
+const loginMethod = Cypress.env('type')
 import './commands';
 require("cypress-xpath");
 
@@ -41,13 +41,11 @@ before(() => {
         return false;
     });
 
-    const url = Cypress.env(loginMethod);
-
     const login = LOGIN_TYPE[loginMethod];
 
-    cy.log(`Parameter loginMethod is: ${loginMethod} and url from loginMethod is: ${url}`);
+    cy.log(`Parameter loginMethod is: ${loginMethod} and url from loginMethod is: ${Cypress.config('baseUrl')}`);
 
-    navigate(url);
+    navigate("app/wazuh");
 
     login ? login() : cy.log(`Error! loginMethod: "${loginMethod}" is not recognized`);
 

@@ -12,4 +12,14 @@ set your server ip on `"baseUrl":` parameter inside `cypress.json` file
 run `cypress open`
 
 ## Execute test using tags
-npx cypress-tags run -e TAGS='@about'
+`npx cypress-tags run -e TAGS='@about'`
+
+## Run special environment variable commands
+
+example:
+`npm run start -- --env type=odfe --config baseUrl=https://localhost:5600`
+
+### default setting:
+type=`xpack`
+baseUrl=`https://localhost:5601/`
+

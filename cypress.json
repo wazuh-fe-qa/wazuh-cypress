@@ -1,4 +1,5 @@
 {
+  "baseUrl": "https://localhost:5601/",
   "testFiles": ["**/*.{feature,features}"],
   "defaultCommandTimeout": 40000,
   "viewportWidth": 1360,
@@ -18,9 +19,6 @@
   "screenshotsFolder": "cypress/report/screenshots",
   "experimentalSessionSupport": true,
   "env": {
-      "type_x": "xpack",
-      "type_o": "odfe",
-      "type_b": "basic",
-      "type_d": "demo"
+      "type": "xpack"
     }
 }
