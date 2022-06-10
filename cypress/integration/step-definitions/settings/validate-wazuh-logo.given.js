@@ -6,7 +6,7 @@ const url = Cypress.env(loginMethod);
 Given('The kibana admin user is logged in using {} and the wazuh logo is displayed',  (loginMethod) => {
     // const url = Cypress.env(loginMethod);
     
-    navigate(Cypress.env(loginMethod));
+    navigate("app/wazuh");
     
     elementIsVisible(wazuhMenuButton);
     
@@ -15,7 +15,7 @@ Given('The kibana admin user is logged in using {} and the wazuh logo is display
 Given('The admin user is logged in using {}',  (loginMethod) => {
     // const url = Cypress.env(loginMethod);
     
-    navigate(Cypress.env(loginMethod));
+    navigate("app/wazuh");
     
     elementIsVisible(wazuhMenuButton);
     
