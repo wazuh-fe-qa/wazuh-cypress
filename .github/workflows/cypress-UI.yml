@@ -139,7 +139,7 @@ jobs:
      - name: Step 13 - Archive reports
        uses: actions/upload-artifact@v2
        with:
-        name: cypress-reports
+        name: cypress-reports_${{ github.event.inputs.wazuh-version }}-${{ github.event.inputs.elastic-version }}
         path: ${{ github.workspace }}/wazuh-cypress/cypress/report/*
      #- name: Step 12 - Upload Screenshots And Videos To Slack
       # if: failure()
