@@ -117,30 +117,20 @@ jobs:
         cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
         docker exec $(docker-compose ps -q kibana) sed -i -e "s/url: https:\/\/localhost/url: https:\/\/wazuh-manager-master/g" /usr/share/kibana/data/wazuh/config/wazuh.yml
         docker exec $(docker-compose ps -q kibana) cat /usr/share/kibana/data/wazuh/config/wazuh.yml
-     - name: Step 09 - Download Project wazuh-qa 
-       uses: actions/checkout@v2
-       with:
-        ref: 'main'
-        path: wazuh-cypress
-     - name: Step 10 - Install Cypress Project Dependencies
+     - name: Step 09 - Run Cypress tests
        run: |
-        cd $GITHUB_WORKSPACE/wazuh-cypress
-        npm install
-      # npm run cy:install
-     - name: Step 11 - Run Cypress tests
-       run: |
-         cd $GITHUB_WORKSPACE/wazuh-cypress
-         npm run cypress:run-headless         
+         cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
+         docker exec $(docker-compose ps -q cypress) bash -c " . /home/automation/nvm/nvm.sh && nvm use && npm run cypress:run-headless:github-actions"
        continue-on-error: true 
-     - name: Step 12 - Run Cypress reports
+     - name: Step 10 - Run Cypress reports
        run: |
-         cd $GITHUB_WORKSPACE/wazuh-cypress
-         npm run cypress:report        
-     - name: Step 13 - Archive reports
+         cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
+         docker exec $(docker-compose ps -q cypress) bash -c " . /home/automation/nvm/nvm.sh && nvm use && npm run cypress:report"        
+     - name: Step 11 - Archive reports
        uses: actions/upload-artifact@v2
        with:
         name: cypress-reports_${{ github.event.inputs.wazuh-version }}-${{ github.event.inputs.elastic-version }}
-        path: ${{ github.workspace }}/wazuh-cypress/cypress/report/*
+        path: ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}/report/*
      #- name: Step 12 - Upload Screenshots And Videos To Slack
       # if: failure()
        #uses: trymbill/cypress-slack-video-upload-action@v1.3.0
