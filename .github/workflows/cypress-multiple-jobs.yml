@@ -75,15 +75,15 @@ jobs:
         ref: 'master'
         path: wazuh-app-environments
         token: ${{ secrets.FE_SECRET_TOKEN }}
-     - name: Step 02 - Set up Docker Buildx
-       uses: docker/setup-buildx-action@v1
      - name: Step 03 - Build
-       uses: docker/build-push-action@v2
-       with:
-        context: ${{ github.workspace }}/wazuh-app-environments/images/${{ github.event.inputs.wazuh-manager-image }}
-        build-args: WAZUH_VERSION=${{ github.event.inputs.wazuh-version }},FILEBEAT_VERSION=${{ github.event.inputs.elastic-version }},FILEBEAT_WAZUH_TEMPLATE_URL=${{ github.event.inputs.filebeat-wazuh-template-url }},FILEBEAT_WAZUH_MODULE_URL=${{ github.event.inputs.filebeat-wazuh-module-url }}
-        tags: ${{ github.event.inputs.wazuh-manager-image }}:${{ github.event.inputs.wazuh-version }}-${{ github.event.inputs.elastic-version }}
-        outputs: type=docker,dest=/tmp/wazuh-manager-image.tar
+       run: |
+        cd ${{ github.workspace }}/wazuh-app-environments/images/${{ github.event.inputs.wazuh-manager-image }}
+        docker build -t matiasmoreno876/wazuh-manager-image:${{ github.event.inputs.wazuh-version }}-${{ github.event.inputs.elastic-version }} \
+        --build-arg WAZUH_VERSION=${{ github.event.inputs.wazuh-version }} \
+        --build-arg FILEBEAT_VERSION=${{ github.event.inputs.elastic-version }} \
+        --build-arg FILEBEAT_WAZUH_TEMPLATE_URL=https://raw.githubusercontent.com/wazuh/wazuh/4.0/extensions/elasticsearch/7.x/wazuh-template.json \
+        --build-arg FILEBEAT_WAZUH_MODULE_URL=https://packages.wazuh.com/4.x/filebeat/wazuh-filebeat-0.1.tar.gz \
+        --output type=docker,dest=/tmp/wazuh-manager-image.tar . 
      - name: Step 04 - Upload artifact
        uses: actions/upload-artifact@v2
        with:
@@ -146,11 +146,17 @@ jobs:
     runs-on: ubuntu-18.04
     needs:
      - job_1
+     - job_2
      - job_3
      - job_4
     steps:
      - name: Step 01 - Set up environment variables
        run: |
+        echo "Information about the workflow:
+        wazuh-version: ${{ github.event.inputs.wazuh-version }}
+        elastic-version: ${{ github.event.inputs.elastic-version }}
+        wazuh-app-branch-version: ${{ github.event.inputs.wazuh-app-branch-version }}"
+
         echo "PATH_TEMPLATE=$GITHUB_WORKSPACE/wazuh-app-environments/templates_elastic_prod/es_xpack-wz_cluster-agent/" >> $GITHUB_ENV
      - name: Step 02 - Download Project wazuh-app-environments 
        uses: actions/checkout@v2
@@ -175,6 +181,11 @@ jobs:
        with:
         name: wazuh-agent-image
         path: /tmp
+     - name: Step 07 - Download wazuh-manager-image
+       uses: actions/download-artifact@v2
+       with:
+        name: wazuh-manager-image
+        path: /tmp        
      - name: Step 07 - Download ubuntu-cypress-image
        uses: actions/download-artifact@v2
        with:
@@ -184,6 +195,7 @@ jobs:
        run: |
           ls -ls /tmp/
           docker load --input /tmp/wazuh-agent-image.tar
+          docker load --input /tmp/wazuh-manager-image.tar
           docker load --input /tmp/ubuntu-cypress-image.tar
           docker image ls -a
      - name: Step 09 - Configuring templates docker environment
@@ -222,6 +234,7 @@ jobs:
      - name: Step 12 - Run Cypress tests
        run: |
          cd ${{ env.PATH_TEMPLATE }}
+         docker exec $(docker-compose ps -q cypress) bash -c "sed -i -e 's|localhost|kibana|g' ./cypress.env.json"        
          docker exec $(docker-compose ps -q cypress) bash -c " . /home/automation/nvm/nvm.sh && nvm use && npm run cypress:run-headless"        
        continue-on-error: true 
      - name: Step 13 - Run Cypress reports
