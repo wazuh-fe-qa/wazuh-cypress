@@ -1,6 +1,10 @@
 import { When } from 'cypress-cucumber-preprocessor/steps';
-import { navigate, clickElement , elementIsVisible} from '../../utils/driver';
-import { settingsButton, wazuhMenuButton } from '../../pageobjects/wazuh-menu/wazuh-menu.page';
+import { clickElement , elementIsVisible, getSelector} from '../../utils/driver';
+
+import { WAZUH_MENU_PAGE as pageName} from '../../utils/pages-constants';
+const settingsButton = getSelector('settingsButton', pageName);
+const wazuhMenuButton = getSelector('wazuhMenuButton', pageName);
+
 import { SETTINGS_MENU_LINKS } from '../../utils/mappers/settings-mapper';
 
 When('The user navigates to {} settings', (menuOption) => {

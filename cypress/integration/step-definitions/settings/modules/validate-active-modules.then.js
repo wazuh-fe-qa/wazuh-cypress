@@ -1,10 +1,10 @@
-import { clickElement, elementIsVisible } from '../../../utils/driver';
+import { clickElement, elementIsVisible, getSelector } from '../../../utils/driver';
 import { MODULES_CARDS } from '../../../utils/mappers/modules-mapper';
-import {
-  modulesButton,
-  modulesDirectoryLink,
-  wazuhMenuButton
-} from '../../../pageobjects/wazuh-menu/wazuh-menu.page';
+
+import { WAZUH_MENU_PAGE as pageName} from '../../../utils/pages-constants';
+const modulesButton = getSelector('modulesButton', pageName);
+const modulesDirectoryLink = getSelector('modulesDirectoryLink', pageName);
+const wazuhMenuButton = getSelector('wazuhMenuButton', pageName);
 
 Then('The activated modules with {} are displayed on home page', (moduleName) => {
   elementIsVisible(wazuhMenuButton);
