@@ -12,6 +12,13 @@ import { SAMPLE_DATA_PAGE } from '../../pageobjects/xpack/settings/sample-data.p
 import { DECODERS_PAGE } from '../../pageobjects/xpack/wazuh-menu/decoders.page';
 import { RULES_PAGE } from '../../pageobjects/xpack/wazuh-menu/rules.page';
 import { WAZUH_MENU_PAGE } from '../../pageobjects/xpack/wazuh-menu/wazuh-menu.page';
+import { MODULES_DIRECTORY_PAGE } from '../../pageobjects/xpack/modules-directory.page';
+
+import { AGENT_MODULES } from '../../utils/mappers/xpack/agent-modules-mapper';
+import { BASIC_MODULES } from '../../utils/mappers/xpack/basic-modules-mapper';
+import { MODULES_CARDS, MODULES_SETTINGS } from '../../utils/mappers/xpack/modules-mapper';
+import { SAMPLE_DATA } from '../../utils/mappers/xpack/sample-data-mapper';
+import { SETTINGS_MENU_LINKS } from '../../utils/mappers/xpack/settings-mapper';
 
 export const XPACK_PAGES_MAPPER = {
   DEPLOY_NEW_AGENT_PAGE,
@@ -28,4 +35,12 @@ export const XPACK_PAGES_MAPPER = {
   DECODERS_PAGE,
   RULES_PAGE,
   WAZUH_MENU_PAGE,
+  MODULES_DIRECTORY_PAGE,
+
+  AGENT_MODULES,
+  BASIC_MODULES,
+  MODULES_CARDS,
+  MODULES_SETTINGS,
+  SAMPLE_DATA,
+  SETTINGS_MENU_LINKS,
 };
