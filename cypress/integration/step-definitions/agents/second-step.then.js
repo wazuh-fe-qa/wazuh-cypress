@@ -1,7 +1,7 @@
 import { When } from 'cypress-cucumber-preprocessor/steps';
-import { elementIsVisible,checkInformationElement } from '../../utils/driver';
+import { elementIsVisible, checkInformationElement, getSelector } from '../../utils/driver';
 
-const pageName = 'DEPLOY_NEW_AGENT_PAGE';
+import { DEPLOY_NEW_AGENT_PAGE as pageName} from '../../utils/pages-constants';
 const serverAddressSubTitle = getSelector('serverAddressSubTitle', pageName);
 const serverMessage = getSelector('serverMessage', pageName);
 const serverInputField = getSelector('serverInputField', pageName);

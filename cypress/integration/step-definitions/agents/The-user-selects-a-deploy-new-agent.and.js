@@ -1,7 +1,7 @@
 import { When } from 'cypress-cucumber-preprocessor/steps';
-import { clickElementByXpath, xpathElementIsVisible } from '../../utils/driver';
+import { clickElementByXpath, xpathElementIsVisible, getSelector } from '../../utils/driver';
 
-const pageName = 'AGENTS_PAGE';
+import { AGENTS_PAGE as pageName} from '../../utils/pages-constants';
 const deployNewAgentButton = getSelector('deployNewAgentSections', pageName);
 
 When('The user selects a deploy new agent', () => {

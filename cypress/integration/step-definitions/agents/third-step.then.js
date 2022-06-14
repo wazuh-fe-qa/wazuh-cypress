@@ -1,7 +1,7 @@
 import { Then } from 'cypress-cucumber-preprocessor/steps';
-import { elementIsVisible,xpathElementIsVisible, xpathCheckInformationElement, checkInformationElement } from '../../utils/driver';
+import { elementIsVisible,xpathElementIsVisible, xpathCheckInformationElement, checkInformationElement, getSelector } from '../../utils/driver';
 
-const pageName = 'DEPLOY_NEW_AGENT_PAGE';
+import { DEPLOY_NEW_AGENT_PAGE as pageName} from '../../utils/pages-constants';
 const agentToGroupSubTitle = getSelector('agentToGroupSubTitle', pageName);
 const agentToGroupMessage = getSelector('agentToGroupMessage', pageName);
 const agentToGroupSelector = getSelector('agentToGroupSelector', pageName);

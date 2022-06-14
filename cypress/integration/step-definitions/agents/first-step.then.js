@@ -6,7 +6,7 @@ import {
   getSelector,
 } from '../../utils/driver';
 
-const pageName = 'DEPLOY_NEW_AGENT_PAGE';
+import { DEPLOY_NEW_AGENT_PAGE as pageName} from '../../utils/pages-constants';
 const operationSystemTitle = getSelector('operationSystemTitle', pageName);
 const operationSystemOption = getSelector('operationSystemOption', pageName);
 const closeButton = getSelector('closeButton', pageName);

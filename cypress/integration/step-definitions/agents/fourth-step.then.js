@@ -1,7 +1,7 @@
 import { Then } from 'cypress-cucumber-preprocessor/steps';
-import { elementIsVisible, checkInformationElement } from '../../utils/driver';
+import { elementIsVisible, checkInformationElement, getSelector } from '../../utils/driver';
 
-const pageName = 'DEPLOY_NEW_AGENT_PAGE';
+import { DEPLOY_NEW_AGENT_PAGE as pageName} from '../../utils/pages-constants';
 const installAndEnrollAgentSubTitle = getSelector('installAndEnrollAgentSubTitle', pageName);
 const installAndEnrollAgentDefaultLabel = getSelector('installAndEnrollAgentDefaultLabel', pageName);
 
