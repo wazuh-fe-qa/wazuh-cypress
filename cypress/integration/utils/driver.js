@@ -1,4 +1,6 @@
 /// <reference types="cypress" />
+import { XPACK_PAGES_MAPPER } from "./mappers/xpack-pages-mapper";
+
 export const clickElement = (selector) => {
   getElement(selector).should('not.be.disabled').click();
   return this;
@@ -47,6 +49,21 @@ export const fillField = (selector, text) => {
 
 export const getElement = (selector) => {
   return cy.get(selector);
+};
+
+export const getSelector = (name, page) => {
+  switch (Cypress.env('type')) {
+    case 'xpack':
+      return XPACK_PAGES_MAPPER[page][name];
+    case 'odfe':
+      return '';
+    case 'basic':
+      return '';
+    case 'wzd':
+      return '';
+    default:
+      return '';
+  }
 };
 
 export const getAvailableElement = (selector) => {

@@ -1,6 +1,9 @@
 import { Then } from 'cypress-cucumber-preprocessor/steps';
-import { elementIsVisible, xpathElementIsVisible, checkInformationElement } from '../../utils/driver';
-import { operationSystemTitle, operationSystemOption,closeButton } from '../../pageobjects/agents/deploy-new-agent.page';
+import { elementIsVisible, xpathElementIsVisible, checkInformationElement, getSelector } from '../../utils/driver';
+
+const operationSystemTitle = getSelector('operationSystemTitle','DEPLOY_NEW_AGENT_PAGE');
+const operationSystemOption = getSelector('operationSystemOption','DEPLOY_NEW_AGENT_PAGE');
+const closeButton = getSelector('closeButton','DEPLOY_NEW_AGENT_PAGE');
 
 Then('A first step {string} is displayed and the following {string} options', (title, option) => {
     elementIsVisible(operationSystemTitle);
