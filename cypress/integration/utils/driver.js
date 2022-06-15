@@ -117,7 +117,7 @@ export const updateCookies = (filename) => {
   let parameterToFilter = []
   cy.getCookies().then((currentCook) => {
     if (currentCook.length != 0) {
-      (Cypress.env('type') == 'odfe') ? parameterToFilter = ['wz-token']: parameterToFilter = ['sid', 'wz-token'];
+      (Cypress.env('type') == 'xpack') ? parameterToFilter = ['sid', 'wz-token']: parameterToFilter = ['wz-token'];
       for (let l = 0; l < parameterToFilter.length; l++) {
         const [cookie] = currentCook.filter(e => e.name == parameterToFilter[l]);
         cy.readFile(filename).then((obj) => {
