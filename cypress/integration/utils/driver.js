@@ -95,12 +95,9 @@ export const setCookies = (cookieFromFile) => {
 
 export const updateCookies = (filename) => {
   let parameterToFilter = []
-  // const filename = 'cookie.json';
   cy.getCookies().then((currentCook) => {
     if (currentCook.length != 0) {
-      debugger
       (Cypress.env('type') == 'odfe') ? parameterToFilter = ['wz-token']: parameterToFilter = ['sid', 'wz-token'];
-      // const parameterToFilter = ['sid', 'wz-token'];
       for (let l = 0; l < parameterToFilter.length; l++) {
         const [cookie] = currentCook.filter(e => e.name == parameterToFilter[l]);
         cy.readFile(filename).then((obj) => {
