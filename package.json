@@ -8,7 +8,7 @@
     "start:xpack": "npx cypress open --config baseUrl=https://kibana:5601/ --env type=xpack",
     "start:basic": "npx cypress open --config baseUrl=http://localhost:5601/ --env type=basic",
     "start:odfe": "npx cypress open --config baseUrl=http://localhost:5601/ --env type=odfe",
-    "start:wzd": "npx cypress open --config baseUrl=http://localhost:5601/ --env type=wzd",
+    "start:wzd": "npx cypress open --config baseUrl=https://localhost:5601/ --env type=wzd",
     "cy:install": "npx cypress install --force",
     "test": "echo \"Error: no test specified\" && exit 1",
     "cypress:run-headless": "cypress run --headless --browser chrome",
