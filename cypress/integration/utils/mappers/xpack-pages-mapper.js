@@ -14,11 +14,11 @@ import { RULES_PAGE } from '../../pageobjects/xpack/wazuh-menu/rules.page';
 import { WAZUH_MENU_PAGE } from '../../pageobjects/xpack/wazuh-menu/wazuh-menu.page';
 import { MODULES_DIRECTORY_PAGE } from '../../pageobjects/xpack/modules-directory.page';
 
-import { AGENT_MODULES } from '../../utils/mappers/xpack/agent-modules-mapper';
-import { BASIC_MODULES } from '../../utils/mappers/xpack/basic-modules-mapper';
-import { MODULES_CARDS, MODULES_SETTINGS } from '../../utils/mappers/xpack/modules-mapper';
-import { SAMPLE_DATA } from '../../utils/mappers/xpack/sample-data-mapper';
-import { SETTINGS_MENU_LINKS } from '../../utils/mappers/xpack/settings-mapper';
+import { AGENT_MODULES } from './xpack/agent-modules-mapper';
+import { BASIC_MODULES } from './xpack/basic-modules-mapper';
+import { MODULES_CARDS, MODULES_SETTINGS } from './xpack/modules-mapper';
+import { SAMPLE_DATA } from './xpack/sample-data-mapper';
+import { SETTINGS_MENU_LINKS } from './xpack/settings-mapper';
 
 export const XPACK_PAGES_MAPPER = {
   DEPLOY_NEW_AGENT_PAGE,
