@@ -93,11 +93,11 @@ export const setCookies = (cookieFromFile) => {
   }
 }
 
-export const updateCookies = () => {
-  const filename = 'cookie.json';
+export const updateCookies = (filename) => {
+  let parameterToFilter = []
   cy.getCookies().then((currentCook) => {
     if (currentCook.length != 0) {
-      const parameterToFilter = ['sid', 'wz-token'];
+      (Cypress.env('type') == 'odfe') ? parameterToFilter = ['wz-token']: parameterToFilter = ['sid', 'wz-token'];
       for (let l = 0; l < parameterToFilter.length; l++) {
         const [cookie] = currentCook.filter(e => e.name == parameterToFilter[l]);
         cy.readFile(filename).then((obj) => {
@@ -130,18 +130,17 @@ export const preserveCookie = () => {
   })
 }
 
-export const updateExpiryValueCookies = () => {
+export const updateExpiryValueCookies = (cookiePath) => {
   let timestamp = new Date().getTime();
   let today = new Date();
-  const filename = 'cookie.json';
   try {
-    cy.readFile(filename).then((obj) => {
+    cy.readFile(cookiePath).then((obj) => {
       const newCookie = obj.map(e => {
         let oldDate = new Date(e.expiry);
         if (oldDate < today) e.expiry = timestamp;
         return e;
       })
-      cy.writeFile(filename, JSON.stringify(newCookie))
+      cy.writeFile(cookiePath, JSON.stringify(newCookie))
     })
   } catch (e) {
   }
