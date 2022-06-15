@@ -19,6 +19,6 @@
   "screenshotsFolder": "cypress/report/screenshots",
   "experimentalSessionSupport": true,
   "env": {
-      "type": "xpack"
+      "type": "odfe"
     }
 }

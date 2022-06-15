@@ -26,8 +26,7 @@ import {
     preserveCookie,
     timestampToDate
 } from '../integration/utils/driver';
-const cookieMock = require('../../cookie.json');
-//TODO: we must improve these hardcoded variables
+import { COOKIE_TYPE } from './cookie-constants';
 const loginMethod = Cypress.env('type')
 import './commands';
 require("cypress-xpath");
@@ -56,24 +55,32 @@ before(() => {
 })
 
 beforeEach(() => {
-    cy.getCookies().then((currentCookie) => {
-        let today = new Date();
-        let todayDate = timestampToDate(today);
-        const [cookie] = cookieMock.map(e => new Date(e.expiry));
-        let expiryDateCookieSaved = timestampToDate([cookie][0]);
-        if ( expiryDateCookieSaved < todayDate) {
-            setCookies(currentCookie)
-        } else {
-            setCookies(cookieMock)
-        };
-    });
-    cy.setSessionStorage('healthCheck', 'executed');
-    updateExpiryValueCookies();
-    preserveCookie()
-    updateCookies();
+    if (Cypress.env('type') != 'basic') {
+        const cookiePath = COOKIE_TYPE[Cypress.env('type')];
+        cy.getCookies().then((currentCookie) => {
+            let today = new Date();
+            let todayDate = timestampToDate(today);
+            cy.readFile(cookiePath).then((obj) => {
+                const [cookie] = obj.map(e => new Date(e.expiry));
+                let expiryDateCookieSaved = timestampToDate([cookie][0]);
+                if (expiryDateCookieSaved < todayDate) {
+                    setCookies(currentCookie)
+                } else {
+                    setCookies(obj)
+                };
+            })
+        });
+        cy.setSessionStorage('healthCheck', 'executed');
+        updateExpiryValueCookies(cookiePath);
+        preserveCookie()
+        updateCookies(cookiePath);
+    }
 })
 
 afterEach(() => {
-    updateCookies();
-    clearSession();
+    if (Cypress.env('type') != 'basic') {
+        const cookiePath = COOKIE_TYPE[Cypress.env('type')];
+        updateCookies(cookiePath);
+        clearSession();
+    }
 })
