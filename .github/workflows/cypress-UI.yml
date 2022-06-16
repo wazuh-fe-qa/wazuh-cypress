@@ -69,6 +69,7 @@ jobs:
         sed -i -e 's|WAZUH_AGENT_IMAGE=.*|WAZUH_AGENT_IMAGE=${{ github.event.inputs.wazuh-agent-image }}|g' ./.env
         sed -i -e 's|WAZUH_VERSION=.*|WAZUH_VERSION=${{ github.event.inputs.wazuh-version }}|g' ./.env
         sed -i -e 's|ELASTIC_VERSION=.*|ELASTIC_VERSION=${{ github.event.inputs.elastic-version }}|g' ./.env
+        sed -i -e 's|UBUNTU_CYPRESS_VERSION=.*|UBUNTU_CYPRESS_VERSION=2.0.0|g' ./.env
         cat .env
      - name: Step 04 - Starting containers
        run: |
