@@ -52,35 +52,17 @@ before(() => {
 
     validateURLIncludes(OVERVIEW_URL);
 
+    cy.getCookies().then((cookies) => {
+        cy.log(`cookies eb before: ${JSON.stringify(cookies)}`);
+        cy.writeFile('cookies.json', JSON.stringify(cookies));
+    })
 })
 
 beforeEach(() => {
-    if (Cypress.env('type') != 'basic') {
-        const cookiePath = COOKIE_TYPE[Cypress.env('type')];
-        cy.getCookies().then((currentCookie) => {
-            let today = new Date();
-            let todayDate = timestampToDate(today);
-            cy.readFile(cookiePath).then((obj) => {
-                const [cookie] = obj.map(e => new Date(e.expiry));
-                let expiryDateCookieSaved = timestampToDate([cookie][0]);
-                if (expiryDateCookieSaved < todayDate) {
-                    setCookies(currentCookie)
-                } else {
-                    setCookies(obj)
-                };
-            })
-        });
-        cy.setSessionStorage('healthCheck', 'executed');
-        updateExpiryValueCookies(cookiePath);
-        preserveCookie()
-        updateCookies(cookiePath);
-    }
-})
-
-afterEach(() => {
-    if (Cypress.env('type') != 'basic') {
-        const cookiePath = COOKIE_TYPE[Cypress.env('type')];
-        updateCookies(cookiePath);
-        clearSession();
-    }
+    cy.readFile('cookies.json').then((obj) => {
+        obj.forEach((element) => {
+        cy.setCookie(element.name, element.value);
+      });
+    })
+    cy.setSessionStorage('healthCheck', 'executed');
 })
