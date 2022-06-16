@@ -1,11 +1,11 @@
 import { Then } from 'cypress-cucumber-preprocessor/steps';
-import { getElement } from '../../../utils/driver';
-import {
-  titleSelector,
-  tableSelector,
-  dropdownPaginationSelector,
-  listPages
-} from '../../../pageobjects/wazuh-menu/decoders.page';
+import { getElement, getSelector } from '../../../utils/driver';
+
+import { DECODERS_PAGE as pageName} from '../../../utils/pages-constants';
+const titleSelector = getSelector('titleSelector', pageName);
+const tableSelector = getSelector('tableSelector', pageName);
+const dropdownPaginationSelector = getSelector('dropdownPaginationSelector', pageName);
+const listPages = getSelector('listPages', pageName);
 
 Then('The user should see the decoders', () => {
   getElement(titleSelector)

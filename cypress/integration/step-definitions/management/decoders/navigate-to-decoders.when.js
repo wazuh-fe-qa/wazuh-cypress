@@ -1,10 +1,10 @@
 import { When } from 'cypress-cucumber-preprocessor/steps';
-import { clickElement, validateURLIncludes, elementIsVisible } from '../../../utils/driver';
-import {
-  decodersLink,
-  wazuhMenuButton,
-  managementButton,
-} from '../../../pageobjects/wazuh-menu/wazuh-menu.page';
+import { clickElement, validateURLIncludes, elementIsVisible, getSelector } from '../../../utils/driver';
+
+import { WAZUH_MENU_PAGE as pageName} from '../../../utils/pages-constants';
+const decodersLink = getSelector('decodersLink', pageName);
+const wazuhMenuButton = getSelector('wazuhMenuButton', pageName);
+const managementButton = getSelector('managementButton', pageName);
 
 When('The user navigates to decoders', () => {
   elementIsVisible(wazuhMenuButton);

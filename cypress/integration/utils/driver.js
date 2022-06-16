@@ -1,4 +1,9 @@
 /// <reference types="cypress" />
+import { XPACK_PAGES_MAPPER } from "./mappers/xpack-pages-mapper";
+import { ODFE_PAGES_MAPPER } from "./mappers/odfe-pages-mapper";
+import { BASIC_PAGES_MAPPER } from "./mappers/basic-pages-mapper";
+import { WZD_PAGES_MAPPER } from "./mappers/wzd-pages-mapper";
+
 export const clickElement = (selector) => {
   getElement(selector).should('not.be.disabled').click();
   return this;
@@ -49,6 +54,21 @@ export const getElement = (selector) => {
   return cy.get(selector);
 };
 
+export const getSelector = (name, page) => {
+  switch (Cypress.env('type')) {
+    case 'xpack':
+      return XPACK_PAGES_MAPPER[page][name];
+    case 'odfe':
+      return ODFE_PAGES_MAPPER[page][name];
+    case 'basic':
+      return BASIC_PAGES_MAPPER[page][name];
+    case 'wzd':
+      return WZD_PAGES_MAPPER[page][name];
+    default:
+      return '';
+  }
+};
+
 export const getAvailableElement = (selector) => {
   return cy.get(selector).should('not.be.disabled');
 };
@@ -68,84 +88,6 @@ export const validateURLIncludes = (include) => {
   cy.url().should('include', include);
 };
 
-export const clearSession = () => {
-  cy.clearLocalStorage();
-  cy.clearCookies();
-};
-
-export const setCookies = (cookieFromFile) => {
-  try {
-    cy.getCookies().then((currentCookie) => {
-      if (currentCookie.length != 0) {
-        cookieFromFile.forEach((element) => {
-          cy.setCookie(element.name, element.value);
-        });
-      } else {
-        cy.readFile('cookie.json').then((cookieFile) => {
-          cy.log('cookie', cookieFile);
-          cookieFile.forEach(element => {
-            cy.setCookie(element.name, element.value);
-          })
-        })
-      }
-    });
-  } catch (e) {
-  }
-}
-
-export const updateCookies = () => {
-  const filename = 'cookie.json';
-  cy.getCookies().then((currentCook) => {
-    if (currentCook.length != 0) {
-      const parameterToFilter = ['sid', 'wz-token'];
-      for (let l = 0; l < parameterToFilter.length; l++) {
-        const [cookie] = currentCook.filter(e => e.name == parameterToFilter[l]);
-        cy.readFile(filename).then((obj) => {
-          const newCookie = obj.map(e => {
-            if (e.name == parameterToFilter[l]) e.value = cookie.value
-            return e;
-          })
-          cy.writeFile(filename, JSON.stringify(newCookie))
-        })
-      }
-    }
-  });
-}
-
-export const preserveCookie = () => {
-  let str = [];
-  return cy.getCookies().then((cook) => {
-    if (cook.length != 0) {
-      for (let l = 0; l < cook.length; l++) {
-        if (cook.length > 0 && l == 0) {
-          str[l] = cook[l].name;
-          Cypress.Cookies.preserveOnce(str[l]);
-        }
-        else if (cook.length > 1 && l > 1) {
-          str[l] = cook[l].name;
-          Cypress.Cookies.preserveOnce(str[l]);
-        }
-      }
-    }
-  })
-}
-
-export const updateExpiryValueCookies = () => {
-  let timestamp = new Date().getTime();
-  let today = new Date();
-  const filename = 'cookie.json';
-  try {
-    cy.readFile(filename).then((obj) => {
-      const newCookie = obj.map(e => {
-        let oldDate = new Date(e.expiry);
-        if (oldDate < today) e.expiry = timestamp;
-        return e;
-      })
-      cy.writeFile(filename, JSON.stringify(newCookie))
-    })
-  } catch (e) {
-  }
-}
 
 // Function that's return the selector by xpath
 export const getElementByXpath = (xpathSelector) => {

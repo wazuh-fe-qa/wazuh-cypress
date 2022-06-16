@@ -1,9 +1,8 @@
-import { clickElement } from '../../../utils/driver';
-import { SAMPLE_DATA } from '../../../utils/mappers/sample-data-mapper';
-
+import { clickElement, getSelector } from '../../../utils/driver';
+import { SAMPLE_DATA } from '../../../utils/pages-constants';
 When('The user adds/removes sample data for', (types) => {
   types.raw().forEach((sample) => {
-    clickElement(SAMPLE_DATA[sample]);
+    clickElement(getSelector(sample, SAMPLE_DATA));
     cy.wait(8000);
   });
 });
