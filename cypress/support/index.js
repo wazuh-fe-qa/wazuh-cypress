@@ -17,24 +17,14 @@
 
 import { LOGIN_TYPE, OVERVIEW_URL } from '../integration/utils/login-constants';
 import {
-    updateCookies,
-    clearSession,
-    updateExpiryValueCookies,
     navigate,
     validateURLIncludes,
-    setCookies,
-    preserveCookie,
-    timestampToDate
 } from '../integration/utils/driver';
-import { COOKIE_TYPE } from './cookie-constants';
 const loginMethod = Cypress.env('type')
 import './commands';
 require("cypress-xpath");
 
 before(() => {
-    clearSession();
-
-    cy.setSessionStorage('healthCheck', 'executed');
 
     Cypress.on('uncaught:exception', (err, runnable) => {
         return false;
@@ -52,35 +42,18 @@ before(() => {
 
     validateURLIncludes(OVERVIEW_URL);
 
+    cy.getCookies().then((cookies) => {
+        cy.log(`Save cookies in cookies.json: ${JSON.stringify(cookies)}`);
+        cy.writeFile('cookies.json', '[]');
+        cy.writeFile('cookies.json', JSON.stringify(cookies));
+    })
 })
 
 beforeEach(() => {
-    if (Cypress.env('type') != 'basic') {
-        const cookiePath = COOKIE_TYPE[Cypress.env('type')];
-        cy.getCookies().then((currentCookie) => {
-            let today = new Date();
-            let todayDate = timestampToDate(today);
-            cy.readFile(cookiePath).then((obj) => {
-                const [cookie] = obj.map(e => new Date(e.expiry));
-                let expiryDateCookieSaved = timestampToDate([cookie][0]);
-                if (expiryDateCookieSaved < todayDate) {
-                    setCookies(currentCookie)
-                } else {
-                    setCookies(obj)
-                };
-            })
-        });
-        cy.setSessionStorage('healthCheck', 'executed');
-        updateExpiryValueCookies(cookiePath);
-        preserveCookie()
-        updateCookies(cookiePath);
-    }
-})
-
-afterEach(() => {
-    if (Cypress.env('type') != 'basic') {
-        const cookiePath = COOKIE_TYPE[Cypress.env('type')];
-        updateCookies(cookiePath);
-        clearSession();
-    }
+    cy.readFile('cookies.json').then((cookies) => {
+        cookies.forEach((cookie) => {
+        cy.setCookie(cookie.name, cookie.value);
+      });
+    })
+    cy.setSessionStorage('healthCheck', 'executed');
 })
