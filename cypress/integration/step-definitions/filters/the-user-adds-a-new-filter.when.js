@@ -14,8 +14,8 @@ When('The user adds a new filter', () => {
   elementIsVisible(addFilterButton);
   clickElement(addFilterButton);
   fillField(filterSuggestionList,'rule.level');
-  elementIsVisible(selectedFilter);
-  clickElement(selectedFilter);
+  //elementIsVisible(selectedFilter);
+  //clickElement(selectedFilter);
   getAvailableElement(filterOperatorList);
   elementIsVisible(filterOperatorList);
   clickElement(filterOperatorList);
