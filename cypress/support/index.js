@@ -34,13 +34,19 @@ before(() => {
 
     cy.log(`Parameter loginMethod is: ${loginMethod} and url from loginMethod is: ${Cypress.config('baseUrl')}`);
 
-    navigate("app/wazuh");
+    (Cypress.env('type') == 'odfe') ? navigate("app/kibana?security_tenant=analysts#/visualize/edit/c501fa50-7e52-11e9-ae4e-b5d69947d32e?_g=()") : navigate("app/wazuh");
 
     login ? login() : cy.log(`Error! loginMethod: "${loginMethod}" is not recognized`);
 
-    cy.wait(15000);
-
-    validateURLIncludes(OVERVIEW_URL);
+    if (Cypress.env('type') != 'odfe') {
+        cy.wait(15000);
+        validateURLIncludes(OVERVIEW_URL);
+    }
+    else{
+        cy.wait(5000);
+        navigate("app/wazuh");
+        cy.wait(15000);
+    };
 
     cy.getCookies().then((cookies) => {
         cy.log(`Save cookies in cookies.json: ${JSON.stringify(cookies)}`);
