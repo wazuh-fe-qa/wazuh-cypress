@@ -44,6 +44,7 @@ before(() => {
 
     cy.getCookies().then((cookies) => {
         cy.log(`Save cookies in cookies.json: ${JSON.stringify(cookies)}`);
+        cy.writeFile('cookies.json', '[]');
         cy.writeFile('cookies.json', JSON.stringify(cookies));
     })
 })
