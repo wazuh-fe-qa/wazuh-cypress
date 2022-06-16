@@ -121,7 +121,7 @@ jobs:
      - name: Step 09 - Run Cypress tests
        run: |
          cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
-         docker exec $(docker-compose ps -q cypress) bash -c " . /home/automation/nvm/nvm.sh && nvm use && npm run cypress:run-headless:github-actions"
+         docker exec $(docker-compose ps -q cypress) bash -c " . /home/automation/nvm/nvm.sh && nvm use && npm run cypress:run-headless:github-actions:xpack"
        continue-on-error: true 
      - name: Step 10 - Run Cypress reports
        run: |
