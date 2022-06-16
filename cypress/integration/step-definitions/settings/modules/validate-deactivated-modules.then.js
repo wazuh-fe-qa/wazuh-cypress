@@ -1,10 +1,9 @@
-import { clickElement, elementIsNotVisible, elementIsVisible } from '../../../utils/driver';
-import {
-  modulesButton,
-  modulesDirectoryLink,
-  wazuhMenuButton,
-} from '../../../pageobjects/wazuh-menu/wazuh-menu.page';
-import { MODULES_CARDS } from '../../../utils/mappers/modules-mapper';
+import { clickElement, elementIsNotVisible, elementIsVisible, getSelector } from '../../../utils/driver';
+
+import { WAZUH_MENU_PAGE as pageName, MODULES_CARDS} from '../../../utils/pages-constants';
+const modulesButton = getSelector('modulesButton', pageName);
+const modulesDirectoryLink = getSelector('modulesDirectoryLink', pageName);
+const wazuhMenuButton = getSelector('wazuhMenuButton', pageName);
 
 Then('The deactivated modules with {} are not displayed on home page', (moduleName) => {
   elementIsVisible(wazuhMenuButton);
@@ -13,5 +12,5 @@ Then('The deactivated modules with {} are not displayed on home page', (moduleNa
   clickElement(modulesButton);
   elementIsVisible(modulesDirectoryLink);
   clickElement(modulesDirectoryLink);
-  elementIsNotVisible(MODULES_CARDS[moduleName]);
+  elementIsNotVisible(getSelector(moduleName, MODULES_CARDS));
 });

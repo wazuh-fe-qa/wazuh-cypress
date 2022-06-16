@@ -1,149 +1,151 @@
-import { elementTextIncludes, elementIsVisible } from '../../../utils/driver';
-import {
-    settingTitle,
-    generalPanelTitle,
-    generalPanelIndexPatternName,
-    generalPanelIndexPatternDescription,
-    generalPanelIndexPatternLabel,
-    generalPanelIndexPatternField,
-    generalPanelRequestTimeoutName,
-    generalPanelRequestTimeoutDescription,
-    generalPanelRequestLabel,
-    generalPanelRequestField,
-    generalPanelIpSelectorName,
-    generalPanelIpSelectorDescription,
-    generalPanelIpSelectorLabel,
-    generalPanelIpSelectorField,
-    generalPanelIpIgnoreName,
-    generalPanelIpIgnoreDescription,
-    generalPanelIpIgnoreLabel,
-    generalPanelIpIgnoreField,
-    generalPanelCronPrefixName,
-    generalPanelCronPrefixDescription,
-    generalPanelCronLabel,
-    generalPanelCronField,
-    generalPanelSamplePrefixName,
-    generalPanelSamplePrefixDescription,
-    generalPanelSampleLabel,
-    generalPanelSampleField,
-    generalPanelManagerAlertsPrefixName,
-    generalPanelManagerAlertsPrefixDescription,
-    generalPanelManagerAlertsLabel,
-    generalPanelManagerAlertsField,
-    generalPanelLogLevelName,
-    generalPanelLogLevelDescription,
-    generalPanelLogLevelLabel,
-    generalPanelLogLevelField,
-    generalPanelEnrollmentName,
-    generalPanelEnrollmentDescription,
-    generalPanelEnrollmentLabel,
-    generalPanelEnrollmentField,
-    healthCheckPanelTitle,
-    healthCheckPanelIndexPatternPrefixName,
-    healthCheckPanelIndexPatternPrefixDescription,
-    healthCheckPanelIndexPatterLabel,
-    healthCheckPanelIndexPatterField,
-    healthCheckPanelIndexTemplatePrefixName,
-    healthCheckPanelIndexTemplatePrefixDescription,
-    healthCheckPanelIndexTemplateLabel,
-    healthCheckPanelIndexTemplateField,
-    healthCheckPanelApiConnectionPrefixName,
-    healthCheckPanelApiConnectionPrefixDescription,
-    healthCheckPanelApiConnectionLabel,
-    healthCheckPanelApiConnectionField,
-    healthCheckPanelApiVersionPrefixName,
-    healthCheckPanelApiVersionPrefixDescription,
-    healthCheckPanelApiVersionLabel,
-    healthCheckPanelApiVersionField,
-    healthCheckPanelKnowFieldsPrefixName,
-    healthCheckPanelKnowFieldsPrefixDescription,
-    healthCheckPanelKnowFieldsLabel,
-    healthCheckPanelKnowFieldsField,
-    healthCheckPanelRemoveMetaFieldsPrefixName,
-    healthCheckPanelRemoveMetaFieldsPrefixDescription,
-    healthCheckPanelRemoveMetaFieldsPrefixLabel,
-    healthCheckPanelRemoveMetaFieldsPrefixField,
-    healthCheckPanelSetBucketPrefixName,
-    healthCheckPanelSetBucketPrefixDescription,
-    healthCheckPanelSetBucketLabel,
-    healthCheckPanelSetBucketField,
-    healthCheckPanelSetTimePrefixName,
-    healthCheckPanelSetTimePrefixDescription,
-    healthCheckPanelSetTimeLabel,
-    healthCheckPanelSetTimeField,
-    monitoringPanelTitle,
-    monitoringPanelStatusName,
-    monitoringPanelStatusDescription,
-    monitoringPanelStatusPatterLabel,
-    monitoringPanelStatusPatterField,
-    monitoringPanelFrequencyName,
-    monitoringPanelFrequencyDescription,
-    monitoringPanelFrequencyLabel,
-    monitoringPanelFrequencyField,
-    monitoringPanelIndexShardsName,
-    monitoringPanelIndexShardsDescription,
-    monitoringPanelIndexShardsLabel,
-    monitoringPanelIndexShardsField,
-    monitoringPanelIndexReplicasName,
-    monitoringPanelIndexReplicasDescription,
-    monitoringPanelPanelIndexReplicasLabel,
-    monitoringPanelIndexReplicasField,
-    monitoringPanelIndexCreationName,
-    monitoringPanelIndexCreationDescription,
-    monitoringPanelIndexCreationLabel,
-    monitoringPanelIndexCreationField,
-    monitoringPanelIndexPatternName,
-    monitoringPanelIndexPatternDescription,
-    monitoringPanelIndexPatternLabel,
-    monitoringPanelIndexPatternField,
-    statisticsPanelTitle,
-    StatisticsPanelStatusName,
-    StatisticsPanelStatusDescription,
-    StatisticsPanelStatusPatterLabel,
-    StatisticsPanelStatusPatterField,
-    StatisticsPanelIncludesApisName,
-    StatisticsPanelIncludesApisDescription,
-    StatisticsPanelIncludesApisLabel,
-    StatisticsPanelIncludesApisField,
-    StatisticsPanelIndexIntervalName,
-    StatisticsPanelIndexIntervalDescription,
-    StatisticsPanelIndexIntervalLabel,
-    StatisticsPanelIndexIntervalField,
-    StatisticsPanelIndexNameName,
-    StatisticsPanelIndexNameDescription,
-    StatisticsPanelIndexNameLabel,
-    StatisticsPanelIndexNameField,
-    StatisticsPanelIndexCreationName,
-    StatisticsPanelIndexCreationDescription,
-    StatisticsPanelIndexCreationLabel,
-    StatisticsPanelIndexCreationField,
-    StatisticsPanelIndexShardsName,
-    StatisticsPanelIndexShardsDescription,
-    StatisticsPanelIndexShardsLabel,
-    StatisticsPanelIndexShardsField,
-    StatisticsPanelIndexReplicasName,
-    StatisticsPanelIndexReplicasDescription,
-    StatisticsPanelIndexReplicasLabel,
-    StatisticsPanelIndexReplicasField,
-    logoPanelTitle,
-    LogosCustomizationPanelLogoAppName,
-    LogosCustomizationPanelLogoAppDescription,
-    LogosCustomizationPanelLogoAppPatterLabel,
-    LogosCustomizationPanelLogoAppPatterField,
-    LogosCustomizationPanelLogosSidebarName,
-    LogosCustomizationPanelLogosSidebarDescription,
-    LogosCustomizationPanelLogosSidebarLabel,
-    LogosCustomizationPanelLogosSidebarField,
-    LogosCustomizationPanelLogoHealthCheckName,
-    LogosCustomizationPanelLogoHealthCheckDescription,
-    LogosCustomizationPanelLogoHealthCheckLabel,
-    LogosCustomizationPanelLogoHealthCheckField,
-    LogosCustomizationPanelLogoReportName,
-    LogosCustomizationPanelLogoReportDescription,
-    LogosCustomizationPanelLogoReportLabel,
-    LogosCustomizationPanelLogoReportField,
-    settingSubTitle
-} from '../../../pageobjects/settings/configuration.page';
+import { elementTextIncludes, elementIsVisible, getSelector } from '../../../utils/driver';
+
+import { CONFIGURATION_PAGE as pageName} from '../../../utils/pages-constants';
+const settingTitle = getSelector('settingTitle', pageName);
+const generalPanelTitle = getSelector('generalPanelTitle', pageName);
+const generalPanelIndexPatternName = getSelector('generalPanelIndexPatternName', pageName);
+const generalPanelIndexPatternDescription = getSelector('generalPanelIndexPatternDescription', pageName);
+const generalPanelIndexPatternLabel = getSelector('generalPanelIndexPatternLabel', pageName);
+const generalPanelIndexPatternField = getSelector('generalPanelIndexPatternField', pageName);
+const generalPanelRequestTimeoutName = getSelector('generalPanelRequestTimeoutName', pageName);
+const generalPanelRequestTimeoutDescription = getSelector('generalPanelRequestTimeoutDescription', pageName);
+const generalPanelRequestLabel = getSelector('generalPanelRequestLabel', pageName);
+const generalPanelRequestField = getSelector('generalPanelRequestField', pageName);
+const generalPanelIpSelectorName = getSelector('generalPanelIpSelectorName', pageName);
+const generalPanelIpSelectorDescription = getSelector('generalPanelIpSelectorDescription', pageName);
+const generalPanelIpSelectorLabel = getSelector('generalPanelIpSelectorLabel', pageName);
+const generalPanelIpSelectorField = getSelector('generalPanelIpSelectorField', pageName);
+const generalPanelIpIgnoreName = getSelector('generalPanelIpIgnoreName', pageName);
+const generalPanelIpIgnoreDescription = getSelector('generalPanelIpIgnoreDescription', pageName);
+const generalPanelIpIgnoreLabel = getSelector('generalPanelIpIgnoreLabel', pageName);
+const generalPanelIpIgnoreField = getSelector('generalPanelIpIgnoreField', pageName);
+const generalPanelCronPrefixName = getSelector('generalPanelCronPrefixName', pageName);
+const generalPanelCronPrefixDescription = getSelector('generalPanelCronPrefixDescription', pageName);
+const generalPanelCronLabel = getSelector('generalPanelCronLabel', pageName);
+const generalPanelCronField = getSelector('generalPanelCronField', pageName);
+const generalPanelSamplePrefixName = getSelector('generalPanelSamplePrefixName', pageName);
+const generalPanelSamplePrefixDescription = getSelector('generalPanelSamplePrefixDescription', pageName);
+const generalPanelSampleLabel = getSelector('generalPanelSampleLabel', pageName);
+const generalPanelSampleField = getSelector('generalPanelSampleField', pageName);
+const generalPanelManagerAlertsPrefixName = getSelector('generalPanelManagerAlertsPrefixName', pageName);
+const generalPanelManagerAlertsPrefixDescription = getSelector('generalPanelManagerAlertsPrefixDescription', pageName);
+const generalPanelManagerAlertsLabel = getSelector('generalPanelManagerAlertsLabel', pageName);
+const generalPanelManagerAlertsField = getSelector('generalPanelManagerAlertsField', pageName);
+const generalPanelLogLevelName = getSelector('generalPanelLogLevelName', pageName);
+const generalPanelLogLevelDescription = getSelector('generalPanelLogLevelDescription', pageName);
+const generalPanelLogLevelLabel = getSelector('generalPanelLogLevelLabel', pageName);
+const generalPanelLogLevelField = getSelector('generalPanelLogLevelField', pageName);
+const generalPanelEnrollmentName = getSelector('generalPanelEnrollmentName', pageName);
+const generalPanelEnrollmentDescription = getSelector('generalPanelEnrollmentDescription', pageName);
+const generalPanelEnrollmentLabel = getSelector('generalPanelEnrollmentLabel', pageName);
+const generalPanelEnrollmentField = getSelector('generalPanelEnrollmentField', pageName);
+const healthCheckPanelTitle = getSelector('healthCheckPanelTitle', pageName);
+const healthCheckPanelIndexPatternPrefixName = getSelector('healthCheckPanelIndexPatternPrefixName', pageName);
+const healthCheckPanelIndexPatternPrefixDescriptio = getSelector('healthCheckPanelIndexPatternPrefixDescriptio', pageName);
+const healthCheckPanelIndexPatterLabel = getSelector('healthCheckPanelIndexPatterLabel', pageName);
+const healthCheckPanelIndexPatterField = getSelector('healthCheckPanelIndexPatterField', pageName);
+const healthCheckPanelIndexTemplatePrefixName = getSelector('healthCheckPanelIndexTemplatePrefixName', pageName);
+const healthCheckPanelIndexTemplatePrefixDescriptio = getSelector('healthCheckPanelIndexTemplatePrefixDescriptio', pageName);
+const healthCheckPanelIndexTemplateLabel = getSelector('healthCheckPanelIndexTemplateLabel', pageName);
+const healthCheckPanelIndexTemplateField = getSelector('healthCheckPanelIndexTemplateField', pageName);
+const healthCheckPanelApiConnectionPrefixName = getSelector('healthCheckPanelApiConnectionPrefixName', pageName);
+const healthCheckPanelApiConnectionPrefixDescriptio = getSelector('healthCheckPanelApiConnectionPrefixDescriptio', pageName);
+const healthCheckPanelApiConnectionLabel = getSelector('healthCheckPanelApiConnectionLabel', pageName);
+const healthCheckPanelApiConnectionField = getSelector('healthCheckPanelApiConnectionField', pageName);
+const healthCheckPanelApiVersionPrefixName = getSelector('healthCheckPanelApiVersionPrefixName', pageName);
+const healthCheckPanelApiVersionPrefixDescriptio = getSelector('healthCheckPanelApiVersionPrefixDescriptio', pageName);
+const healthCheckPanelApiVersionLabel = getSelector('healthCheckPanelApiVersionLabel', pageName);
+const healthCheckPanelApiVersionField = getSelector('healthCheckPanelApiVersionField', pageName);
+const healthCheckPanelKnowFieldsPrefixName = getSelector('healthCheckPanelKnowFieldsPrefixName', pageName);
+const healthCheckPanelKnowFieldsPrefixDescriptio = getSelector('healthCheckPanelKnowFieldsPrefixDescriptio', pageName);
+const healthCheckPanelKnowFieldsLabel = getSelector('healthCheckPanelKnowFieldsLabel', pageName);
+const healthCheckPanelKnowFieldsField = getSelector('healthCheckPanelKnowFieldsField', pageName);
+const healthCheckPanelRemoveMetaFieldsPrefixName = getSelector('healthCheckPanelRemoveMetaFieldsPrefixName', pageName);
+const healthCheckPanelRemoveMetaFieldsPrefixDescriptio = getSelector('healthCheckPanelRemoveMetaFieldsPrefixDescriptio', pageName);
+const healthCheckPanelRemoveMetaFieldsPrefixLabe = getSelector('healthCheckPanelRemoveMetaFieldsPrefixLabe', pageName);
+const healthCheckPanelRemoveMetaFieldsPrefixFiel = getSelector('healthCheckPanelRemoveMetaFieldsPrefixFiel', pageName);
+const healthCheckPanelSetBucketPrefixName = getSelector('healthCheckPanelSetBucketPrefixName', pageName);
+const healthCheckPanelSetBucketPrefixDescription = getSelector('healthCheckPanelSetBucketPrefixDescription', pageName);
+const healthCheckPanelSetBucketLabel = getSelector('healthCheckPanelSetBucketLabel', pageName);
+const healthCheckPanelSetBucketField = getSelector('healthCheckPanelSetBucketField', pageName);
+const healthCheckPanelSetTimePrefixName = getSelector('healthCheckPanelSetTimePrefixName', pageName);
+const healthCheckPanelSetTimePrefixDescription = getSelector('healthCheckPanelSetTimePrefixDescription', pageName);
+const healthCheckPanelSetTimeLabel = getSelector('healthCheckPanelSetTimeLabel', pageName);
+const healthCheckPanelSetTimeField = getSelector('healthCheckPanelSetTimeField', pageName);
+const monitoringPanelTitle = getSelector('monitoringPanelTitle', pageName);
+const monitoringPanelStatusName = getSelector('monitoringPanelStatusName', pageName);
+const monitoringPanelStatusDescription = getSelector('monitoringPanelStatusDescription', pageName);
+const monitoringPanelStatusPatterLabel = getSelector('monitoringPanelStatusPatterLabel', pageName);
+const monitoringPanelStatusPatterField = getSelector('monitoringPanelStatusPatterField', pageName);
+const monitoringPanelFrequencyName = getSelector('monitoringPanelFrequencyName', pageName);
+const monitoringPanelFrequencyDescription = getSelector('monitoringPanelFrequencyDescription', pageName);
+const monitoringPanelFrequencyLabel = getSelector('monitoringPanelFrequencyLabel', pageName);
+const monitoringPanelFrequencyField = getSelector('monitoringPanelFrequencyField', pageName);
+const monitoringPanelIndexShardsName = getSelector('monitoringPanelIndexShardsName', pageName);
+const monitoringPanelIndexShardsDescription = getSelector('monitoringPanelIndexShardsDescription', pageName);
+const monitoringPanelIndexShardsLabel = getSelector('monitoringPanelIndexShardsLabel', pageName);
+const monitoringPanelIndexShardsField = getSelector('monitoringPanelIndexShardsField', pageName);
+const monitoringPanelIndexReplicasName = getSelector('monitoringPanelIndexReplicasName', pageName);
+const monitoringPanelIndexReplicasDescription = getSelector('monitoringPanelIndexReplicasDescription', pageName);
+const monitoringPanelPanelIndexReplicasLabel = getSelector('monitoringPanelPanelIndexReplicasLabel', pageName);
+const monitoringPanelIndexReplicasField = getSelector('monitoringPanelIndexReplicasField', pageName);
+const monitoringPanelIndexCreationName = getSelector('monitoringPanelIndexCreationName', pageName);
+const monitoringPanelIndexCreationDescription = getSelector('monitoringPanelIndexCreationDescription', pageName);
+const monitoringPanelIndexCreationLabel = getSelector('monitoringPanelIndexCreationLabel', pageName);
+const monitoringPanelIndexCreationField = getSelector('monitoringPanelIndexCreationField', pageName);
+const monitoringPanelIndexPatternName = getSelector('monitoringPanelIndexPatternName', pageName);
+const monitoringPanelIndexPatternDescription = getSelector('monitoringPanelIndexPatternDescription', pageName);
+const monitoringPanelIndexPatternLabel = getSelector('monitoringPanelIndexPatternLabel', pageName);
+const monitoringPanelIndexPatternField = getSelector('monitoringPanelIndexPatternField', pageName);
+const statisticsPanelTitle = getSelector('statisticsPanelTitle', pageName);
+const StatisticsPanelStatusName = getSelector('StatisticsPanelStatusName', pageName);
+const StatisticsPanelStatusDescription = getSelector('StatisticsPanelStatusDescription', pageName);
+const StatisticsPanelStatusPatterLabel = getSelector('StatisticsPanelStatusPatterLabel', pageName);
+const StatisticsPanelStatusPatterField = getSelector('StatisticsPanelStatusPatterField', pageName);
+const StatisticsPanelIncludesApisName = getSelector('StatisticsPanelIncludesApisName', pageName);
+const StatisticsPanelIncludesApisDescription = getSelector('StatisticsPanelIncludesApisDescription', pageName);
+const StatisticsPanelIncludesApisLabel = getSelector('StatisticsPanelIncludesApisLabel', pageName);
+const StatisticsPanelIncludesApisField = getSelector('StatisticsPanelIncludesApisField', pageName);
+const StatisticsPanelIndexIntervalName = getSelector('StatisticsPanelIndexIntervalName', pageName);
+const StatisticsPanelIndexIntervalDescription = getSelector('StatisticsPanelIndexIntervalDescription', pageName);
+const StatisticsPanelIndexIntervalLabel = getSelector('StatisticsPanelIndexIntervalLabel', pageName);
+const StatisticsPanelIndexIntervalField = getSelector('StatisticsPanelIndexIntervalField', pageName);
+const StatisticsPanelIndexNameName = getSelector('StatisticsPanelIndexNameName', pageName);
+const StatisticsPanelIndexNameDescription = getSelector('StatisticsPanelIndexNameDescription', pageName);
+const StatisticsPanelIndexNameLabel = getSelector('StatisticsPanelIndexNameLabel', pageName);
+const StatisticsPanelIndexNameField = getSelector('StatisticsPanelIndexNameField', pageName);
+const StatisticsPanelIndexCreationName = getSelector('StatisticsPanelIndexCreationName', pageName);
+const StatisticsPanelIndexCreationDescription = getSelector('StatisticsPanelIndexCreationDescription', pageName);
+const StatisticsPanelIndexCreationLabel = getSelector('StatisticsPanelIndexCreationLabel', pageName);
+const StatisticsPanelIndexCreationField = getSelector('StatisticsPanelIndexCreationField', pageName);
+const StatisticsPanelIndexShardsName = getSelector('StatisticsPanelIndexShardsName', pageName);
+const StatisticsPanelIndexShardsDescription = getSelector('StatisticsPanelIndexShardsDescription', pageName);
+const StatisticsPanelIndexShardsLabel = getSelector('StatisticsPanelIndexShardsLabel', pageName);
+const StatisticsPanelIndexShardsField = getSelector('StatisticsPanelIndexShardsField', pageName);
+const StatisticsPanelIndexReplicasName = getSelector('StatisticsPanelIndexReplicasName', pageName);
+const StatisticsPanelIndexReplicasDescription = getSelector('StatisticsPanelIndexReplicasDescription', pageName);
+const StatisticsPanelIndexReplicasLabel = getSelector('StatisticsPanelIndexReplicasLabel', pageName);
+const StatisticsPanelIndexReplicasField = getSelector('StatisticsPanelIndexReplicasField', pageName);
+const logoPanelTitle = getSelector('logoPanelTitle', pageName);
+const LogosCustomizationPanelLogoAppName = getSelector('LogosCustomizationPanelLogoAppName', pageName);
+const LogosCustomizationPanelLogoAppDescription = getSelector('LogosCustomizationPanelLogoAppDescription', pageName);
+const LogosCustomizationPanelLogoAppPatterLabel = getSelector('LogosCustomizationPanelLogoAppPatterLabel', pageName);
+const LogosCustomizationPanelLogoAppPatterField = getSelector('LogosCustomizationPanelLogoAppPatterField', pageName);
+const settingSubTitle = getSelector('settingSubTitle', pageName);
+const LogosCustomizationPanelLogoReportField = getSelector('LogosCustomizationPanelLogoReportField', pageName);
+const LogosCustomizationPanelLogoReportLabel = getSelector('LogosCustomizationPanelLogoReportLabel', pageName);
+const LogosCustomizationPanelLogoReportDescription = getSelector('LogosCustomizationPanelLogoReportDescription', pageName);
+const LogosCustomizationPanelLogoReportName = getSelector('LogosCustomizationPanelLogoReportName', pageName);
+const LogosCustomizationPanelLogoHealthCheckField = getSelector('LogosCustomizationPanelLogoHealthCheckField', pageName);
+const LogosCustomizationPanelLogoHealthCheckLabel = getSelector('LogosCustomizationPanelLogoHealthCheckLabel', pageName);
+const LogosCustomizationPanelLogoHealthCheckDescription = getSelector('LogosCustomizationPanelLogoHealthCheckDescription', pageName);
+const LogosCustomizationPanelLogoHealthCheckName = getSelector('LogosCustomizationPanelLogoHealthCheckName', pageName);
+const LogosCustomizationPanelLogosSidebarField = getSelector('LogosCustomizationPanelLogosSidebarField', pageName);
+const LogosCustomizationPanelLogosSidebarLabel = getSelector('LogosCustomizationPanelLogosSidebarLabel', pageName);
+const LogosCustomizationPanelLogosSidebarDescription = getSelector('LogosCustomizationPanelLogosSidebarDescription', pageName);
+const LogosCustomizationPanelLogosSidebarName = getSelector('LogosCustomizationPanelLogosSidebarName', pageName);
+
+
 const texts = require('../../../../fixtures/configuration.panel.text.json');
 
 Then('The app current settings are displayed', () => {

@@ -1,6 +1,14 @@
 import { When } from 'cypress-cucumber-preprocessor/steps';
-import { clickElement, fillField, elementIsVisible, getAvailableElement} from '../../utils/driver';
-import { addFilterButton, filterSuggestionList, filterOperatorList, filterParams, saveFilterButton, selectedOperator} from '../../pageobjects/filters/filters.page';
+import { clickElement, fillField, elementIsVisible, getAvailableElement, getSelector} from '../../utils/driver';
+
+import { FILTERS_PAGE as pageName} from '../../utils/pages-constants';
+const addFilterButton = getSelector('addFilterButton', pageName);
+const filterSuggestionList = getSelector('filterSuggestionList', pageName);
+const filterOperatorList = getSelector('filterOperatorList', pageName);
+const filterParams = getSelector('filterParams', pageName);
+const saveFilterButton = getSelector('saveFilterButton', pageName);
+const selectedOperator = getSelector('selectedOperator', pageName);
+
 When('The user adds a new filter', () => {
   elementIsVisible(addFilterButton);
   clickElement(addFilterButton);

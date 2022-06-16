@@ -1,10 +1,10 @@
 import { When } from 'cypress-cucumber-preprocessor/steps';
-import { clickElement, elementIsVisible, validateURLIncludes } from '../../../utils/driver';
-import {
-  managementButton,
-  wazuhMenuButton,
-  rulesLink,
-} from '../../../pageobjects/wazuh-menu/wazuh-menu.page';
+import { clickElement, elementIsVisible, validateURLIncludes, getSelector } from '../../../utils/driver';
+
+import { WAZUH_MENU_PAGE as pageName} from '../../../utils/pages-constants';
+const managementButton = getSelector('managementButton', pageName);
+const wazuhMenuButton = getSelector('wazuhMenuButton', pageName);
+const rulesLink = getSelector('rulesLink', pageName);
 
 When('The user navigates to rules', () => {
   elementIsVisible(wazuhMenuButton);

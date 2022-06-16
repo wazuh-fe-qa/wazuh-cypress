@@ -1,5 +1,7 @@
-import { elementIsVisible } from '../../../utils/driver';
-import { dataAddedSuccessfullyToast } from '../../../pageobjects/settings/sample-data.page';
+import { elementIsVisible, getSelector } from '../../../utils/driver';
+
+import { SAMPLE_DATA_PAGE as pageName} from '../../../utils/pages-constants';
+const dataAddedSuccessfullyToast = getSelector('dataAddedSuccessfullyToast', pageName);
 
 Then('The add data success toasts are displayed', () => {
   elementIsVisible(dataAddedSuccessfullyToast);

@@ -1,4 +1,9 @@
 /// <reference types="cypress" />
+import { XPACK_PAGES_MAPPER } from "./mappers/xpack-pages-mapper";
+import { ODFE_PAGES_MAPPER } from "./mappers/odfe-pages-mapper";
+import { BASIC_PAGES_MAPPER } from "./mappers/basic-pages-mapper";
+import { WZD_PAGES_MAPPER } from "./mappers/wzd-pages-mapper";
+
 export const clickElement = (selector) => {
   getElement(selector).should('not.be.disabled').click();
   return this;
@@ -49,6 +54,21 @@ export const getElement = (selector) => {
   return cy.get(selector);
 };
 
+export const getSelector = (name, page) => {
+  switch (Cypress.env('type')) {
+    case 'xpack':
+      return XPACK_PAGES_MAPPER[page][name];
+    case 'odfe':
+      return ODFE_PAGES_MAPPER[page][name];
+    case 'basic':
+      return BASIC_PAGES_MAPPER[page][name];
+    case 'wzd':
+      return WZD_PAGES_MAPPER[page][name];
+    default:
+      return '';
+  }
+};
+
 export const getAvailableElement = (selector) => {
   return cy.get(selector).should('not.be.disabled');
 };
@@ -97,7 +117,7 @@ export const updateCookies = (filename) => {
   let parameterToFilter = []
   cy.getCookies().then((currentCook) => {
     if (currentCook.length != 0) {
-      (Cypress.env('type') == 'odfe') ? parameterToFilter = ['wz-token']: parameterToFilter = ['sid', 'wz-token'];
+      (Cypress.env('type') == 'xpack') ? parameterToFilter = ['sid', 'wz-token']: parameterToFilter = ['wz-token'];
       for (let l = 0; l < parameterToFilter.length; l++) {
         const [cookie] = currentCook.filter(e => e.name == parameterToFilter[l]);
         cy.readFile(filename).then((obj) => {
