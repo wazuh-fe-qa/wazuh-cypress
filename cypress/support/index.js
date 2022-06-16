@@ -17,14 +17,8 @@
 
 import { LOGIN_TYPE, OVERVIEW_URL } from '../integration/utils/login-constants';
 import {
-    updateCookies,
-    clearSession,
-    updateExpiryValueCookies,
     navigate,
     validateURLIncludes,
-    setCookies,
-    preserveCookie,
-    timestampToDate
 } from '../integration/utils/driver';
 import { COOKIE_TYPE } from './cookie-constants';
 const loginMethod = Cypress.env('type')
@@ -32,9 +26,6 @@ import './commands';
 require("cypress-xpath");
 
 before(() => {
-    clearSession();
-
-    cy.setSessionStorage('healthCheck', 'executed');
 
     Cypress.on('uncaught:exception', (err, runnable) => {
         return false;
@@ -53,15 +44,15 @@ before(() => {
     validateURLIncludes(OVERVIEW_URL);
 
     cy.getCookies().then((cookies) => {
-        cy.log(`cookies eb before: ${JSON.stringify(cookies)}`);
+        cy.log(`Save cookies in cookies.json: ${JSON.stringify(cookies)}`);
         cy.writeFile('cookies.json', JSON.stringify(cookies));
     })
 })
 
 beforeEach(() => {
-    cy.readFile('cookies.json').then((obj) => {
-        obj.forEach((element) => {
-        cy.setCookie(element.name, element.value);
+    cy.readFile('cookies.json').then((cookies) => {
+        cookies.forEach((cookie) => {
+        cy.setCookie(cookie.name, cookie.value);
       });
     })
     cy.setSessionStorage('healthCheck', 'executed');
