@@ -20,7 +20,6 @@ import {
     navigate,
     validateURLIncludes,
 } from '../integration/utils/driver';
-import { COOKIE_TYPE } from './cookie-constants';
 const loginMethod = Cypress.env('type')
 import './commands';
 require("cypress-xpath");
