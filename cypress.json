@@ -17,7 +17,6 @@
   },
   "videosFolder": "cypress/report/video",
   "screenshotsFolder": "cypress/report/screenshots",
-  "experimentalSessionAndOrigin": true,
   "env": {
       "type": "odfe"
     }
