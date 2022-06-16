@@ -1,7 +1,7 @@
 export const AGENTS_PAGE = {
   firstAgentList: '[data-test-subj="row-001"]',
-  agSecurityEventsLink: '.WzManagementSideMenu [title="Security events"] div div',
-  agIntegrityMonitoringLink: '.WzManagementSideMenu [title="Integrity monitoring"] div div',
+  agSecurityEventsLink: ':nth-child(1) > .euiSideNav > .euiSideNav__content > .euiSideNavItem--root > .euiSideNavItem__items > :nth-child(1) > .euiSideNavItemButton > .euiSideNavItemButton__content > .euiSideNavItemButton__label > .euiFlexGroup > .euiFlexItem',
+  agIntegrityMonitoringLink: ':nth-child(1) > .euiSideNav > .euiSideNav__content > .euiSideNavItem--root > .euiSideNavItem__items > :nth-child(2) > .euiSideNavItemButton > .euiSideNavItemButton__content > .euiSideNavItemButton__label > .euiFlexGroup > .euiFlexItem',
   agSCALink: '.euiFlexItem.wz-module-header-agent-title > div > div:nth-child(4) button',
   agSystemAuditingLink: '.WzManagementSideMenu [title="System Auditing"] div div',
   agVulnerabilitiesLink: '.WzManagementSideMenu [title="Vulnerabilities"] div div',
@@ -13,7 +13,7 @@ export const AGENTS_PAGE = {
   agHIPAA: '.WzManagementSideMenu [title="HIPAA"] div div',
   agNIST: '.WzManagementSideMenu [title="NIST 800-53"] div div',
   agTSC: '.WzManagementSideMenu [title="TSC"] div div',
-  statusChart: '.agents-status-pie > .euiPanel > .euiCard__content > .euiCard__children > .euiFlexGroup',
+  statusChart: '.agents-status-pie .euiCard .euiCard__content  .euiFlexGroup--gutterLarge',
   agentDetails: 'euiFlexItem euiFlexItem--flexGrowZero agents-details-card',
   deployNewAgentButton: '//span[contains(text(),"Deploy new agent")]',
 };
