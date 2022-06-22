@@ -18,7 +18,7 @@ on:
         required: true
       wazuh-version:
         description: 'Wazuh Version'
-        default: 'v4.3.1'
+        default: 'v4.3.4'
         required: true
       elastic-version: 
         description: 'Elastic Version'
@@ -31,10 +31,12 @@ on:
       install-package:
         type: boolean
         description: 'install previously created package?'
+        default: true
         required: true
       url-package:
         description: 'package download url'
-        required: false        
+        required: false 
+        default: 'https://packages-dev.wazuh.com/pre-release/ui/kibana/wazuh_kibana-4.3.4_7.16.3-1.zip'       
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
