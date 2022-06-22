@@ -75,7 +75,9 @@ jobs:
        run: |
         cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
         sed -i -e 's|docker-compose exec elasticsearch|docker exec $(docker-compose ps -q elasticsearch)|g' ./setup.sh
-        sudo sh setup.sh 
+        sudo sh setup.sh
+        echo CONTINUES AFTER 15 SECONDS ...
+        sleep 15s 
      - name: Step 05 - Download Project wazuh-packages 
        if: ${{ github.event.inputs.install-package == 'false' }}
        uses: actions/checkout@v2
