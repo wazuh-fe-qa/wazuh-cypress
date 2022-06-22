@@ -143,4 +143,4 @@ jobs:
         workdir: ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}/cypress-slack
         token: ${{ secrets.ACTIONS_SLACK_TOKEN }}
         channels: 'daily-app-team'
-        message-text: ${{ format('The following workflow was executed "{0}", for the package "wazuh_kibana-{1}_{2}", wazuh-version "{1}", elastic-stack-version "{2}", for more information visit https://github.com/{3}/actions/runs/{4}', github.workflow, github.event.inputs.wazuh-version, github.event.inputs.elastic-version, github.repository, github.run_id) }}
+        message-text: ${{ format('The following workflow was executed "{0}", for the package "wazuh_kibana-{1}_{2}", wazuh-version "{1}", elastic-stack-version "{2}", for more information visit https://github.com/{3}/actions/runs/{4}, Ive placed the screenshots and videos in this thread:', github.workflow, github.event.inputs.wazuh-version, github.event.inputs.elastic-version, github.repository, github.run_id) }}
