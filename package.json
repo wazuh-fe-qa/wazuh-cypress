@@ -15,7 +15,7 @@
     "cypress:run-headless:github-actions:xpack": "cypress run --headless --browser chrome --config baseUrl=https://kibana:5601/ --env type=xpack",
     "cypress:run-headless:github-actions:basic": "cypress run --headless --browser chrome --config baseUrl=http://kibana:5601/ --env type=basic",
     "cypress:run-headless:github-actions:odfe": "cypress run --headless --browser chrome --config baseUrl=http://kibana:5601/ --env type=odfe",
-    "cypress:run-headless:github-actions:wzd": "cypress run --headless --browser chrome --config baseUrl=https://kibana:5601/ --env type=wzd",
+    "cypress:run-headless:github-actions:wzd": "cypress run --headless --browser chrome --config baseUrl=https://wazuh.dashboard:5601/ --env type=wzd",
     "cypress:run-headless:xpack": "cypress run --headless --browser chrome --config baseUrl=https://localhost:5601/ --env type=xpack",
     "cypress:run-headless:basic": "cypress run --headless --browser chrome --config baseUrl=http://localhost:5601/ --env type=basic",
     "cypress:run-headless:odfe": "cypress run --headless --browser chrome --config baseUrl=http://localhost:5601/ --env type=odfe",
