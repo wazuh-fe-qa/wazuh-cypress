@@ -18,10 +18,10 @@ on:
         required: true
       ubuntu-cypress-version: 
         description: 'Ubuntu Cypress Version'
-        default: '2.0.0'
+        default: '3.0.0'
         required: true
       url-package:
-        description: 'package download url'
+        description: 'Package Download Url'
         required: false 
         default: 'https://packages-dev.wazuh.com/pre-release/ui/kibana/wazuh_kibana-4.3.4_7.16.3-1.zip'       
 
@@ -39,7 +39,6 @@ jobs:
         wazuh-version: ${{ github.event.inputs.wazuh-version }}
         elastic-version: ${{ github.event.inputs.elastic-version }}
         ubuntu-cypress-version: ${{ github.event.inputs.ubuntu-cypress-version }}
-        path-template: ${{ env.PATH_TEMPLATE }}
         url-package: ${{ github.event.inputs.url-package }}"
         
      - name: Step 02 - Download Project wazuh-app-environments 
@@ -91,7 +90,7 @@ jobs:
      - name: Step 09 - Archive reports
        uses: actions/upload-artifact@v2
        with:
-        name: cypress-reports_${{ github.event.inputs.wazuh-version }}-${{ github.event.inputs.elastic-version }}
+        name: cypress-reports_XPACK_${{ github.event.inputs.wazuh-version }}-${{ github.event.inputs.elastic-version }}
         path: ${{ env.PATH_TEMPLATE }}/report/*
      - name: Step 10 - Upload Screenshots And Videos To Slack
        uses: trymbill/cypress-slack-video-upload-action@v1.3.0

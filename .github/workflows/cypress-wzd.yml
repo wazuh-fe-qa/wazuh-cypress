@@ -1,6 +1,6 @@
 # This is a basic workflow that is manually triggered
 
-name: Cypress automation test - [basic]
+name: Cypress automation test - [wzd]
 
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
@@ -8,13 +8,9 @@ on:
   workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
-      wazuh-version:
-        description: 'Wazuh Version'
-        default: 'v4.3.4'
-        required: true
-      elastic-version: 
-        description: 'Elastic Version'
-        default: '7.16.3'
+      wazuh-stack-version:
+        description: 'Wazuh Stack Version'
+        default: '4.3.4'
         required: true
       ubuntu-cypress-version: 
         description: 'Ubuntu Cypress Version'
@@ -23,21 +19,20 @@ on:
       url-package:
         description: 'Package Download Url'
         required: false 
-        default: 'https://packages-dev.wazuh.com/pre-release/ui/kibana/wazuh_kibana-4.3.4_7.16.3-1.zip'       
+        default: 'https://packages-dev.wazuh.com/pre-release/ui/dashboard/wazuh-4.3.4-1.zip'       
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  setup-wazuh-kibana-app:
-    name: Run setup environment wazuh kibana app
+  setup-wazuh-dashboard-app:
+    name: Run setup environment wazuh dashboard app
     runs-on: ubuntu-18.04
     steps:
      - name: Step 01 - Set up environment variables
        run: |
-        echo "PATH_TEMPLATE=$GITHUB_WORKSPACE/wazuh-app-environments/templates_elastic_prod/es_basic-wz_cluster-agent/" >> $GITHUB_ENV
+        echo "PATH_TEMPLATE=$GITHUB_WORKSPACE/wazuh-app-environments/templates_wazuh_prod/" >> $GITHUB_ENV
 
-        echo "Information about the workflow (basic):
-        wazuh-version: ${{ github.event.inputs.wazuh-version }}
-        elastic-version: ${{ github.event.inputs.elastic-version }}
+        echo "Information about the workflow (wzd):
+        wazuh-stack-version: ${{ github.event.inputs.wazuh-stack-version }}
         ubuntu-cypress-version: ${{ github.event.inputs.ubuntu-cypress-version }}
         url-package: ${{ github.event.inputs.url-package }}"
         
@@ -53,33 +48,35 @@ jobs:
         cd $GITHUB_WORKSPACE/wazuh-app-environments/
         mkdir packages
         cd ${{ env.PATH_TEMPLATE }}
-        sed -i -e 's|WAZUH_VERSION=.*|WAZUH_VERSION=${{ github.event.inputs.wazuh-version }}|g' ./.env
-        sed -i -e 's|ELASTIC_VERSION=.*|ELASTIC_VERSION=${{ github.event.inputs.elastic-version }}|g' ./.env
+        sed -i -e 's|WAZUH_STACK_VERSION=.*|WAZUH_STACK_VERSION=${{ github.event.inputs.wazuh-stack-version }}|g' ./.env
         sed -i -e 's|UBUNTU_CYPRESS_VERSION=.*|UBUNTU_CYPRESS_VERSION=${{ github.event.inputs.ubuntu-cypress-version }}|g' ./.env
         cat .env
      - name: Step 04 - Starting containers
        run: |
         cd ${{ env.PATH_TEMPLATE }}
         docker-compose up -d
-        echo CONTINUES AFTER 15 SECONDS ...
-        sleep 15s 
-     - name: Step 05 - Installing package from url
+        echo CONTINUES AFTER 30 SECONDS ...
+        sleep 30s 
+     - name: Step 05 - Remove Wazuh
        run: |
         cd ${{ env.PATH_TEMPLATE }}
-        docker exec $(docker-compose ps -q kibana) bin/kibana-plugin install ${{ github.event.inputs.url-package }}
-        docker-compose restart kibana
+        docker exec $(docker-compose ps -q wazuh.dashboard) bin/opensearch-dashboards-plugin remove wazuh
+        docker-compose restart wazuh.dashboard
+        echo CONTINUES AFTER 30 SECONDS ...
+        sleep 30s
+        docker-compose ps 
+     - name: Step 06 - Installing package from url
+       run: |
+        cd ${{ env.PATH_TEMPLATE }}
+        docker exec $(docker-compose ps -q wazuh.dashboard) bin/opensearch-dashboards-plugin install ${{ github.event.inputs.url-package }}
+        docker-compose restart wazuh.dashboard
         echo CONTINUES AFTER 60 SECONDS ...
         sleep 60s
         docker-compose ps
-     - name: Step 06 - Configuring ip container into wazuh.yml
-       run: |
-        cd ${{ env.PATH_TEMPLATE }}
-        docker exec $(docker-compose ps -q kibana) sed -i -e "s/url: https:\/\/localhost/url: https:\/\/wazuh-manager-master/g" /usr/share/kibana/data/wazuh/config/wazuh.yml
-        docker exec $(docker-compose ps -q kibana) cat /usr/share/kibana/data/wazuh/config/wazuh.yml
      - name: Step 07 - Run Cypress tests
        run: |
          cd ${{ env.PATH_TEMPLATE }}
-         docker exec $(docker-compose ps -q cypress) bash -c " . /home/automation/nvm/nvm.sh && nvm use && npm run cypress:run-headless:github-actions:basic"
+         docker exec $(docker-compose ps -q cypress) bash -c " . /home/automation/nvm/nvm.sh && nvm use && npm run cypress:run-headless:github-actions:wzd"
        continue-on-error: true 
      - name: Step 08 - Run Cypress reports
        run: |
@@ -89,7 +86,7 @@ jobs:
      - name: Step 09 - Archive reports
        uses: actions/upload-artifact@v2
        with:
-        name: cypress-reports_BASIC_${{ github.event.inputs.wazuh-version }}-${{ github.event.inputs.elastic-version }}
+        name: cypress-reports_WZD_${{ github.event.inputs.wazuh-stack-version }}
         path: ${{ env.PATH_TEMPLATE }}/report/*
      - name: Step 10 - Upload Screenshots And Videos To Slack
        uses: trymbill/cypress-slack-video-upload-action@v1.3.0
@@ -97,4 +94,4 @@ jobs:
         workdir: ${{ env.PATH_TEMPLATE }}/cypress-slack
         token: ${{ secrets.ACTIONS_SLACK_TOKEN }}
         channels: 'daily-app-team'
-        message-text: ${{ format('The following workflow was executed "{0}", wazuh-version "{1}", elastic-stack-version "{2}", ubuntu-cypress-version "{5}", package used "{6}", for more information visit https://github.com/{3}/actions/runs/{4}, The screenshots and videos in this thread:', github.workflow, github.event.inputs.wazuh-version, github.event.inputs.elastic-version, github.repository, github.run_id, github.event.inputs.ubuntu-cypress-version, github.event.inputs.url-package) }}
+        message-text: ${{ format('The following workflow was executed "{0}", wazuh-stack-version "{1}", ubuntu-cypress-version "{4}", package used "{5}", for more information visit https://github.com/{2}/actions/runs/{3}, The screenshots and videos in this thread:', github.workflow, github.event.inputs.wazuh-stack-version, github.repository, github.run_id, github.event.inputs.ubuntu-cypress-version, github.event.inputs.url-package) }}
