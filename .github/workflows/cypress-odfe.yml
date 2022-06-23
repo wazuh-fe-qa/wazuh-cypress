@@ -1,0 +1,107 @@
+# This is a basic workflow that is manually triggered
+
+name: Cypress automation test - [odfe]
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      wazuh-version:
+        description: 'Wazuh Version'
+        default: 'v4.3.4'
+        required: true
+      elastic-version: 
+        description: 'Elastic Version'
+        default: '7.10.2'
+        required: true
+      odfe-version: 
+        description: 'ODFE Version'
+        default: '1.13.2'
+        required: true
+      ubuntu-cypress-version: 
+        description: 'Ubuntu Cypress Version'
+        default: '2.0.0'
+        required: true
+      url-package:
+        description: 'package download url'
+        required: false 
+        default: 'https://packages-dev.wazuh.com/pre-release/ui/kibana/wazuh_kibana-4.3.4_7.16.3-1.zip'       
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  setup-wazuh-kibana-app:
+    name: Run setup environment wazuh kibana app
+    runs-on: ubuntu-18.04
+    steps:
+     - name: Step 01 - Set up environment variables
+       run: |
+        echo "PATH_TEMPLATE=$GITHUB_WORKSPACE/wazuh-app-environments/templates_elastic_prod/es_odfe-wz_cluster-agent/" >> $GITHUB_ENV
+
+        echo "Information about the workflow (odfe):
+        wazuh-version: ${{ github.event.inputs.wazuh-version }}
+        elastic-version: ${{ github.event.inputs.elastic-version }}
+        odfe-version: ${{ github.event.inputs.odfe-version }}
+        ubuntu-cypress-version: ${{ github.event.inputs.ubuntu-cypress-version }}
+        path-template: ${{ env.PATH_TEMPLATE }}
+        url-package: ${{ github.event.inputs.url-package }}"
+        
+     - name: Step 02 - Download Project wazuh-app-environments 
+       uses: actions/checkout@v2
+       with:
+        repository: matiasmoreno876/wazuh-app-environments
+        ref: 'master'
+        path: wazuh-app-environments
+        token: ${{ secrets.FE_SECRET_TOKEN }}
+     - name: Step 03 - Configuring templates docker environment
+       run: |
+        cd $GITHUB_WORKSPACE/wazuh-app-environments/
+        mkdir packages
+        cd ${{ env.PATH_TEMPLATE }}
+        sed -i -e 's|WAZUH_VERSION=.*|WAZUH_VERSION=${{ github.event.inputs.wazuh-version }}|g' ./.env
+        sed -i -e 's|ELASTIC_VERSION=.*|ELASTIC_VERSION=${{ github.event.inputs.elastic-version }}|g' ./.env
+        sed -i -e 's|ODFE_VERSION=.*|ODFE_VERSION=${{ github.event.inputs.odfe-version }}|g' ./.env
+        sed -i -e 's|UBUNTU_CYPRESS_VERSION=.*|UBUNTU_CYPRESS_VERSION=${{ github.event.inputs.ubuntu-cypress-version }}|g' ./.env
+        cat .env
+     - name: Step 04 - Starting containers
+       run: |
+        cd ${{ env.PATH_TEMPLATE }}
+        docker-compose up -d
+        echo CONTINUES AFTER 15 SECONDS ...
+        sleep 15s 
+     - name: Step 05 - Installing package from url
+       run: |
+        cd ${{ env.PATH_TEMPLATE }}
+        docker exec $(docker-compose ps -q kibana) bin/kibana-plugin install ${{ github.event.inputs.url-package }}
+        docker-compose restart kibana
+        echo CONTINUES AFTER 60 SECONDS ...
+        sleep 60s
+        docker-compose ps
+     - name: Step 06 - Configuring ip container into wazuh.yml
+       run: |
+        cd ${{ env.PATH_TEMPLATE }}
+        docker exec $(docker-compose ps -q kibana) sed -i -e "s/url: https:\/\/localhost/url: https:\/\/wazuh-manager-master/g" /usr/share/kibana/data/wazuh/config/wazuh.yml
+        docker exec $(docker-compose ps -q kibana) cat /usr/share/kibana/data/wazuh/config/wazuh.yml
+     - name: Step 07 - Run Cypress tests
+       run: |
+         cd ${{ env.PATH_TEMPLATE }}
+         docker exec $(docker-compose ps -q cypress) bash -c " . /home/automation/nvm/nvm.sh && nvm use && npm run cypress:run-headless:github-actions:odfe"
+       continue-on-error: true 
+     - name: Step 08 - Run Cypress reports
+       run: |
+         cd ${{ env.PATH_TEMPLATE }}
+         docker exec $(docker-compose ps -q cypress) bash -c " . /home/automation/nvm/nvm.sh && nvm use && npm run cypress:report"        
+         docker exec $(docker-compose ps -q cypress) bash -c "cp -R /home/automation/wazuh-cypress/cypress/* /home/automation/wazuh-cypress/cypress-slack"        
+     - name: Step 09 - Archive reports
+       uses: actions/upload-artifact@v2
+       with:
+        name: cypress-reports_${{ github.event.inputs.wazuh-version }}-${{ github.event.inputs.elastic-version }}
+        path: ${{ env.PATH_TEMPLATE }}/report/*
+     - name: Step 10 - Upload Screenshots And Videos To Slack
+       uses: trymbill/cypress-slack-video-upload-action@v1.3.0
+       with:
+        workdir: ${{ env.PATH_TEMPLATE }}/cypress-slack
+        token: ${{ secrets.ACTIONS_SLACK_TOKEN }}
+        channels: 'daily-app-team'
+        message-text: ${{ format('The following workflow was executed "{0}", wazuh-version "{1}", elastic-stack-version "{2}", ubuntu-cypress-version "{5}", package used "{6}", for more information visit https://github.com/{3}/actions/runs/{4}, The screenshots and videos in this thread:', github.workflow, github.event.inputs.wazuh-version, github.event.inputs.elastic-version, github.repository, github.run_id, github.event.inputs.ubuntu-cypress-version, github.event.inputs.url-package) }}
