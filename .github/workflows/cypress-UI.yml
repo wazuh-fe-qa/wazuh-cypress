@@ -1,6 +1,6 @@
 # This is a basic workflow that is manually triggered
 
-name: Manual workflow
+name: Cypress automation test
 
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
@@ -18,7 +18,7 @@ on:
         required: true
       wazuh-version:
         description: 'Wazuh Version'
-        default: 'v4.3.1'
+        default: 'v4.3.4'
         required: true
       elastic-version: 
         description: 'Elastic Version'
@@ -31,10 +31,12 @@ on:
       install-package:
         type: boolean
         description: 'install previously created package?'
+        default: true
         required: true
       url-package:
         description: 'package download url'
-        required: false        
+        required: false 
+        default: 'https://packages-dev.wazuh.com/pre-release/ui/kibana/wazuh_kibana-4.3.4_7.16.3-1.zip'       
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -69,12 +71,15 @@ jobs:
         sed -i -e 's|WAZUH_AGENT_IMAGE=.*|WAZUH_AGENT_IMAGE=${{ github.event.inputs.wazuh-agent-image }}|g' ./.env
         sed -i -e 's|WAZUH_VERSION=.*|WAZUH_VERSION=${{ github.event.inputs.wazuh-version }}|g' ./.env
         sed -i -e 's|ELASTIC_VERSION=.*|ELASTIC_VERSION=${{ github.event.inputs.elastic-version }}|g' ./.env
+        sed -i -e 's|UBUNTU_CYPRESS_VERSION=.*|UBUNTU_CYPRESS_VERSION=2.0.0|g' ./.env
         cat .env
      - name: Step 04 - Starting containers
        run: |
         cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
         sed -i -e 's|docker-compose exec elasticsearch|docker exec $(docker-compose ps -q elasticsearch)|g' ./setup.sh
-        sudo sh setup.sh 
+        sudo sh setup.sh
+        echo CONTINUES AFTER 15 SECONDS ...
+        sleep 15s 
      - name: Step 05 - Download Project wazuh-packages 
        if: ${{ github.event.inputs.install-package == 'false' }}
        uses: actions/checkout@v2
@@ -120,22 +125,22 @@ jobs:
      - name: Step 09 - Run Cypress tests
        run: |
          cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
-         docker exec $(docker-compose ps -q cypress) bash -c " . /home/automation/nvm/nvm.sh && nvm use && npm run cypress:run-headless:github-actions"
+         docker exec $(docker-compose ps -q cypress) bash -c " . /home/automation/nvm/nvm.sh && nvm use && npm run cypress:run-headless:github-actions:xpack"
        continue-on-error: true 
      - name: Step 10 - Run Cypress reports
        run: |
          cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
          docker exec $(docker-compose ps -q cypress) bash -c " . /home/automation/nvm/nvm.sh && nvm use && npm run cypress:report"        
+         docker exec $(docker-compose ps -q cypress) bash -c "cp -R /home/automation/wazuh-cypress/cypress/* /home/automation/wazuh-cypress/cypress-slack"        
      - name: Step 11 - Archive reports
        uses: actions/upload-artifact@v2
        with:
         name: cypress-reports_${{ github.event.inputs.wazuh-version }}-${{ github.event.inputs.elastic-version }}
         path: ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}/report/*
-     #- name: Step 12 - Upload Screenshots And Videos To Slack
-      # if: failure()
-       #uses: trymbill/cypress-slack-video-upload-action@v1.3.0
-       #with:
-        #workdir: wazuh-qa/tests/frontend/test_kibana_app/cypress
-        #token: ${{ secrets.ACTIONS_SLACK_TOKEN }}
-        #channels: 'daily-app-team'
-        #message-text: ${{ format('Workflow "{0}" job test triggered by {1} is FAILED for {2} - {3}', github.workflow, github.event_name, github.base_ref, github.head_ref) }}
+     - name: Step 12 - Upload Screenshots And Videos To Slack
+       uses: trymbill/cypress-slack-video-upload-action@v1.3.0
+       with:
+        workdir: ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}/cypress-slack
+        token: ${{ secrets.ACTIONS_SLACK_TOKEN }}
+        channels: 'daily-app-team'
+        message-text: ${{ format('The following workflow was executed "{0}", for the package "wazuh_kibana-{1}_{2}", wazuh-version "{1}", elastic-stack-version "{2}", for more information visit https://github.com/{3}/actions/runs/{4}, Ive placed the screenshots and videos in this thread:', github.workflow, github.event.inputs.wazuh-version, github.event.inputs.elastic-version, github.repository, github.run_id) }}
