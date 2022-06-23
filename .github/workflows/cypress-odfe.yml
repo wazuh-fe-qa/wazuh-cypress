@@ -22,10 +22,10 @@ on:
         required: true
       ubuntu-cypress-version: 
         description: 'Ubuntu Cypress Version'
-        default: '2.0.0'
+        default: '3.0.0'
         required: true
       url-package:
-        description: 'package download url'
+        description: 'Package Download Url'
         required: false 
         default: 'https://packages-dev.wazuh.com/pre-release/ui/kibana/wazuh_kibana-4.3.4_7.16.3-1.zip'       
 
@@ -44,7 +44,6 @@ jobs:
         elastic-version: ${{ github.event.inputs.elastic-version }}
         odfe-version: ${{ github.event.inputs.odfe-version }}
         ubuntu-cypress-version: ${{ github.event.inputs.ubuntu-cypress-version }}
-        path-template: ${{ env.PATH_TEMPLATE }}
         url-package: ${{ github.event.inputs.url-package }}"
         
      - name: Step 02 - Download Project wazuh-app-environments 
@@ -96,7 +95,7 @@ jobs:
      - name: Step 09 - Archive reports
        uses: actions/upload-artifact@v2
        with:
-        name: cypress-reports_${{ github.event.inputs.wazuh-version }}-${{ github.event.inputs.elastic-version }}
+        name: cypress-reports_ODFE_${{ github.event.inputs.wazuh-version }}-${{ github.event.inputs.odfe-version }}-${{ github.event.inputs.elastic-version }}
         path: ${{ env.PATH_TEMPLATE }}/report/*
      - name: Step 10 - Upload Screenshots And Videos To Slack
        uses: trymbill/cypress-slack-video-upload-action@v1.3.0
@@ -104,4 +103,4 @@ jobs:
         workdir: ${{ env.PATH_TEMPLATE }}/cypress-slack
         token: ${{ secrets.ACTIONS_SLACK_TOKEN }}
         channels: 'daily-app-team'
-        message-text: ${{ format('The following workflow was executed "{0}", wazuh-version "{1}", elastic-stack-version "{2}", ubuntu-cypress-version "{5}", package used "{6}", for more information visit https://github.com/{3}/actions/runs/{4}, The screenshots and videos in this thread:', github.workflow, github.event.inputs.wazuh-version, github.event.inputs.elastic-version, github.repository, github.run_id, github.event.inputs.ubuntu-cypress-version, github.event.inputs.url-package) }}
+        message-text: ${{ format('The following workflow was executed "{0}", wazuh-version "{1}", elastic-stack-version "{2}", odfe-version "{7}", ubuntu-cypress-version "{5}", package used "{6}", for more information visit https://github.com/{3}/actions/runs/{4}, The screenshots and videos in this thread:', github.workflow, github.event.inputs.wazuh-version, github.event.inputs.elastic-version, github.repository, github.run_id, github.event.inputs.ubuntu-cypress-version, github.event.inputs.url-package, github.event.inputs.odfe-version) }}
