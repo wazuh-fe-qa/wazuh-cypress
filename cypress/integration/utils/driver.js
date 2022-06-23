@@ -15,6 +15,11 @@ export const forceClickElement = (cssSelector) => {
   return this;
 };
 
+export const forceEnter = (cssSelector) => {
+  cy.wait(1000);
+  getElement(cssSelector).type('{enter}')
+};
+
 export const forceClickElementByXpath = (xpathSelector) => {
   cy.wait(1000);
   getElementByXpath(xpathSelector).click({ force: true })
