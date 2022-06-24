@@ -88,10 +88,14 @@ jobs:
        with:
         name: cypress-reports_WZD_${{ github.event.inputs.wazuh-stack-version }}
         path: ${{ env.PATH_TEMPLATE }}/report/*
-     - name: Step 10 - Upload Screenshots And Videos To Slack
-       uses: trymbill/cypress-slack-video-upload-action@v1.3.0
+     - name: Step 10 - Post to a Slack channel
+       id: slack
+       uses: slackapi/slack-github-action@v1.19.0
        with:
-        workdir: ${{ env.PATH_TEMPLATE }}/cypress-slack
-        token: ${{ secrets.ACTIONS_SLACK_TOKEN }}
-        channels: 'daily-app-team'
-        message-text: ${{ format('The following workflow was executed "{0}", wazuh-stack-version "{1}", ubuntu-cypress-version "{4}", package used "{5}", for more information visit https://github.com/{2}/actions/runs/{3}, The screenshots and videos in this thread:', github.workflow, github.event.inputs.wazuh-stack-version, github.repository, github.run_id, github.event.inputs.ubuntu-cypress-version, github.event.inputs.url-package) }}
+          # Slack channel id, channel name, or user id to post message.
+          # See also: https://api.slack.com/methods/chat.postMessage#channels
+        channel-id: 'daily-app-team'
+          # For posting a simple plain text message
+        slack-message: "The following workflow was executed: ${{ github.workflow }} \n GitHub build result: ${{ job.status }}\n Wazuh stack version: ${{ github.event.inputs.wazuh-stack-version }} \n Ubuntu Cypress version: ${{ github.event.inputs.ubuntu-cypress-version }} \n Package used: ${{ github.event.inputs.url-package }} \n For more information visit: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+       env:
+          SLACK_BOT_TOKEN: ${{ secrets.ACTIONS_SLACK_TOKEN }}
