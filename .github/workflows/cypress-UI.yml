@@ -24,13 +24,21 @@ jobs:
        run: |
         echo " 1 of 2 failed (50%)                      11:35       11        8        3        -        - " >> cypress.log
         tail --help
-        echo "TEST_SKIPPED=$(tail -r cypress.log | grep -m 1 '.' | awk ' { print $(NF)}')" >> $GITHUB_ENV
-        echo "TEST_PENDING=$(tail -r cypress.log | grep -m 1 '.' | awk ' { print $(NF-1)}')" >> $GITHUB_ENV
-        echo "TEST_FAILING=$(tail -r cypress.log | grep -m 1 '.' | awk ' { print $(NF-2)}')" >> $GITHUB_ENV
-        echo "TEST_PASSING=$(tail -r cypress.log | grep -m 1 '.' | awk ' { print $(NF-3)}')" >> $GITHUB_ENV
-        echo "TEST_TOTAL=$(tail -r cypress.log | grep -m 1 '.' | awk ' { print $(NF-4)}')" >> $GITHUB_ENV
-        echo "TEST_TIME=$(tail -r cypress.log | grep -m 1 '.' | awk ' { print $(NF-5)}')" >> $GITHUB_ENV
+        echo "TEST_SKIPPED=$(tail cypress.log | grep -m 1 '.' | awk ' { print $(NF)}')" >> $GITHUB_ENV
+        echo "TEST_PENDING=$(tail cypress.log | grep -m 1 '.' | awk ' { print $(NF-1)}')" >> $GITHUB_ENV
+        echo "TEST_FAILING=$(tail cypress.log | grep -m 1 '.' | awk ' { print $(NF-2)}')" >> $GITHUB_ENV
+        echo "TEST_PASSING=$(tail cypress.log | grep -m 1 '.' | awk ' { print $(NF-3)}')" >> $GITHUB_ENV
+        echo "TEST_TOTAL=$(tail cypress.log | grep -m 1 '.' | awk ' { print $(NF-4)}')" >> $GITHUB_ENV
+        echo "TEST_TIME=$(tail cypress.log | grep -m 1 '.' | awk ' { print $(NF-5)}')" >> $GITHUB_ENV
      - name: Step 02
        run: |
-        echo "The following workflow was executed: ${{ github.workflow }}\n Test summary:\n-- Total Test: ${{ env.TEST_TOTAL }}\n-- Passing: ${{ env.TEST_PASSING }}\n-- Failing: ${{ env.TEST_FAILING }}\n-- Pending: ${{ env.TEST_PENDING }}\n-- Skipped: ${{ env.TEST_SKIPPED }}\n-- Total Time: ${{ env.TEST_TIME }}\n\nFor more information visit: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        echo "The following workflow was executed: ${{ github.workflow }}
+        Test summary:
+        -- Total Test: ${{ env.TEST_TOTAL }}
+        -- Passing: ${{ env.TEST_PASSING }}
+        -- Failing: ${{ env.TEST_FAILING }}
+        -- Pending: ${{ env.TEST_PENDING }}
+        -- Skipped: ${{ env.TEST_SKIPPED }}
+        -- Total Time: ${{ env.TEST_TIME }}
+        For more information visit: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
     
