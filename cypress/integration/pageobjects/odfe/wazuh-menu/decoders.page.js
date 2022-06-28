@@ -9,4 +9,9 @@ export const DECODERS_PAGE = {
   saveDecoderButtonSelector: '.euiFlexItem--flexGrowZero > .euiButton > .euiButtonContent',
   messageConfirmSaveSelector: '.euiText > span',
   buttonRestartSelector: '.euiCallOut.euiCallOut--primary .euiButton.euiButton--primary',
+  firstCustomDecoder: '[data-test-subj="row-local_decoder_example"]',
+  xmlDecoderFile:':nth-child(4) .euiTableCellContent .euiToolTipAnchor .euiLink',
+  codeEditorSelector: '[data-test-subj="codeEditorContainer"]',
+  backButtonSelector: '.euiFlexGroup .euiFlexItem .euiToolTipAnchor .euiButtonIcon',
+  confirmModalSelector: '[data-test-subj="confirmModalTitleText"]'
 };
