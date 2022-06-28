@@ -4,7 +4,7 @@ Feature: Validate that the added filter label is displayed
   I want to set a new filter
   in order to manage them
   Background:
-    Given The admin user is logged in using xpack
+    Given The kibana admin user is logged and the wazuh logo is displayed
 
   @filter
   Scenario Outline: The user add a new filer <Module Name>

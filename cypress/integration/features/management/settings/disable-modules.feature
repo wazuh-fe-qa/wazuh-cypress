@@ -6,7 +6,7 @@ Feature: disable modules
 
   @DisableModules
   Scenario Outline: Disable modules, <Module Name>
-    Given The kibana admin user is logged in using xpack and the wazuh logo is displayed
+    Given The kibana admin user is logged and the wazuh logo is displayed
     When The user navigates to Modules settings
     And All modules are activates
     And The user deactivates the modules with <Module Name>
