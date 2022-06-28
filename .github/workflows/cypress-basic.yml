@@ -77,9 +77,10 @@ jobs:
         docker exec $(docker-compose ps -q kibana) sed -i -e "s/url: https:\/\/localhost/url: https:\/\/wazuh-manager-master/g" /usr/share/kibana/data/wazuh/config/wazuh.yml
         docker exec $(docker-compose ps -q kibana) cat /usr/share/kibana/data/wazuh/config/wazuh.yml
      - name: Step 07 - Run Cypress tests
+       id: run-cypress-test
        run: |
          cd ${{ env.PATH_TEMPLATE }}
-         docker exec $(docker-compose ps -q cypress) bash -c " . /home/automation/nvm/nvm.sh && nvm use && npm run cypress:run-headless:github-actions:basic"
+         docker exec $(docker-compose ps -q cypress) bash -c " . /home/automation/nvm/nvm.sh && nvm use && npm run cypress:run-headless:github-actions:basic" | tee cypress.log
        continue-on-error: true 
      - name: Step 08 - Run Cypress reports
        run: |
@@ -91,6 +92,15 @@ jobs:
        with:
         name: cypress-reports_BASIC_${{ github.event.inputs.wazuh-version }}-${{ github.event.inputs.elastic-version }}
         path: ${{ env.PATH_TEMPLATE }}/report/*
+     - name: Step 10 - Log parsing
+       run: |
+        cd ${{ env.PATH_TEMPLATE }}
+        echo "TEST_SKIPPED=$(tail -r cypress.log | grep -m 1 '.' | awk ' { print $(NF)}')" >> $GITHUB_ENV
+        echo "TEST_PENDING=$(tail -r cypress.log | grep -m 1 '.' | awk ' { print $(NF-1)}')" >> $GITHUB_ENV
+        echo "TEST_FAILING=$(tail -r cypress.log | grep -m 1 '.' | awk ' { print $(NF-2)}')" >> $GITHUB_ENV
+        echo "TEST_PASSING=$(tail -r cypress.log | grep -m 1 '.' | awk ' { print $(NF-3)}')" >> $GITHUB_ENV
+        echo "TEST_TOTAL=$(tail -r cypress.log | grep -m 1 '.' | awk ' { print $(NF-4)}')" >> $GITHUB_ENV
+        echo "TEST_TIME=$(tail -r cypress.log | grep -m 1 '.' | awk ' { print $(NF-5)}')" >> $GITHUB_ENV
      - name: Step 10 - Post to a Slack channel
        id: slack
        uses: slackapi/slack-github-action@v1.19.0
@@ -99,6 +109,6 @@ jobs:
           # See also: https://api.slack.com/methods/chat.postMessage#channels
         channel-id: 'daily-app-team'
           # For posting a simple plain text message
-        slack-message: "The following workflow was executed: ${{ github.workflow }} \n GitHub build result: ${{ job.status }}\n Wazuh version: ${{ github.event.inputs.wazuh-version }} \n Elastic version: ${{ github.event.inputs.elastic-version }} \n Ubuntu Cypress version: ${{ github.event.inputs.ubuntu-cypress-version }} \n Package used: ${{ github.event.inputs.url-package }} \n For more information visit: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        slack-message: "The following workflow was executed: ${{ github.workflow }}\nGitHub build result: ${{ job.status }}\nWazuh version: ${{ github.event.inputs.wazuh-version }}\nElastic version: ${{ github.event.inputs.elastic-version }}\nUbuntu Cypress version: ${{ github.event.inputs.ubuntu-cypress-version }}\nPackage used: ${{ github.event.inputs.url-package }}\n- Test summary:\n-- Test status: ${{ steps.run-cypress-test.outcome }}\n-- Total Test: ${{ env.TEST_TOTAL }}\n-- Test Passing: ${{ env.TEST_PASSING }}\n-- Test Failing: ${{ env.TEST_FAILING }}\n-- Test Pending: ${{ env.TEST_PENDING }}\n-- Test Skipped: ${{ env.TEST_SKIPPED }}\n-- Total Time: ${{ env.TEST_TIME }}\n\nFor more information visit: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
        env:
           SLACK_BOT_TOKEN: ${{ secrets.ACTIONS_SLACK_TOKEN }}
