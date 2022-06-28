@@ -1,6 +1,5 @@
 import { Then } from 'cypress-cucumber-preprocessor/steps';
 import { getElement, getSelector } from '../../../utils/driver';
-
 import { RULES_PAGE as pageName} from '../../../utils/pages-constants';
 const dropdownPaginationSelector = getSelector('dropdownPaginationSelector', pageName);
 const listPagesSelector = getSelector('listPagesSelector', pageName);
