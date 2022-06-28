@@ -4,7 +4,7 @@ Feature: Validate that the added filter label is remove after click remove filte
   I want to set a new filter
   in order to manage them
   Background:
-    Given The kibana admin user is logged and the wazuh logo is displayed
+    Given The wazuh admin user is logged
 
   @filter
   Scenario Outline: The user remove an added filter - Module - Dashboard <Module Name>

@@ -1,12 +1,12 @@
 Feature: Validate that the config to added new agent
 
-    As a Kibana user
+    As a wazuh user
     I want to add a new agent
     in order to manage them
 
     @agent
     Scenario Outline: Validate the information to add a new Agent
-        Given The kibana admin user is logged and the wazuh logo is displayed
+        Given The wazuh admin user is logged
         When The user navigates to the agent page
         And The user selects a deploy new agent
         Then The browser is on the new deploy agent page
