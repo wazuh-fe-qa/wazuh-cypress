@@ -101,13 +101,13 @@ jobs:
      - name: Step 10 - Log parsing
        run: |
         cd ${{ env.PATH_TEMPLATE }}
-        echo "TEST_SKIPPED=$(tail -r cypress.log | grep -m 1 '.' | awk ' { print $(NF)}')" >> $GITHUB_ENV
-        echo "TEST_PENDING=$(tail -r cypress.log | grep -m 1 '.' | awk ' { print $(NF-1)}')" >> $GITHUB_ENV
-        echo "TEST_FAILING=$(tail -r cypress.log | grep -m 1 '.' | awk ' { print $(NF-2)}')" >> $GITHUB_ENV
-        echo "TEST_PASSING=$(tail -r cypress.log | grep -m 1 '.' | awk ' { print $(NF-3)}')" >> $GITHUB_ENV
-        echo "TEST_TOTAL=$(tail -r cypress.log | grep -m 1 '.' | awk ' { print $(NF-4)}')" >> $GITHUB_ENV
-        echo "TEST_TIME=$(tail -r cypress.log | grep -m 1 '.' | awk ' { print $(NF-5)}')" >> $GITHUB_ENV
-     - name: Step 10 - Post to a Slack channel
+        echo "TEST_SKIPPED=$(tail cypress.log | grep -m 1 '.' | awk ' { print $(NF)}')" >> $GITHUB_ENV
+        echo "TEST_PENDING=$(tail cypress.log | grep -m 1 '.' | awk ' { print $(NF-1)}')" >> $GITHUB_ENV
+        echo "TEST_FAILING=$(tail cypress.log | grep -m 1 '.' | awk ' { print $(NF-2)}')" >> $GITHUB_ENV
+        echo "TEST_PASSING=$(tail cypress.log | grep -m 1 '.' | awk ' { print $(NF-3)}')" >> $GITHUB_ENV
+        echo "TEST_TOTAL=$(tail cypress.log | grep -m 1 '.' | awk ' { print $(NF-4)}')" >> $GITHUB_ENV
+        echo "TEST_TIME=$(tail cypress.log | grep -m 1 '.' | awk ' { print $(NF-5)}')" >> $GITHUB_ENV
+     - name: Step 11 - Post to a Slack channel
        id: slack
        uses: slackapi/slack-github-action@v1.19.0
        with:
@@ -115,6 +115,6 @@ jobs:
           # See also: https://api.slack.com/methods/chat.postMessage#channels
         channel-id: 'daily-app-team'
           # For posting a simple plain text message
-        slack-message: "The following workflow was executed: ${{ github.workflow }}\nGitHub build result: ${{ job.status }}\nWazuh version: ${{ github.event.inputs.wazuh-version }}\nElastic version: ${{ github.event.inputs.elastic-version }}\nODFE version: ${{ github.event.inputs.odfe-version }}\nUbuntu Cypress version: ${{ github.event.inputs.ubuntu-cypress-version }}\nPackage used: ${{ github.event.inputs.url-package }}\n- Test summary:\n-- Test status: ${{ steps.run-cypress-test.outcome }}\n-- Total Test: ${{ env.TEST_TOTAL }}\n-- Test Passing: ${{ env.TEST_PASSING }}\n-- Test Failing: ${{ env.TEST_FAILING }}\n-- Test Pending: ${{ env.TEST_PENDING }}\n-- Test Skipped: ${{ env.TEST_SKIPPED }}\n-- Total Time: ${{ env.TEST_TIME }}\n\nFor more information visit: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        slack-message: "The following workflow was executed: ${{ github.workflow }}\nGitHub build result: ${{ job.status }}\nWazuh version: ${{ github.event.inputs.wazuh-version }}\nElastic version: ${{ github.event.inputs.elastic-version }}\nODFE version: ${{ github.event.inputs.odfe-version }}\nUbuntu Cypress version: ${{ github.event.inputs.ubuntu-cypress-version }}\nPackage used: ${{ github.event.inputs.url-package }}\n\nTest summary:\n\tTotal Test: ${{ env.TEST_TOTAL }}\n\tPassing: ${{ env.TEST_PASSING }}\n\tFailing: ${{ env.TEST_FAILING }}\n\tPending: ${{ env.TEST_PENDING }}\n\tSkipped: ${{ env.TEST_SKIPPED }}\n\tTotal Time: ${{ env.TEST_TIME }}\n\nFor more information visit: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
        env:
           SLACK_BOT_TOKEN: ${{ secrets.ACTIONS_SLACK_TOKEN }}
