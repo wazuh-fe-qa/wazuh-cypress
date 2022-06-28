@@ -13,3 +13,4 @@ Feature: Should Displayes a warning modal
     And The user modify the selected decoders
     And The user tries to exit create decoders page without saving data
     Then The informative modal is displayed
+    
