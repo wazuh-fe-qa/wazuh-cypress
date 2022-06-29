@@ -22,5 +22,5 @@ Feature: Should List Decoders And Show The Pager
     Given The kibana admin user is logged and the wazuh logo is displayed
     When The user navigates to decoders
     When The user press button custom decoders
-    When The user presses the edit decoder button and edits it
+    When The user presses the edit decoders button and edits it
     Then The user should see the message
