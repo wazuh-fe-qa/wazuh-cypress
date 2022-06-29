@@ -1,6 +1,5 @@
 import { Then } from 'cypress-cucumber-preprocessor/steps';
 import { getElement, getSelector } from '../../../utils/driver';
-
 import { DECODERS_PAGE as pageName} from '../../../utils/pages-constants';
 const titleSelector = getSelector('titleSelector', pageName);
 const tableSelector = getSelector('tableSelector', pageName);
