@@ -101,12 +101,12 @@ jobs:
      - name: Step 10 - Log parsing
        run: |
         cd ${{ env.PATH_TEMPLATE }}
-        echo "TEST_SKIPPED=$(tail -n 3 cypress.log | grep -m 1 '.' | awk ' { print $(NF)}')" >> $GITHUB_ENV
-        echo "TEST_PENDING=$(tail -n 3 cypress.log | grep -m 1 '.' | awk ' { print $(NF-1)}')" >> $GITHUB_ENV
-        echo "TEST_FAILING=$(tail -n 3 cypress.log | grep -m 1 '.' | awk ' { print $(NF-2)}')" >> $GITHUB_ENV
-        echo "TEST_PASSING=$(tail -n 3 cypress.log | grep -m 1 '.' | awk ' { print $(NF-3)}')" >> $GITHUB_ENV
-        echo "TEST_TOTAL=$(tail -n 3 cypress.log | grep -m 1 '.' | awk ' { print $(NF-4)}')" >> $GITHUB_ENV
-        echo "TEST_TIME=$(tail -n 3 cypress.log | grep -m 1 '.' | awk ' { print $(NF-5)}')" >> $GITHUB_ENV
+        echo "TEST_SKIPPED=$(grep -E "failed \(|passed" cypress.log | awk ' { print $(NF)}')" >> $GITHUB_ENV
+        echo "TEST_PENDING=$(grep -E "failed \(|passed" cypress.log | awk ' { print $(NF-1)}')" >> $GITHUB_ENV
+        echo "TEST_FAILING=$(grep -E "failed \(|passed" cypress.log | awk ' { print $(NF-2)}')" >> $GITHUB_ENV
+        echo "TEST_PASSING=$(grep -E "failed \(|passed" cypress.log | awk ' { print $(NF-3)}')" >> $GITHUB_ENV
+        echo "TEST_TOTAL=$(grep -E "failed \(|passed" cypress.log | awk ' { print $(NF-4)}')" >> $GITHUB_ENV
+        echo "TEST_TIME=$(grep -E "failed \(|passed" cypress.log | awk ' { print $(NF-5)}')" >> $GITHUB_ENV
      - name: Step 11 - Post to a Slack channel
        id: slack
        uses: slackapi/slack-github-action@v1.19.0
