@@ -12,31 +12,7 @@ on:
         description: 'Wazuh Manager Image'
         default: 'wazuh_manager_filebeat_sources_cmake'
         required: true
-      wazuh-agent-image: 
-        description: 'Wazuh Agent Image'
-        default: 'wazuh_agent_ubuntu_sources_cmake'
-        required: true
-      wazuh-version:
-        description: 'Wazuh Version'
-        default: 'v4.3.4'
-        required: true
-      elastic-version: 
-        description: 'Elastic Version'
-        default: '7.16.3'
-        required: true
-      wazuh-app-branch-version: 
-        description: 'Wazuh Kiabana App Branch/Tag'
-        default: ''
-        required: false  
-      install-package:
-        type: boolean
-        description: 'install previously created package?'
-        default: true
-        required: true
-      url-package:
-        description: 'package download url'
-        required: false 
-        default: 'https://packages-dev.wazuh.com/pre-release/ui/kibana/wazuh_kibana-4.3.4_7.16.3-1.zip'       
+    
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -44,103 +20,34 @@ jobs:
     name: Run setup environment wazuh kibana app
     runs-on: ubuntu-18.04
     steps:
-     - name: Step 01 - Set up environment variables
+     - name: Step 01 
        run: |
-        echo "Information about the workflow:
-        wazuh-version: ${{ github.event.inputs.wazuh-version }}
-        elastic-version: ${{ github.event.inputs.elastic-version }}
-        wazuh-app-branch-version: ${{ github.event.inputs.wazuh-app-branch-version }}
-        install-package: ${{ github.event.inputs.install-package }}
-        url-package: ${{ github.event.inputs.url-package }}"
+        echo " 
+        Found '/home/automation/wazuh-cypress/.nvmrc' with version <17.3.0>
+        Now using node v17.3.0 (npm v8.3.0)
 
-        echo "PATH_TEMPLATE_XPACK_CLUSTER_AGENT=$GITHUB_WORKSPACE/wazuh-app-environments/templates_elastic_prod/es_xpack-wz_cluster-agent/" >> $GITHUB_ENV
-     - name: Step 02 - Download Project wazuh-app-environments 
-       uses: actions/checkout@v2
-       with:
-        repository: matiasmoreno876/wazuh-app-environments
-        ref: 'master'
-        path: wazuh-app-environments
-        token: ${{ secrets.FE_SECRET_TOKEN }}
-     - name: Step 03 - Configuring templates docker environment
+        > wazuh-kibana-app-automation@1.0.0 cypress:run-headless:github-actions:xpack
+        > cypress run --headless --browser chrome --config baseUrl=https://kibana:5601/ --env type=xpack
+        1 of 2 failed (50%)                      11:35       11        8        3        -        - 
+        
+        " >> cypress.log
+        
+        tail --help
+        echo "TEST_SKIPPED=$(tail cypress.log | grep -m 1 '.' | awk ' { print $(NF)}')" >> $GITHUB_ENV
+        echo "TEST_PENDING=$(tail cypress.log | grep -m 1 '.' | awk ' { print $(NF-1)}')" >> $GITHUB_ENV
+        echo "TEST_FAILING=$(tail cypress.log | grep -m 1 '.' | awk ' { print $(NF-2)}')" >> $GITHUB_ENV
+        echo "TEST_PASSING=$(tail cypress.log | grep -m 1 '.' | awk ' { print $(NF-3)}')" >> $GITHUB_ENV
+        echo "TEST_TOTAL=$(tail cypress.log | grep -m 1 '.' | awk ' { print $(NF-4)}')" >> $GITHUB_ENV
+        echo "TEST_TIME=$(tail cypress.log | grep -m 1 '.' | awk ' { print $(NF-5)}')" >> $GITHUB_ENV
+     - name: Step 02
        run: |
-        cd $GITHUB_WORKSPACE/wazuh-app-environments/
-        mkdir packages
-        cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
-        cat ./.env
-        sed -i -e 's|WAZUH_MANAGER_IMAGE=.*|WAZUH_MANAGER_IMAGE=${{ github.event.inputs.wazuh-manager-image }}|g' ./.env
-        sed -i -e 's|WAZUH_AGENT_IMAGE=.*|WAZUH_AGENT_IMAGE=${{ github.event.inputs.wazuh-agent-image }}|g' ./.env
-        sed -i -e 's|WAZUH_VERSION=.*|WAZUH_VERSION=${{ github.event.inputs.wazuh-version }}|g' ./.env
-        sed -i -e 's|ELASTIC_VERSION=.*|ELASTIC_VERSION=${{ github.event.inputs.elastic-version }}|g' ./.env
-        sed -i -e 's|UBUNTU_CYPRESS_VERSION=.*|UBUNTU_CYPRESS_VERSION=2.0.0|g' ./.env
-        cat .env
-     - name: Step 04 - Starting containers
-       run: |
-        cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
-        sed -i -e 's|docker-compose exec elasticsearch|docker exec $(docker-compose ps -q elasticsearch)|g' ./setup.sh
-        sudo sh setup.sh
-        echo CONTINUES AFTER 15 SECONDS ...
-        sleep 15s 
-     - name: Step 05 - Download Project wazuh-packages 
-       if: ${{ github.event.inputs.install-package == 'false' }}
-       uses: actions/checkout@v2
-       with:
-        repository: wazuh/wazuh-packages
-        ref: 'master'
-        path: wazuh-packages
-     - name: Step 06 - Building package
-       if: ${{ github.event.inputs.install-package == 'false' }}
-       run: |
-        cd $GITHUB_WORKSPACE/wazuh-packages/wazuhapp/kibana
-        pwd
-        ls -la
-        echo fixing command...
-        sed -i -e 's/'\|' cut -d \"\/\" \-f2//g' ./generate_wazuh_app.sh 
-        echo run command...
-        ./generate_wazuh_app.sh -b ${{ github.event.inputs.wazuh-app-branch-version }} -s $GITHUB_WORKSPACE/wazuh-app-environments/packages -r 1
-     - name: Step 07 - Installing package
-       if: ${{ github.event.inputs.install-package == 'false' }}
-       run: |
-        cd $GITHUB_WORKSPACE/wazuh-app-environments/packages/
-        PACKAGE_NAME=`ls *.zip`
-        cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
-        docker exec $(docker-compose ps -q kibana) bin/kibana-plugin install file:///packages/$PACKAGE_NAME
-        docker-compose restart kibana
-        echo CONTINUES AFTER 60 SECONDS ...
-        sleep 60s
-        docker-compose ps
-     - name: Step 07 - Installing package from url
-       if: ${{ github.event.inputs.install-package == 'true' }}
-       run: |
-        cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
-        docker exec $(docker-compose ps -q kibana) bin/kibana-plugin install ${{ github.event.inputs.url-package }}
-        docker-compose restart kibana
-        echo CONTINUES AFTER 60 SECONDS ...
-        sleep 60s
-        docker-compose ps
-     - name: Step 08 - Configuring ip container into wazuh.yml
-       run: |
-        cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
-        docker exec $(docker-compose ps -q kibana) sed -i -e "s/url: https:\/\/localhost/url: https:\/\/wazuh-manager-master/g" /usr/share/kibana/data/wazuh/config/wazuh.yml
-        docker exec $(docker-compose ps -q kibana) cat /usr/share/kibana/data/wazuh/config/wazuh.yml
-     - name: Step 09 - Run Cypress tests
-       run: |
-         cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
-         docker exec $(docker-compose ps -q cypress) bash -c " . /home/automation/nvm/nvm.sh && nvm use && npm run cypress:run-headless:github-actions:xpack"
-       continue-on-error: true 
-     - name: Step 10 - Run Cypress reports
-       run: |
-         cd ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}
-         docker exec $(docker-compose ps -q cypress) bash -c " . /home/automation/nvm/nvm.sh && nvm use && npm run cypress:report"        
-         docker exec $(docker-compose ps -q cypress) bash -c "cp -R /home/automation/wazuh-cypress/cypress/* /home/automation/wazuh-cypress/cypress-slack"        
-     - name: Step 11 - Archive reports
-       uses: actions/upload-artifact@v2
-       with:
-        name: cypress-reports_${{ github.event.inputs.wazuh-version }}-${{ github.event.inputs.elastic-version }}
-        path: ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}/report/*
-     - name: Step 12 - Upload Screenshots And Videos To Slack
-       uses: trymbill/cypress-slack-video-upload-action@v1.3.0
-       with:
-        workdir: ${{ env.PATH_TEMPLATE_XPACK_CLUSTER_AGENT }}/cypress-slack
-        token: ${{ secrets.ACTIONS_SLACK_TOKEN }}
-        channels: 'daily-app-team'
-        message-text: ${{ format('The following workflow was executed "{0}", for the package "wazuh_kibana-{1}_{2}", wazuh-version "{1}", elastic-stack-version "{2}", for more information visit https://github.com/{3}/actions/runs/{4}, Ive placed the screenshots and videos in this thread:', github.workflow, github.event.inputs.wazuh-version, github.event.inputs.elastic-version, github.repository, github.run_id) }}
+        echo "The following workflow was executed: ${{ github.workflow }}
+        Test summary:
+        -- Total Test: ${{ env.TEST_TOTAL }}
+        -- Passing: ${{ env.TEST_PASSING }}
+        -- Failing: ${{ env.TEST_FAILING }}
+        -- Pending: ${{ env.TEST_PENDING }}
+        -- Skipped: ${{ env.TEST_SKIPPED }}
+        -- Total Time: ${{ env.TEST_TIME }}
+        For more information visit: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+    
