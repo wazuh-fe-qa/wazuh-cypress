@@ -6,7 +6,7 @@ Feature: enable modules
 
   @EnableModules
   Scenario Outline: Enable modules, <Module Name>
-    Given The kibana admin user is logged in using xpack and the wazuh logo is displayed
+    Given The kibana admin user is logged and the wazuh logo is displayed
     When The user navigates to Modules settings
     And All modules are deactivates
     And The user activates the modules with <Module Name>

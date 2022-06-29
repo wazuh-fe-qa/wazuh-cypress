@@ -6,13 +6,13 @@ Feature: Should List Rules And Show The Pager
   
   @rules
   Scenario: Should List Rules And Show The Pager
-    Given The kibana admin user is logged in using xpack and the wazuh logo is displayed
+    Given The kibana admin user is logged and the wazuh logo is displayed
     When The user navigates to rules
     Then The user should see the rules
   
   @rules
   Scenario: Should List Custom Rules And Show The Pager
-    Given The kibana admin user is logged in using xpack and the wazuh logo is displayed
+    Given The kibana admin user is logged and the wazuh logo is displayed
     When The user navigates to rules
-    When The user press button custom rules
+    And The user clicks the custom rules button
     Then The user should see the rules

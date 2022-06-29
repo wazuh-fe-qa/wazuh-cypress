@@ -4,7 +4,7 @@ Feature: Validate that the pinned filter label is displayed
   I want to set a new filter from the agent page
   in order to manage them
   Background:
-    Given The admin user is logged in using xpack
+    Given The kibana admin user is logged and the wazuh logo is displayed
     And The user navigates to the agent page
     And The user navigates to the agent dashboard
 

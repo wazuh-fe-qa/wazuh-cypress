@@ -6,7 +6,7 @@ Feature: Validate that the config to added new agent
 
     @agent
     Scenario Outline: Validate the information to add a new Agent
-        Given The kibana admin user is logged in using xpack and the wazuh logo is displayed
+        Given The kibana admin user is logged and the wazuh logo is displayed
         When The user navigates to the agent page
         And The user selects a deploy new agent
         Then The browser is on the new deploy agent page
