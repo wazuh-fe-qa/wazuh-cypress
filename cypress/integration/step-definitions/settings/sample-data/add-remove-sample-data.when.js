@@ -1,17 +1,16 @@
 import { clickElement, getSelector } from '../../../utils/driver';
 import { SAMPLE_DATA } from '../../../utils/pages-constants';
-
-
+let toastLocator = '[data-test-subj="globalToastList"] div button';
+let toastLocatorTitle = '[data-test-subj="globalToastList"] div span';
 
 When('The user {} sample data for', (status,types) => {
-  cy.get('[data-test-subj="globalToastList"] div button', { timeout: 8000 });
-  clickElement('[data-test-subj="globalToastList"] div button');
+  cy.get(toastLocator, { timeout: 8000 });
+  clickElement(toastLocator);
   types.raw().forEach((sample) => {
     cy.wait(500)
     clickElement(getSelector(sample, SAMPLE_DATA));
-    debugger
     cy.wait(2000);
-    cy.get('[data-test-subj="globalToastList"] div span', { timeout: 8000 })
+    cy.get(toastLocatorTitle, { timeout: 8000 })
       .then(($) => {
         const texts = $.map((i, el) => Cypress.$(el).text().replace('A new notification appears').replace('Date range for sample data is now-7 days ago'))
         const paragraphs = texts.get()
@@ -20,7 +19,7 @@ When('The user {} sample data for', (status,types) => {
         let titleStatus = 'added'
         if(status != 'adds') titleStatus =  'removed';
         expect(paragraphs.toString()).to.equals(titles + ' alerts '+ titleStatus)
-        clickElement('[data-test-subj="globalToastList"] div button');
+        clickElement(toastLocator);
       })
   });
 });
