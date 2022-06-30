@@ -11,6 +11,6 @@ Feature: Should Displayes a warning modal
     And The user clicks the custom decoders button
     And The user selects a custom decoders to edit
     And The user modify the selected decoders
-    And The user tries to exit create decoders page without saving data
+    And The user tries to exit edit decoders page without saving data
     Then The informative modal is displayed
     

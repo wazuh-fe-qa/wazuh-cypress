@@ -9,7 +9,7 @@ Feature: Should Displayes a warning modal
     Given The kibana admin user is logged and the wazuh logo is displayed
     When The user navigates to groups page
     And The user selects a group to edit
-    #And The user modify the selected decoders
-    #And The user tries to exit create decoders page without saving data
-    #Then The informative modal is displayed
+    And The user modify the selected group
+    And The user tries to exit edit groups page without saving data
+    Then The informative modal is displayed
     

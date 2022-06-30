@@ -3,7 +3,7 @@ import { clickElement ,elementIsVisible, getSelector } from '../../../utils/driv
 import {GROUPS_PAGE as pageName} from '../../../utils/pages-constants';
 const editGroups = getSelector('editGroups', pageName);
 
-When('And The user selects a group to edit', () => {
+When('The user selects a group to edit', () => {
   elementIsVisible(editGroups);
   clickElement(editGroups);
 });
