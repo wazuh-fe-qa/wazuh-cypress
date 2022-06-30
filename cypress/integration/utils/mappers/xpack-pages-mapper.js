@@ -14,7 +14,6 @@ import { RULES_PAGE } from '../../pageobjects/xpack/wazuh-menu/rules.page';
 import { WAZUH_MENU_PAGE } from '../../pageobjects/xpack/wazuh-menu/wazuh-menu.page';
 import { MODULES_DIRECTORY_PAGE } from '../../pageobjects/xpack/modules-directory.page';
 import { GROUPS_PAGE } from '../../pageobjects/xpack/wazuh-menu/groups.page';
-
 import { AGENT_MODULES } from './xpack/agent-modules-mapper';
 import { BASIC_MODULES } from './xpack/basic-modules-mapper';
 import { MODULES_CARDS, MODULES_SETTINGS } from './xpack/modules-mapper';

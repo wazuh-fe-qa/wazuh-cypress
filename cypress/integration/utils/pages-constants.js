@@ -13,7 +13,6 @@ export const DECODERS_PAGE = 'DECODERS_PAGE';
 export const RULES_PAGE = 'RULES_PAGE';
 export const WAZUH_MENU_PAGE = 'WAZUH_MENU_PAGE';
 export const GROUPS_PAGE = 'GROUPS_PAGE';
-
 export const AGENT_MODULES = 'AGENT_MODULES';
 export const BASIC_MODULES = 'BASIC_MODULES';
 export const MODULES_CARDS = 'MODULES_CARDS';
