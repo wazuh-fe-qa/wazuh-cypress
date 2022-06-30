@@ -1,6 +1,6 @@
 Feature: Should List Decoders And Show The Pager
 
-  As a kibana user
+  As a wazuh user
   i want to see the Decoders pages
   in order to manage them
   

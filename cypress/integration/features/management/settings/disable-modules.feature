@@ -1,12 +1,12 @@
 Feature: disable modules
 
-  As a kibana user
+  As a wazuh user
   I want to disable different modules
   in order to see them in the modules directory
 
   @DisableModules
   Scenario Outline: Disable modules, <Module Name>
-    Given The kibana admin user is logged and the wazuh logo is displayed
+    Given The wazuh admin user is logged
     When The user navigates to Modules settings
     And All modules are activates
     And The user deactivates the modules with <Module Name>
