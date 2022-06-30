@@ -6,7 +6,7 @@ Feature: Should Displayes a warning modal
 
 @rules
   Scenario: Validate confirmation when closing modal without saving - Management - edit rules
-    Given The kibana admin user is logged and the wazuh logo is displayed
+    Given The wazuh admin user is logged
     When The user navigates to rules
     And The user clicks the custom rules button
     And The user selects a custom rule to edit
