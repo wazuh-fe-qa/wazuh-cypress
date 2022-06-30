@@ -19,7 +19,7 @@ import { BASIC_MODULES } from './wzd/basic-modules-mapper';
 import { MODULES_CARDS, MODULES_SETTINGS } from './wzd/modules-mapper';
 import { SAMPLE_DATA } from './wzd/sample-data-mapper';
 import { SETTINGS_MENU_LINKS } from './wzd/settings-mapper';
-
+import { GROUPS_PAGE } from '../../pageobjects/xpack/wazuh-menu/groups.page';
 export const WZD_PAGES_MAPPER = {
   DEPLOY_NEW_AGENT_PAGE,
   AGENTS_PAGE,
@@ -43,4 +43,5 @@ export const WZD_PAGES_MAPPER = {
   MODULES_SETTINGS,
   SAMPLE_DATA,
   SETTINGS_MENU_LINKS,
+  GROUPS_PAGE
 };

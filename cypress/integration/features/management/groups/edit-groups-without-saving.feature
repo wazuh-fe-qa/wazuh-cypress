@@ -8,8 +8,7 @@ Feature: Should Displayes a warning modal
   Scenario: Validate confirmation when closing modal without saving - Management - edit groups
     Given The kibana admin user is logged and the wazuh logo is displayed
     When The user navigates to groups page
-    #And The user clicks the custom decoders button
-    #And The user selects a custom decoders to edit
+    And The user selects a group to edit
     #And The user modify the selected decoders
     #And The user tries to exit create decoders page without saving data
     #Then The informative modal is displayed
