@@ -19,6 +19,7 @@ import { BASIC_MODULES } from './basic/basic-modules-mapper';
 import { MODULES_CARDS, MODULES_SETTINGS } from './basic/modules-mapper';
 import { SAMPLE_DATA } from './basic/sample-data-mapper';
 import { SETTINGS_MENU_LINKS } from './basic/settings-mapper';
+import { GROUPS_PAGE } from '../../pageobjects/xpack/wazuh-menu/groups.page';
 
 export const BASIC_PAGES_MAPPER = {
   DEPLOY_NEW_AGENT_PAGE,
@@ -43,4 +44,5 @@ export const BASIC_PAGES_MAPPER = {
   MODULES_SETTINGS,
   SAMPLE_DATA,
   SETTINGS_MENU_LINKS,
+  GROUPS_PAGE
 };
