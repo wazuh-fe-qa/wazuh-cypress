@@ -10,13 +10,17 @@ const saveFilterButton = getSelector('saveFilterButton', pageName);
 const selectedOperator = getSelector('selectedOperator', pageName);
 
 When('The user adds a new filter', () => {
+  cy.wait(500);
   elementIsVisible(addFilterButton);
   clickElement(addFilterButton);
+  cy.wait(500);
   fillField(filterSuggestionList,'rule.level');
   forceEnter(filterSuggestionList);
+  cy.wait(500);
   getAvailableElement(filterOperatorList);
   elementIsVisible(filterOperatorList);
   clickElement(filterOperatorList);
+  cy.wait(500);
   elementIsVisible(selectedOperator);
   forceClickElement(selectedOperator);
   fillField(filterParams,'7');
