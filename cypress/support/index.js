@@ -53,6 +53,7 @@ before(() => {
         cy.writeFile('cookies.json', '[]');
         cy.writeFile('cookies.json', JSON.stringify(cookies));
     })
+
 })
 
 beforeEach(() => {
@@ -62,4 +63,10 @@ beforeEach(() => {
       });
     })
     cy.setSessionStorage('healthCheck', 'executed');
+
+    if (Cypress.env('type') == 'wzd') {
+        navigate("/");
+        cy.get('nav #selectAPIBar').select('mock');
+    }
+
 })
