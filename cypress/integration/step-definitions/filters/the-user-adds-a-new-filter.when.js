@@ -19,7 +19,7 @@ When('The user adds a new filter', () => {
   cy.wait(500);
   getAvailableElement(filterOperatorList);
   elementIsVisible(filterOperatorList);
-  clickElement(filterOperatorList);
+  forceClickElement(filterOperatorList);
   cy.wait(500);
   elementIsVisible(selectedOperator);
   forceClickElement(selectedOperator);
