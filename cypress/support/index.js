@@ -23,6 +23,8 @@ import {
 const loginMethod = Cypress.env('type')
 import './commands';
 require("cypress-xpath");
+const indexPageComp1 = 'react-component[name="StatsOverview"]';
+const indexPageComp2 = 'react-component[name="OverviewWelcome"]';
 
 before(() => {
 
@@ -39,13 +41,15 @@ before(() => {
     login ? login() : cy.log(`Error! loginMethod: "${loginMethod}" is not recognized`);
 
     if (Cypress.env('type') != 'odfe') {
-        cy.wait(15000);
+        cy.get('react-component[name="StatsOverview"]', { timeout: 15000 })
+        cy.get('react-component[name="OverviewWelcome"]', { timeout: 15000 })
         validateURLIncludes(OVERVIEW_URL);
     }
     else{
-        cy.wait(5000);
+        cy.wait(3000);
         navigate("app/wazuh");
-        cy.wait(15000);
+        cy.get('react-component[name="StatsOverview"]', { timeout: 15000 })
+        cy.get('react-component[name="OverviewWelcome"]', { timeout: 15000 })
     };
 
     cy.getCookies().then((cookies) => {
