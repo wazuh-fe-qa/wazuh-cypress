@@ -41,7 +41,6 @@ before(() => {
     login ? login() : cy.log(`Error! loginMethod: "${loginMethod}" is not recognized`);
 
     if (Cypress.env('type') != 'odfe') {
-        // cy.wait(15000);
         cy.get('react-component[name="StatsOverview"]', { timeout: 15000 })
         cy.get('react-component[name="OverviewWelcome"]', { timeout: 15000 })
         validateURLIncludes(OVERVIEW_URL);
@@ -49,7 +48,6 @@ before(() => {
     else{
         cy.wait(3000);
         navigate("app/wazuh");
-        // cy.wait(15000);
         cy.get('react-component[name="StatsOverview"]', { timeout: 15000 })
         cy.get('react-component[name="OverviewWelcome"]', { timeout: 15000 })
     };
