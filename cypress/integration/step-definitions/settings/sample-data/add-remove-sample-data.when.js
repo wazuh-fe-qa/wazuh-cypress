@@ -4,8 +4,7 @@ let toastLocator = '[data-test-subj="globalToastList"] div button';
 let toastLocatorTitle = '[data-test-subj="globalToastList"] div span';
 
 When('The user {} sample data for', (status,types) => {
-  cy.get(toastLocator, { timeout: 8000 });
-  clickElement(toastLocator);
+  cy.wait(10000)
   types.raw().forEach((sample) => {
     cy.wait(500)
     clickElement(getSelector(sample, SAMPLE_DATA));
