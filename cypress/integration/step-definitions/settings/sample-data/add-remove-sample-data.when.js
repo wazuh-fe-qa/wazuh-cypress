@@ -4,7 +4,6 @@ let toastLocator = '[data-test-subj="globalToastList"] div button';
 let toastLocatorTitle = '[data-test-subj="globalToastList"] div';
 
 When('The user {} sample data for', (status,types) => {
-  //cy.wait(10000)
   let titleStatus = 'added'
   let buttonLabel = 'Remove data'
   if(status != 'adds'){titleStatus =  'removed'; buttonLabel = 'Add data';}
@@ -22,7 +21,6 @@ When('The user {} sample data for', (status,types) => {
         let element = getSelector(sample + ' title', SAMPLE_DATA)
         let titles = Cypress.$(element).text()
         expect(paragraphs.toString()).to.contains(titles + ' alerts '+ titleStatus)
-        // clickElement(toastLocator);
       })
   });
 });
