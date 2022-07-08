@@ -20,8 +20,8 @@ Feature: Validate that the added filter label is displayed
       | Integrity Monitoring |
       | System Auditing      |
       | Mitre & Attack       |
-      | GDPR                 |
-      | HIPAA                |
+      #| GDPR                 |
+      #| HIPAA                |
       | NIST                 |
       | TSC                  |
       | Policy Monitoring    |

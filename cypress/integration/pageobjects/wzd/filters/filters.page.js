@@ -1,8 +1,8 @@
 export const FILTERS_PAGE = {
   addFilterButton: '[data-test-subj="addFilter"]',
   filterSuggestionList: '[data-test-subj="filterFieldSuggestionList"]',
-  filterOperatorList: '.euiForm [data-test-subj="filterOperatorList"] button[data-test-subj="comboBoxToggleListButton"]',
-  filterParams: '[data-test-subj="filterParams"]',
+  filterOperatorList: '[data-test-subj="filterOperatorList"] div div [data-test-subj="comboBoxToggleListButton"]',
+  filterParams: '[data-test-subj="filterParams"] .euiFieldNumber',
   saveFilterButton: '[data-test-subj="saveFilter"]',
   stablishedFilter: '[data-test-subj="filter filter-enabled filter-key-rule.level filter-value-7 filter-unpinned "]',
   pinFilterAction: '[data-test-subj="pinFilter"]',
