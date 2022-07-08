@@ -10,4 +10,5 @@ export const FILTERS_PAGE = {
   pinnedFilter: '[data-test-subj="filter filter-enabled filter-key-rule.level filter-value-7 filter-pinned"]',
   eventsButton: '//*[contains(@class,"euiTabs")]//*[contains(text(),"Events")]',
   removeFilterButton: '//*[contains(@class,"euiContextMenuPanel")]//*[contains(text(),"Delete")]',
+  operatorList: '.euiPanel[data-test-subj="comboBoxOptionsList filterOperatorList-optionsList"] .euiComboBoxOptionsList__rowWrap'
 };
