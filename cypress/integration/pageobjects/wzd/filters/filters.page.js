@@ -6,8 +6,9 @@ export const FILTERS_PAGE = {
   saveFilterButton: '[data-test-subj="saveFilter"]',
   stablishedFilter: '[data-test-subj="filter filter-enabled filter-key-rule.level filter-value-7 filter-unpinned "]',
   pinFilterAction: '[data-test-subj="pinFilter"]',
-  selectedOperator: '[title="is"]',
+  selectedOperator: 'button.euiFilterSelectItem[title="is"]',
   pinnedFilter: '[data-test-subj="filter filter-enabled filter-key-rule.level filter-value-7 filter-pinned "]',
   eventsButton: '//*[contains(@class,"euiTabs")]//*[contains(text(),"Events")]',
   removeFilterButton: '//*[contains(@class,"euiContextMenuPanel")]//*[contains(text(),"Delete")]',
+  selectedOperatorLabel: '[data-test-subj="filterOperatorList"] div div [data-test-subj="comboBoxInput"] .euiComboBoxPill'
 };

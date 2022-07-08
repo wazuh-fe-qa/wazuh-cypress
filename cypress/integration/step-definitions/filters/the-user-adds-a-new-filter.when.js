@@ -7,6 +7,7 @@ const filterOperatorList = getSelector('filterOperatorList', pageName);
 const filterParams = getSelector('filterParams', pageName);
 const saveFilterButton = getSelector('saveFilterButton', pageName);
 const selectedOperator = getSelector('selectedOperator', pageName);
+const selectedOperatorLabel= getSelector('selectedOperatorLabel', pageName);
 
 When('The user adds a new filter', () => {
   elementIsVisible(addFilterButton);
@@ -18,10 +19,17 @@ When('The user adds a new filter', () => {
   elementIsVisible(filterOperatorList);
   getAvailableElement(filterOperatorList);
   cy.wait(500);
-  forceClickElement(filterOperatorList);
+  clickElement(filterOperatorList);
   cy.wait(500);
   elementIsVisible(selectedOperator);
-  forceClickElement(selectedOperator);
+  cy.wait(500);
+  clickElement(selectedOperator);
+  cy.wait(500);
+  elementIsVisible(selectedOperatorLabel);
+  elementIsVisible(filterParams);
+  cy.wait(500);
+  forceClickElement(filterParams);
+  cy.removeAllListeners(500);
   fillField(filterParams,'7');
   clickElement(saveFilterButton);
 });
