@@ -14,7 +14,8 @@ When('The user adds a new filter', () => {
   clickElement(addFilterButton);
   fillField(filterSuggestionList,'rule.level');
   forceEnter(filterSuggestionList);
-  clickElement(filterOperatorList);
+  forceClickElement(filterOperatorList);
+  cy.wait(1000);
   elementIsVisible(operatorList);
   cy.wait(1000);
   forceClickElement(selectedOperator);

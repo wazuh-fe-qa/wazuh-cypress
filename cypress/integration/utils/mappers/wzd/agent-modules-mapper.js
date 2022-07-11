@@ -11,8 +11,6 @@ AGENTS_PAGE
     'Mitre & Attack': AGENTS_PAGE['agMitreAttackLink'],
     'Policy Monitoring': AGENTS_PAGE['agPolicyMonitoring'],
     'PCIDSS': AGENTS_PAGE['agPCIDSS'],
-    'GDPR': AGENTS_PAGE['agGDPR'],
-    'HIPAA': AGENTS_PAGE['agHIPAA'],
     'NIST': AGENTS_PAGE['agNIST'],
     'TSC': AGENTS_PAGE['agTSC']
   }
