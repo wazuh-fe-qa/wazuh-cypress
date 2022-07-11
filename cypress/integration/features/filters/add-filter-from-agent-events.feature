@@ -24,8 +24,6 @@ Feature: Validate that the pinned filter label is displayed
       | Integrity Monitoring |
       | System Auditing      |
       | Mitre & Attack       |
-      | GDPR                 |
-      | HIPAA                |
       | NIST                 |
       | TSC                  |
       | Policy Monitoring    |

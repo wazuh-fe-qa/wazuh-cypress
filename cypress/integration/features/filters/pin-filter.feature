@@ -22,8 +22,6 @@ Feature: Pin filter
       | Integrity Monitoring |
       | System Auditing      |
       | Mitre & Attack       |
-      | GDPR                 |
-      | HIPAA                |
       | NIST                 |
       | TSC                  |
       | Policy Monitoring    |
