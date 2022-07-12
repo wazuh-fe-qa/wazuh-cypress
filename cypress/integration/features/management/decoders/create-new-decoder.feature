@@ -1,8 +1,8 @@
 Feature: Should Displayes a message to restart the cluster after saves
 
   As a wazuh user
-  i want to edit a custom rule
-  in order to check if the warning no saving toast is displayed.
+  i want to edit a custom decoder
+  in order to check if the save message it's displayed
 
 @rules
   Scenario: Validate creation message is displayed after creating a new decoder
