@@ -1,4 +1,7 @@
 export const WAZUH_MENU_PAGE = {
+  wazuhMenuLeft: '.wz-menu-left-side .wz-menu-sections',
+  wazuhMenuRight: '.wz-menu-right-side',
+  wazuhMenuSettingRight: '.wz-menu-right-side .WzManagementSideMenu',
   wazuhMenuButton: '[data-test-subj=menuWazuhButton]',
   //region Menu
   //region Menu
