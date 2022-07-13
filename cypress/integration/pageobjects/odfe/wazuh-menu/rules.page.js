@@ -9,5 +9,9 @@ export const RULES_PAGE = {
   xmlRuleFile:'.euiBasicTable .euiTable :nth-child(6) :nth-child(2) .euiToolTipAnchor',
   codeEditorSelector: '[data-test-subj="codeEditorContainer"]',
   backButtonSelector: '.euiFlexGroup .euiFlexItem .euiToolTipAnchor .euiButtonIcon',
-  confirmModalSelector: '[data-test-subj="confirmModalTitleText"]'
+  confirmModalSelector: '[data-test-subj="confirmModalTitleText"]',
+  createNewRulesSelector: '.euiFlexGroup .euiFlexItem .euiButtonEmpty .euiButtonContent .euiButtonEmpty__text:contains("Add new rules file")',
+  rulesTitleSelector:'.euiFlexItem .euiFlexGroup .euiFormControlLayout input.euiFieldText',
+  saveRulesButtonSelector: '.euiFlexGroup .euiFlexItem button.euiButton span.euiButtonContent span.euiButton__text:contains("Save")',
+  saveRulesMessage: '.euiText span:contains("Changes will not take effect until a restart is performed.")'
 };

@@ -13,5 +13,7 @@ export const DECODERS_PAGE = {
   xmlDecoderFile:':nth-child(4) .euiTableCellContent .euiToolTipAnchor .euiLink',
   codeEditorSelector: '[data-test-subj="codeEditorContainer"]',
   backButtonSelector: '.euiFlexGroup .euiFlexItem .euiToolTipAnchor .euiButtonIcon',
-  confirmModalSelector: '[data-test-subj="confirmModalTitleText"]'
+  confirmModalSelector: '[data-test-subj="confirmModalTitleText"]',
+  decoderTitleSelector: '.euiFlexItem .euiFlexGroup .euiFormControlLayout input.euiFieldText',
+  saveDecoderMessage: '.euiText span:contains("Changes will not take effect until a restart is performed.")'
 };
