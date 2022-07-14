@@ -1,4 +1,4 @@
-Feature: Pin filter
+Feature: Pin filter - across the modules
 
   As a Wazuh user
   I want to pin a filter

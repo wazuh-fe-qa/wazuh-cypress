@@ -1,4 +1,4 @@
-Feature: Validate that the added filter label is displayed
+Feature: Validate that the added filter label is displayed from the events page
 
   As a Wazuh user
   I want to set a new filter
