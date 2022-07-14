@@ -1,4 +1,4 @@
-Feature: Pin filter
+Feature: Pin filter - from dashboard to event page
 
   As a Wazuh user
   I want to pin a filter

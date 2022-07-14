@@ -5,7 +5,7 @@ Feature: add Configuration to modules
     in order to check modules
 
     @Configuration
-    Scenario: Add sample data
+    Scenario: Add configuration data
         Given The wazuh admin user is logged
         When The user navigates to Configuration settings
         Then The app current settings are displayed

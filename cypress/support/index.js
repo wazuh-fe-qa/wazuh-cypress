@@ -69,7 +69,7 @@ beforeEach(() => {
     cy.setSessionStorage('healthCheck', 'executed');
 
     if (Cypress.env('type') == 'wzd') {
-        navigate("/");
+        navigate("app/wazuh");
         cy.get('nav #selectAPIBar').select('mock');
     }
 

@@ -1,11 +1,11 @@
-Feature: add sample data to modules
+Feature: Add/Delete Sample data to modules
 
   As a wazuh user
   I want to add sample data indices
   in order to check modules
 
   @sampleData
-  Scenario: Add sample data
+  Scenario: Add all sample data
     Given The wazuh admin user is logged
     When The user navigates to Sample data settings
     And The user adds sample data for

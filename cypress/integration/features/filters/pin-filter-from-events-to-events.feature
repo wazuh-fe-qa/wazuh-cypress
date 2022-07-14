@@ -1,4 +1,4 @@
-Feature: Pin filter
+Feature: Pin filter - from event page
 
   As a Wazuh user
   I want to pin a filter

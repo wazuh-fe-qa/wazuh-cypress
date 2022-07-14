@@ -1,4 +1,4 @@
-Feature: Validate that the pinned filter label is displayed
+Feature: Validate that the pinned filter label is displayed - from event page
 
   As a Wazuh user
   i want to set a new filter from the agent page
