@@ -1,5 +1,4 @@
 import { getSelector } from '../../../utils/driver';
-
 import { SAMPLE_DATA_PAGE as pageName} from '../../../utils/pages-constants';
 const dataAddedSuccessfullyToast = getSelector('dataAddedSuccessfullyToast', pageName);
 

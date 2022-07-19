@@ -23,6 +23,8 @@ import {
 const loginMethod = Cypress.env('type')
 import './commands';
 require("cypress-xpath");
+const indexPageComp1 = 'react-component[name="StatsOverview"]';
+const indexPageComp2 = 'react-component[name="OverviewWelcome"]';
 
 before(() => {
 
@@ -34,18 +36,20 @@ before(() => {
 
     cy.log(`Parameter loginMethod is: ${loginMethod} and url from loginMethod is: ${Cypress.config('baseUrl')}`);
 
-    (Cypress.env('type') == 'odfe') ? navigate("app/kibana?security_tenant=analysts#/visualize/edit/c501fa50-7e52-11e9-ae4e-b5d69947d32e?_g=()") : navigate("app/wazuh");
+    (Cypress.env('type') == 'odfe') ? navigate("app/kibana?security_tenant=analysts#/visualize/edit/c501fa50-7e52-11e9-ae4e-b5d69947d32e?_g=()") : navigate("/app/wazuh#");
 
     login ? login() : cy.log(`Error! loginMethod: "${loginMethod}" is not recognized`);
 
     if (Cypress.env('type') != 'odfe') {
-        cy.wait(15000);
+        cy.get('react-component[name="StatsOverview"]', { timeout: 15000 })
+        cy.get('react-component[name="OverviewWelcome"]', { timeout: 15000 })
         validateURLIncludes(OVERVIEW_URL);
     }
     else{
-        cy.wait(5000);
+        cy.wait(3000);
         navigate("app/wazuh");
-        cy.wait(15000);
+        cy.get('react-component[name="StatsOverview"]', { timeout: 15000 })
+        cy.get('react-component[name="OverviewWelcome"]', { timeout: 15000 })
     };
 
     cy.getCookies().then((cookies) => {
@@ -53,6 +57,7 @@ before(() => {
         cy.writeFile('cookies.json', '[]');
         cy.writeFile('cookies.json', JSON.stringify(cookies));
     })
+
 })
 
 beforeEach(() => {
@@ -62,4 +67,10 @@ beforeEach(() => {
       });
     })
     cy.setSessionStorage('healthCheck', 'executed');
+
+    if (Cypress.env('type') == 'wzd') {
+        navigate("/");
+        cy.get('nav #selectAPIBar').select('mock');
+    }
+
 })

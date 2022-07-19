@@ -4,7 +4,7 @@ Feature: Validate that the added filter label is displayed
   I want to set a new filter
   in order to manage them
   Background:
-    Given The kibana admin user is logged and the wazuh logo is displayed
+    Given The wazuh admin user is logged
   @filter
   Scenario Outline: The user add a new filer from the events page <Module Name>
     When The user goes to <Module Name>
@@ -20,8 +20,6 @@ Feature: Validate that the added filter label is displayed
       | Integrity Monitoring |
       | System Auditing      |
       | Mitre & Attack       |
-      | GDPR                 |
-      | HIPAA                |
       | NIST                 |
       | TSC                  |
       | Policy Monitoring    |

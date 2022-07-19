@@ -1,12 +1,12 @@
 Feature: add sample data to modules
 
-  As a Kibana user
+  As a wazuh user
   I want to add sample data indices
   in order to check modules
 
   @sampleData
   Scenario: Add sample data
-    Given The kibana admin user is logged and the wazuh logo is displayed
+    Given The wazuh admin user is logged
     When The user navigates to Sample data settings
     And The user adds sample data for
       | security information            |
@@ -16,7 +16,7 @@ Feature: add sample data to modules
 
   @sampleData
   Scenario: Delete all sample data
-      Given The kibana admin user is logged and the wazuh logo is displayed
+      Given The wazuh admin user is logged
       When The user navigates to Sample data settings
       And The user removes sample data for
       | security information            |
