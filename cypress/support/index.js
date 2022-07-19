@@ -36,7 +36,7 @@ before(() => {
 
     cy.log(`Parameter loginMethod is: ${loginMethod} and url from loginMethod is: ${Cypress.config('baseUrl')}`);
 
-    (Cypress.env('type') == 'odfe') ? navigate("app/kibana?security_tenant=analysts#/visualize/edit/c501fa50-7e52-11e9-ae4e-b5d69947d32e?_g=()") : navigate("app/wazuh");
+    (Cypress.env('type') == 'odfe') ? navigate("app/kibana?security_tenant=analysts#/visualize/edit/c501fa50-7e52-11e9-ae4e-b5d69947d32e?_g=()") : navigate("/app/wazuh#");
 
     login ? login() : cy.log(`Error! loginMethod: "${loginMethod}" is not recognized`);
 
