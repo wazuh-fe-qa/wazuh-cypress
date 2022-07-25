@@ -4,7 +4,7 @@ import { WAZUH_MENU_PAGE as pageName} from '../../utils/pages-constants';
 const wazuhMenuButton = getSelector('wazuhMenuButton', pageName);
 
 Given('The wazuh admin user is logged',  () => {
-    if (Cypress.env('type') != 'wzd') {
-    navigate("app/wazuh");}else{navigate("/")}
-    elementIsVisible(wazuhMenuButton);
+   // if (Cypress.env('type') != 'wzd') {
+    navigate("app/wazuh");//}else{navigate("/")}
+    //elementIsVisible(wazuhMenuButton);
 })
