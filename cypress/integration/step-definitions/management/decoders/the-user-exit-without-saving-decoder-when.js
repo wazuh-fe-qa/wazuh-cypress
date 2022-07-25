@@ -3,7 +3,7 @@ import { clickElement, elementIsVisible, getSelector } from '../../../utils/driv
 import { DECODERS_PAGE as pageName} from '../../../utils/pages-constants';
 const backButtonSelector = getSelector('backButtonSelector', pageName);
 
-When('The user tries to exit create decoders page without saving data', () => {
+When('The user tries to exit edit decoders page without saving data', () => {
   elementIsVisible(backButtonSelector);
   clickElement(backButtonSelector);
 });

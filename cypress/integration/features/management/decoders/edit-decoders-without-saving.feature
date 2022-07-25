@@ -6,11 +6,11 @@ Feature: Should Displayes a warning modal
 
 @rules
   Scenario: Validate confirmation when closing modal without saving - Management - edit decoders
-    Given The kibana admin user is logged in using xpack and the wazuh logo is displayed
+    Given The wazuh admin user is logged
     When The user navigates to decoders
     And The user clicks the custom decoders button
     And The user selects a custom decoders to edit
     And The user modify the selected decoders
-    And The user tries to exit create decoders page without saving data
+    And The user tries to exit edit decoders page without saving data
     Then The informative modal is displayed
     

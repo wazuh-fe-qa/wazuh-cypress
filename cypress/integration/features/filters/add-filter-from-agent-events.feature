@@ -4,7 +4,7 @@ Feature: Validate that the pinned filter label is displayed
   i want to set a new filter from the agent page
   in order to manage them
   Background:
-    Given The kibana admin user is logged and the wazuh logo is displayed
+    Given The wazuh admin user is logged
     And The user navigates to the agent page
     And The user navigates to the agent dashboard
 
@@ -24,8 +24,6 @@ Feature: Validate that the pinned filter label is displayed
       | Integrity Monitoring |
       | System Auditing      |
       | Mitre & Attack       |
-      | GDPR                 |
-      | HIPAA                |
       | NIST                 |
       | TSC                  |
       | Policy Monitoring    |

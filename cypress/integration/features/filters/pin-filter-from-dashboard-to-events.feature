@@ -4,7 +4,7 @@ Feature: Pin filter
   I want to pin a filter
   in order to aplly it across the modules
   Background:
-    Given The kibana admin user is logged and the wazuh logo is displayed
+    Given The wazuh admin user is logged
 
   @filter
   Scenario Outline: The user add and pin new filer - across the modules - from dashboard to event page <Module Name>
@@ -23,8 +23,6 @@ Feature: Pin filter
       | Integrity Monitoring |
       | System Auditing      |
       | Mitre & Attack       |
-      | GDPR                 |
-      | HIPAA                |
       | NIST                 |
       | TSC                  |
       | Policy Monitoring    |
